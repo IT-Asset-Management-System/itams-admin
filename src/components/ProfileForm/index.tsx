@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
 import { ImageListType } from 'react-images-uploading';
 import { updateProfile, saveAvatar } from '../../api/admin';

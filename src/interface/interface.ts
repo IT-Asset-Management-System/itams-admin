@@ -1,5 +1,3 @@
-import { number, string } from 'yup';
-
 export interface Category {
   id: number;
   name: string;

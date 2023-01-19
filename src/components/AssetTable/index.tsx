@@ -22,6 +22,7 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { deleteAsset, getAllAssets } from '../../api/asset';
 import Actions from '../Actions';
+import { toast } from 'react-toastify';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -262,15 +263,16 @@ export default function AssetTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [rows, setRows] = React.useState<Asset[]>([]);
 
-  // const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [idToDelete, setIdToDelete] = React.useState<number>(0);
+  const handleClickOpen = (id: number) => {
+    setOpen(true);
+    setIdToDelete(id);
+  };
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-
-  // const handleClose = () => {
-  //   setOpen(false);
-  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const getAssets = async () => {
     try {
@@ -284,11 +286,16 @@ export default function AssetTable() {
     getAssets();
   }, []);
 
-  const handleDelete = async (id: number | string) => {
+  const handleDelete = async (id: number) => {
     try {
       await deleteAsset(id);
-    } catch (err) {
+      handleClose();
+      await getAssets();
+      setIdToDelete(0);
+      toast.success('Deleted');
+    } catch (err: any) {
       console.log(err);
+      toast.error(err.response.data.message);
     }
   };
 
@@ -416,7 +423,7 @@ export default function AssetTable() {
                           id={row.id}
                           path="hardware"
                           data={row}
-                          // onClickDelete={handleClickOpen}
+                          onClickDelete={handleClickOpen}
                         />
                       </TableCell>
                     </TableRow>
@@ -448,16 +455,14 @@ export default function AssetTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-      {/* <Box>
+      <Box>
         <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">
-            {"Delete"}
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{'Delete'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               Are you sure you wish to delete ?
@@ -465,12 +470,12 @@ export default function AssetTable() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose} autoFocus>
+            <Button onClick={() => handleDelete(idToDelete)} autoFocus>
               Yes
             </Button>
           </DialogActions>
         </Dialog>
-      </Box> */}
+      </Box>
     </Box>
   );
 }

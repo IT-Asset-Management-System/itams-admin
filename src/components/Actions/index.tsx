@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Actions(props: any) {
   const navigate = useNavigate();
-  const { id, path, data } = props;
+  const { id, path, data, onClickDelete } = props;
   return (
     <Stack direction="row" spacing={1}>
       <Tooltip title="Clone Item">
@@ -28,7 +28,7 @@ function Actions(props: any) {
         </IconButton>
       </Tooltip>
       <Tooltip title="Delete">
-        <IconButton size="small">
+        <IconButton size="small" onClick={() => onClickDelete(+id)}>
           <DeleteIcon fontSize="small" />
         </IconButton>
       </Tooltip>
