@@ -1,9 +1,14 @@
-export interface Category {
+export interface AssetModel {
   id: number;
   name: string;
 }
 
-export interface Manufacturer {
+export interface Department {
+  id: number;
+  name: string;
+}
+
+export interface Status {
   id: number;
   name: string;
 }
@@ -13,12 +18,21 @@ export interface Supplier {
   name: string;
 }
 
+export interface Asset {
+  id: number;
+  name: string;
+  assetModel: string;
+  department: string;
+  supplier: string;
+  status: string;
+}
+
 export interface NewAsset {
   name: string;
-  status: string;
   purchase_cost: number;
-  categoryId: number;
-  manufacturerId: number;
+  assetModelId: number;
+  departmentId: number;
+  statusId: number;
   supplierId: number;
 }
 

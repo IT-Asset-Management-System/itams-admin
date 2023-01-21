@@ -26,7 +26,7 @@ function ChangePasswordForm() {
   return (
     <Box
       sx={{
-        width: '800px',
+        width: { md: '800px', xs: '100%' },
         background: '#FFF',
         borderRadius: '5px',
         py: '32px',

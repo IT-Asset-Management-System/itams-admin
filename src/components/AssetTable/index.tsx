@@ -15,8 +15,6 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
@@ -30,15 +28,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-interface Asset {
-  id: number;
-  category: string;
-  manufacturer: string;
-  supplier: string;
-  name: string;
-  status: string;
-}
+import { getPref, Prefs, setPref } from '../../prefs';
+import { Asset } from '../../interface/interface';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -96,16 +87,22 @@ const headCells: readonly HeadCell[] = [
     label: 'ID',
   },
   {
-    id: 'category',
+    id: 'name',
     numeric: false,
     disablePadding: false,
-    label: 'Category',
+    label: 'Name',
   },
   {
-    id: 'manufacturer',
+    id: 'assetModel',
     numeric: false,
     disablePadding: false,
-    label: 'Manufacturer',
+    label: 'Model',
+  },
+  {
+    id: 'department',
+    numeric: false,
+    disablePadding: false,
+    label: 'Department',
   },
   {
     id: 'supplier',
@@ -113,12 +110,7 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Supplier',
   },
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: false,
-    label: 'Name',
-  },
+
   {
     id: 'status',
     numeric: false,
@@ -259,8 +251,9 @@ export default function AssetTable() {
   const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(
+    getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
+  );
   const [rows, setRows] = React.useState<Asset[]>([]);
 
   const [open, setOpen] = React.useState(false);
@@ -345,11 +338,8 @@ export default function AssetTable() {
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
+    setPref(Prefs.ROWS_PER_PAGE, event.target.value);
     setPage(0);
-  };
-
-  const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
   };
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -366,7 +356,7 @@ export default function AssetTable() {
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
+            size='medium'
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -413,10 +403,10 @@ export default function AssetTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
-                      <TableCell align="left">{row.manufacturer}</TableCell>
-                      <TableCell align="left">{row.supplier}</TableCell>
                       <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">{row.assetModel}</TableCell>
+                      <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.supplier}</TableCell>
                       <TableCell align="left">{row.status}</TableCell>
                       <TableCell align="left">
                         <Actions
@@ -432,7 +422,7 @@ export default function AssetTable() {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: 53 * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />
@@ -451,10 +441,6 @@ export default function AssetTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
       <Box>
         <Dialog
           open={open}

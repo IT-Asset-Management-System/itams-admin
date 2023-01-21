@@ -5,35 +5,41 @@ import InputField from '../FormComponent/InputField';
 import { toast } from 'react-toastify';
 import {
   Actions,
-  Category,
-  Manufacturer,
+  AssetModel,
+  Department,
   NewAsset,
+  Status,
   Supplier,
 } from '../../interface/interface';
-import { getAllCategories } from '../../api/category';
-import { getAllManufacturers } from '../../api/manufacturer';
 import { getAllSuppliers } from '../../api/supplier';
 import SelectField from '../FormComponent/SelectField';
 import { createNewAsset, updateAsset } from '../../api/asset';
 import { useNavigate } from 'react-router-dom';
+import { getAllAssetModels } from '../../api/assetModel';
+import { getAllDepartments } from '../../api/department';
+import { getAllStatuses } from '../../api/status';
 
 function CreateAssetForm(props: any) {
   const { asset, action } = props;
   const navigate = useNavigate();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  const [assetModels, setAssetModels] = useState<AssetModel[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [statuses, setStatuses] = useState<Status[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const initialValues: NewAsset = {
     name: asset?.name ?? '',
-    status: asset?.status ?? '',
     purchase_cost: asset?.purchase_cost ?? 0,
-    categoryId:
-      categories.find((category: Category) => {
-        return category.name === asset?.category;
+    assetModelId:
+      assetModels.find((assetModel: AssetModel) => {
+        return assetModel.name === asset?.assetModel;
       })?.id ?? 0,
-    manufacturerId:
-      manufacturers.find((manufacturer: Manufacturer) => {
-        return manufacturer.name === asset?.manufacturer;
+    departmentId:
+      departments.find((department: Department) => {
+        return department.name === asset?.department;
+      })?.id ?? 0,
+    statusId:
+      statuses.find((status: Status) => {
+        return status.name === asset?.status;
       })?.id ?? 0,
     supplierId:
       suppliers.find((supplier: Supplier) => {
@@ -43,11 +49,13 @@ function CreateAssetForm(props: any) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const categories: Category[] = await getAllCategories();
-        const manufacturers: Manufacturer[] = await getAllManufacturers();
+        const assetModels: AssetModel[] = await getAllAssetModels();
+        const departments: Department[] = await getAllDepartments();
+        const statuses: Status[] = await getAllStatuses();
         const suppliers: Supplier[] = await getAllSuppliers();
-        setCategories(categories);
-        setManufacturers(manufacturers);
+        setAssetModels(assetModels);
+        setDepartments(departments);
+        setStatuses(statuses);
         setSuppliers(suppliers);
       } catch (err) {
         console.log(err);
@@ -75,7 +83,7 @@ function CreateAssetForm(props: any) {
   return (
     <Box
       sx={{
-        width: '1000px',
+        width: { md: '1000px', xs: '100%' },
         background: '#FFF',
         borderRadius: '5px',
         py: '32px',
@@ -99,30 +107,30 @@ function CreateAssetForm(props: any) {
                   required
                 />
                 <InputField
-                  id="status"
-                  fieldName="Status"
-                  fullWidth
-                  formik={formik}
-                  required
-                />
-                <InputField
                   id="purchase_cost"
                   fieldName="Purchase cost"
                   formik={formik}
                   required
                 />
                 <SelectField
-                  id="categoryId"
-                  fieldName="Category"
+                  id="assetModelId"
+                  fieldName="Asset Model"
                   formik={formik}
-                  data={categories}
+                  data={assetModels}
                   required
                 />
                 <SelectField
-                  id="manufacturerId"
-                  fieldName="Manufacturer"
+                  id="departmentId"
+                  fieldName="Department"
                   formik={formik}
-                  data={manufacturers}
+                  data={departments}
+                  required
+                />
+                <SelectField
+                  id="statusId"
+                  fieldName="Status"
+                  formik={formik}
+                  data={statuses}
                   required
                 />
                 <SelectField

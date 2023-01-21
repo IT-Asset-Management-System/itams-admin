@@ -38,7 +38,7 @@ function ProfileForm() {
   return (
     <Box
       sx={{
-        width: '1000px',
+        width: { md: '1000px', xs: '100%' },
         background: '#FFF',
         borderRadius: '5px',
         py: '32px',
