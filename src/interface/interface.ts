@@ -3,7 +3,17 @@ export interface AssetModel {
   name: string;
 }
 
+export interface Category {
+  id: number;
+  name: string;
+}
+
 export interface Department {
+  id: number;
+  name: string;
+}
+
+export interface Manufacturer {
   id: number;
   name: string;
 }
@@ -36,8 +46,34 @@ export interface NewAsset {
   supplierId: number;
 }
 
+export interface License {
+  id: number;
+  name: string;
+  purchase_cost: string;
+  purchase_date: string;
+  expiration_date: string;
+  category: string;
+  manufacturer: string;
+  supplier: string;
+}
+
+export interface NewLicense {
+  name: string;
+  purchase_cost: string;
+  purchase_date: string;
+  expiration_date: string;
+  categoryId: number;
+  manufacturerId: number;
+  supplierId: number;
+}
+
 export enum Actions {
   CREATE,
   UPDATE,
   CLONE,
+}
+
+export interface MenuItem {
+  name: string;
+  destination: string;
 }

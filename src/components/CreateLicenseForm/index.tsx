@@ -5,41 +5,38 @@ import InputField from '../FormComponent/InputField';
 import { toast } from 'react-toastify';
 import {
   Actions,
-  AssetModel,
-  Department,
-  NewAsset,
-  Status,
+  NewLicense,
+  Category,
+  Manufacturer,
   Supplier,
 } from '../../interface/interface';
 import { getAllSuppliers } from '../../api/supplier';
 import SelectField from '../FormComponent/SelectField';
-import { createNewAsset, updateAsset } from '../../api/asset';
 import { useNavigate } from 'react-router-dom';
-import { getAllAssetModels } from '../../api/assetModel';
-import { getAllDepartments } from '../../api/department';
-import { getAllStatuses } from '../../api/status';
+import { getAllCategories } from '../../api/category';
+import { getAllManufacturers } from '../../api/manufacturer';
+import { createNewLicense, updateLicense } from '../../api/license';
+import DatePickerField from '../FormComponent/DatePickerField';
+import dayjs from 'dayjs';
 
-function CreateAssetForm(props: any) {
+function CreateLicenseForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
-  const [assetModels, setAssetModels] = useState<AssetModel[]>([]);
-  const [departments, setDepartments] = useState<Department[]>([]);
-  const [statuses, setStatuses] = useState<Status[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const initialValues: NewAsset = {
+  const initialValues: NewLicense = {
     name: data?.name ?? '',
     purchase_cost: data?.purchase_cost ?? 0,
-    assetModelId:
-      assetModels.find((assetModel: AssetModel) => {
-        return assetModel.name === data?.assetModel;
+    purchase_date: data?.purchase_date ?? dayjs(),
+    expiration_date: data?.expiration_date ?? dayjs(),
+    categoryId:
+      categories.find((category: Category) => {
+        return category.name === data?.category;
       })?.id ?? 0,
-    departmentId:
-      departments.find((department: Department) => {
-        return department.name === data?.department;
-      })?.id ?? 0,
-    statusId:
-      statuses.find((status: Status) => {
-        return status.name === data?.status;
+    manufacturerId:
+      manufacturers.find((manufacturer: Manufacturer) => {
+        return manufacturer.name === data?.manufacturer;
       })?.id ?? 0,
     supplierId:
       suppliers.find((supplier: Supplier) => {
@@ -49,13 +46,11 @@ function CreateAssetForm(props: any) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const assetModels: AssetModel[] = await getAllAssetModels();
-        const departments: Department[] = await getAllDepartments();
-        const statuses: Status[] = await getAllStatuses();
+        const categories: Category[] = await getAllCategories();
+        const manufacturers: Manufacturer[] = await getAllManufacturers();
         const suppliers: Supplier[] = await getAllSuppliers();
-        setAssetModels(assetModels);
-        setDepartments(departments);
-        setStatuses(statuses);
+        setCategories(categories);
+        setManufacturers(manufacturers);
         setSuppliers(suppliers);
       } catch (err) {
         console.log(err);
@@ -64,10 +59,10 @@ function CreateAssetForm(props: any) {
     getData();
   }, []);
 
-  const handleSubmit = async (newAsset: NewAsset) => {
+  const handleSubmit = async (newLicense: NewLicense) => {
     try {
-      if (action === Actions.UPDATE) await updateAsset(data.id, newAsset);
-      else await createNewAsset(newAsset);
+      if (action === Actions.UPDATE) await updateLicense(data.id, newLicense);
+      else await createNewLicense(newLicense);
       navigate(-1);
       toast.success(
         action === Actions.UPDATE
@@ -112,25 +107,30 @@ function CreateAssetForm(props: any) {
                   formik={formik}
                   required
                 />
-                <SelectField
-                  id="assetModelId"
-                  fieldName="Asset Model"
+                <DatePickerField
+                  id="purchase_date"
+                  fieldName="Purchase Date"
                   formik={formik}
-                  data={assetModels}
+                  required
+                />
+                <DatePickerField
+                  id="expiration_date"
+                  fieldName="Expiration Date"
+                  formik={formik}
                   required
                 />
                 <SelectField
-                  id="departmentId"
-                  fieldName="Department"
+                  id="categoryId"
+                  fieldName="Category"
                   formik={formik}
-                  data={departments}
+                  data={categories}
                   required
                 />
                 <SelectField
-                  id="statusId"
-                  fieldName="Status"
+                  id="manufacturerId"
+                  fieldName="Manufacturer"
                   formik={formik}
-                  data={statuses}
+                  data={manufacturers}
                   required
                 />
                 <SelectField
@@ -175,4 +175,4 @@ function CreateAssetForm(props: any) {
   );
 }
 
-export default CreateAssetForm;
+export default CreateLicenseForm;

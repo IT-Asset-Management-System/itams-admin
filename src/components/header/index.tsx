@@ -16,9 +16,31 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../api/auth';
 import { useAuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
-
-const pages = ['Assets'];
-const settings = ['Edit Your Profile', 'Change Password', 'Logout'];
+import MenuListComposition from '../MenuList';
+import { MenuItem as MenuItemInterface } from '../../interface/interface';
+interface Page {
+  name: string;
+  hasChild: boolean;
+  destination?: string;
+  menuList?: MenuItemInterface[];
+}
+const pages: Page[] = [
+  { name: 'Assets', destination: '/hardware', hasChild: false },
+  { name: 'Licenses', destination: '/licenses', hasChild: false },
+  {
+    name: 'Settings',
+    hasChild: true,
+    menuList: [
+      { name: 'Statuses', destination: '/statuses' },
+      { name: 'Asset Models', destination: '/models' },
+    ],
+  },
+];
+const settings: MenuItemInterface[] = [
+  { name: 'Edit Your Profile', destination: '/account/profile' },
+  { name: 'Change Password', destination: '/account/password' },
+  { name: 'Logout', destination: '/login' },
+];
 
 const Header = () => {
   const navigate = useNavigate();
@@ -46,16 +68,10 @@ const Header = () => {
     setAnchorElUser(null);
   };
 
-  const handleClickUserMenu = async (setting: string) => {
+  const handleClickUserMenu = async (destination: string) => {
     handleCloseUserMenu();
-    switch (setting) {
-      case settings[0]:
-        navigate('/account/profile');
-        return;
-      case settings[1]:
-        navigate('/account/password');
-        return;
-      case settings[2]:
+    switch (destination) {
+      case '/login':
         try {
           await logout();
           getAuth();
@@ -66,19 +82,7 @@ const Header = () => {
         }
         return;
       default:
-        return;
-    }
-  };
-
-  const handleClickNavMenu = async (page: string) => {
-    switch (page) {
-      case pages[0]:
-        navigate('/hardware');
-        return;
-      case pages[1]:
-        navigate('/request-asset');
-        return;
-      default:
+        navigate(destination);
         return;
     }
   };
@@ -135,10 +139,10 @@ const Header = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handleClickNavMenu(page)}>
+              {pages.map((page: Page) => (
+                <MenuItem key={page.name}>
                   <Typography textTransform="capitalize" textAlign="center">
-                    {page}
+                    {page.name}
                   </Typography>
                 </MenuItem>
               ))}
@@ -164,20 +168,27 @@ const Header = () => {
             ITAMS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={() => handleClickNavMenu(page)}
-                sx={{
-                  my: 2,
-                  color: 'white',
-                  display: 'block',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {page}
-              </Button>
-            ))}
+            {pages.map((page: Page) =>
+              page.hasChild ? (
+                <MenuListComposition
+                  menuList={page.menuList}
+                  name={page.name}
+                />
+              ) : (
+                <Button
+                  key={page.name}
+                  onClick={() => navigate(page?.destination ?? '')}
+                  sx={{
+                    my: 2,
+                    color: 'white',
+                    display: 'block',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {page.name}
+                </Button>
+              ),
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -202,12 +213,12 @@ const Header = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
+              {settings.map((item: MenuItemInterface) => (
                 <MenuItem
-                  key={setting}
-                  onClick={() => handleClickUserMenu(setting)}
+                  key={item.name}
+                  onClick={() => handleClickUserMenu(item.destination)}
                 >
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center">{item.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>

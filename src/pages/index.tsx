@@ -6,3 +6,5 @@ export { default as Profile } from './Profile';
 export { default as ChangePassword } from './ChangePassword';
 export { default as CreateAsset } from './CreateAsset';
 export { default as Dashboard } from './Dashboard';
+export { default as AllLicenses } from './AllLicenses';
+export { default as CreateLicense } from './CreateLicense';

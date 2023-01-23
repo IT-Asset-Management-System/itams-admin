@@ -12,6 +12,8 @@ import {
   Profile,
   CreateAsset,
   ChangePassword,
+  AllLicenses,
+  CreateLicense,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
@@ -40,6 +42,21 @@ function App() {
                 <Route
                   path=":id/clone"
                   element={<CreateAsset action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="licenses">
+                <Route index element={<AllLicenses />} />
+                <Route
+                  path="create"
+                  element={<CreateLicense action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":id/edit"
+                  element={<CreateLicense action={Actions.UPDATE} />}
+                />
+                <Route
+                  path=":id/clone"
+                  element={<CreateLicense action={Actions.CLONE} />}
                 />
               </Route>
               <Route path="account">

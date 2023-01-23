@@ -18,7 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { deleteAsset, getAllAssets } from '../../api/asset';
+import { deleteLicense, getAllLicenses } from '../../api/license';
 import Actions from '../Actions';
 import { toast } from 'react-toastify';
 
@@ -29,7 +29,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Asset } from '../../interface/interface';
+import { License } from '../../interface/interface';
+import { formatDate } from '../../helpers/format';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -74,7 +75,7 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Asset;
+  id: keyof License;
   label: string;
   numeric: boolean;
 }
@@ -93,16 +94,34 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
-    id: 'assetModel',
+    id: 'purchase_cost',
     numeric: false,
     disablePadding: false,
-    label: 'Model',
+    label: 'Purchase cost',
   },
   {
-    id: 'department',
+    id: 'purchase_date',
     numeric: false,
     disablePadding: false,
-    label: 'Department',
+    label: 'Purchase date',
+  },
+  {
+    id: 'expiration_date',
+    numeric: false,
+    disablePadding: false,
+    label: 'Expiration date',
+  },
+  {
+    id: 'category',
+    numeric: false,
+    disablePadding: false,
+    label: 'Category',
+  },
+  {
+    id: 'manufacturer',
+    numeric: false,
+    disablePadding: false,
+    label: 'Manufacturer',
   },
   {
     id: 'supplier',
@@ -110,20 +129,13 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Supplier',
   },
-
-  {
-    id: 'status',
-    numeric: false,
-    disablePadding: false,
-    label: 'Status',
-  },
 ];
 
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Asset,
+    property: keyof License,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -141,7 +153,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof Asset) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof License) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -246,15 +258,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function AssetTable() {
+export default function LicenseTable() {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof License>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
   );
-  const [rows, setRows] = React.useState<Asset[]>([]);
+  const [rows, setRows] = React.useState<License[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -267,23 +279,23 @@ export default function AssetTable() {
     setOpen(false);
   };
 
-  const getAssets = async () => {
+  const getData = async () => {
     try {
-      const asset = await getAllAssets();
-      setRows(asset);
+      const data = await getAllLicenses();
+      setRows(data);
     } catch (err) {
       console.log(err);
     }
   };
   React.useEffect(() => {
-    getAssets();
+    getData();
   }, []);
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteAsset(id);
+      await deleteLicense(id);
       handleClose();
-      await getAssets();
+      await getData();
       setIdToDelete(0);
       toast.success('Deleted');
     } catch (err: any) {
@@ -294,7 +306,7 @@ export default function AssetTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Asset,
+    property: keyof License,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -404,14 +416,20 @@ export default function AssetTable() {
                         {row.id}
                       </TableCell>
                       <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.assetModel}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.purchase_cost}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.purchase_date)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.expiration_date)}
+                      </TableCell>
+                      <TableCell align="left">{row.category}</TableCell>
+                      <TableCell align="left">{row.manufacturer}</TableCell>
                       <TableCell align="left">{row.supplier}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
                       <TableCell align="left">
                         <Actions
                           id={row.id}
-                          path="hardware"
+                          path="licenses"
                           data={row}
                           onClickDelete={handleClickOpen}
                         />
