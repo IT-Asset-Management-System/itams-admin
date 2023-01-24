@@ -67,6 +67,22 @@ export interface NewLicense {
   supplierId: number;
 }
 
+export interface User {
+  id: number;
+  name: string;
+  username: string;
+  phone: string;
+  department: string;
+}
+
+export interface NewUser {
+  name: string;
+  username: string;
+  password: string;
+  phone: string;
+  departmentId: number;
+}
+
 export enum Actions {
   CREATE,
   UPDATE,

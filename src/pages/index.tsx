@@ -8,3 +8,5 @@ export { default as CreateAsset } from './CreateAsset';
 export { default as Dashboard } from './Dashboard';
 export { default as AllLicenses } from './AllLicenses';
 export { default as CreateLicense } from './CreateLicense';
+export { default as AllUsers } from './AllUsers';
+export { default as CreateUser } from './CreateUser';
