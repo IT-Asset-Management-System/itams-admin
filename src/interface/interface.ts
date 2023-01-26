@@ -25,6 +25,14 @@ export interface NewCategory {
 export interface Department {
   id: number;
   name: string;
+  numOfAssets: number;
+  numOfUsers: number;
+  location: string;
+}
+
+export interface NewDepartment {
+  name: string;
+  locationId: number;
 }
 
 export interface Manufacturer {
@@ -54,6 +62,11 @@ export interface Supplier {
 }
 
 export interface NewSupplier {
+  name: string;
+}
+
+export interface Location {
+  id: number;
   name: string;
 }
 

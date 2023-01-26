@@ -20,3 +20,5 @@ export { default as AllManufacturers } from './AllManufacturers';
 export { default as CreateManufacturer } from './CreateManufacturer';
 export { default as AllSuppliers } from './AllSuppliers';
 export { default as CreateSupplier } from './CreateSupplier';
+export { default as AllDepartments } from './AllDepartments';
+export { default as CreateDepartment } from './CreateDepartment';
