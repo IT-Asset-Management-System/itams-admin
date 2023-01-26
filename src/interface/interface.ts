@@ -21,6 +21,11 @@ export interface Manufacturer {
 export interface Status {
   id: number;
   name: string;
+  numOfAssets: number
+}
+
+export interface NewStatus {
+  name: string;
 }
 
 export interface Supplier {
