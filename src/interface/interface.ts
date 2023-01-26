@@ -50,6 +50,11 @@ export interface NewStatus {
 export interface Supplier {
   id: number;
   name: string;
+  numOfAssets: number;
+}
+
+export interface NewSupplier {
+  name: string;
 }
 
 export interface Asset {
