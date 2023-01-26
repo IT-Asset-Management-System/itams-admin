@@ -30,6 +30,11 @@ export interface Department {
 export interface Manufacturer {
   id: number;
   name: string;
+  numOfAssets: number;
+}
+
+export interface NewManufacturer {
+  name: string;
 }
 
 export interface Status {

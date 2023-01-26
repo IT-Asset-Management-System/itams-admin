@@ -35,6 +35,7 @@ const pages: Page[] = [
       { name: 'Statuses', destination: '/statuses' },
       { name: 'Asset Models', destination: '/models' },
       { name: 'Categories', destination: '/categories' },
+      { name: 'Manufacturers', destination: '/manufacturers' },
     ],
   },
 ];

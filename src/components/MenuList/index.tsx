@@ -25,7 +25,7 @@ export default function MenuListComposition(props: any) {
   };
 
   return (
-    <Box onMouseOver={handleOpen}>
+    <Box onMouseOver={handleOpen} onMouseOut={handleClose}>
       <Button
         ref={anchorRef}
         id="composition-button"

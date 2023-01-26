@@ -22,6 +22,8 @@ import {
   CreateAssetModel,
   AllCategories,
   CreateCategory,
+  AllManufacturers,
+  CreateManufacturer,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
@@ -125,6 +127,21 @@ function App() {
                 <Route
                   path=":id/clone"
                   element={<CreateCategory action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="manufacturers">
+                <Route index element={<AllManufacturers />} />
+                <Route
+                  path="create"
+                  element={<CreateManufacturer action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":id/edit"
+                  element={<CreateManufacturer action={Actions.UPDATE} />}
+                />
+                <Route
+                  path=":id/clone"
+                  element={<CreateManufacturer action={Actions.CLONE} />}
                 />
               </Route>
               <Route path="account">

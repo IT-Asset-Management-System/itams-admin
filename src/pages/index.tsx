@@ -16,3 +16,5 @@ export { default as AllAssetModels } from './AllAssetModels';
 export { default as CreateAssetModel } from './CreateAssetModel';
 export { default as AllCategories } from './AllCategories';
 export { default as CreateCategory } from './CreateCategory';
+export { default as AllManufacturers } from './AllManufacturers';
+export { default as CreateManufacturer } from './CreateManufacturer';
