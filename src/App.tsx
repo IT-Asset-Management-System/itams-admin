@@ -28,6 +28,8 @@ import {
   CreateSupplier,
   AllDepartments,
   CreateDepartment,
+  AllLocations,
+  CreateLocation,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
@@ -176,6 +178,21 @@ function App() {
                 <Route
                   path=":id/clone"
                   element={<CreateDepartment action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="locations">
+                <Route index element={<AllLocations />} />
+                <Route
+                  path="create"
+                  element={<CreateLocation action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":id/edit"
+                  element={<CreateLocation action={Actions.UPDATE} />}
+                />
+                <Route
+                  path=":id/clone"
+                  element={<CreateLocation action={Actions.CLONE} />}
                 />
               </Route>
               <Route path="account">

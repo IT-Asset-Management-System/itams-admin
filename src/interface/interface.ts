@@ -68,6 +68,13 @@ export interface NewSupplier {
 export interface Location {
   id: number;
   name: string;
+  address: string;
+  numOfDepartments: number;
+}
+
+export interface NewLocation {
+  name: string;
+  address: string;
 }
 
 export interface Asset {

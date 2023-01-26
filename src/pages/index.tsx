@@ -22,3 +22,5 @@ export { default as AllSuppliers } from './AllSuppliers';
 export { default as CreateSupplier } from './CreateSupplier';
 export { default as AllDepartments } from './AllDepartments';
 export { default as CreateDepartment } from './CreateDepartment';
+export { default as AllLocations } from './AllLocations';
+export { default as CreateLocation } from './CreateLocation';

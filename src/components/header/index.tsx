@@ -38,6 +38,7 @@ const pages: Page[] = [
       { name: 'Manufacturers', destination: '/manufacturers' },
       { name: 'Suppliers', destination: '/suppliers' },
       { name: 'Departments', destination: '/departments' },
+      { name: 'Locations', destination: '/locations' },
     ],
   },
 ];
