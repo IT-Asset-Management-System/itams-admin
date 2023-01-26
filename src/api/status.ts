@@ -13,10 +13,7 @@ export const getStatusById = async (id: number | string) => {
   return response.data;
 };
 
-export const updateStatus = async (
-  id: number | string,
-  status: NewStatus,
-) => {
+export const updateStatus = async (id: number | string, status: NewStatus) => {
   const response = await axios.put('/status/update-status', {
     id: id,
     ...status,

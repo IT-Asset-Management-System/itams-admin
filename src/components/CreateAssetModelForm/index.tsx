@@ -1,22 +1,55 @@
 import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
+import { useState, useEffect } from 'react';
 import InputField from '../FormComponent/InputField';
 import { toast } from 'react-toastify';
-import { Actions, NewStatus } from '../../interface/interface';
+import {
+  Actions,
+  NewAssetModel,
+  Category,
+  Manufacturer,
+} from '../../interface/interface';
+import SelectField from '../FormComponent/SelectField';
 import { useNavigate } from 'react-router-dom';
-import { createNewStatus, updateStatus } from '../../api/status';
+import { getAllCategories } from '../../api/category';
+import { getAllManufacturers } from '../../api/manufacturer';
+import { createNewAssetModel, updateAssetModel } from '../../api/assetModel';
 
-function CreateStatusForm(props: any) {
+function CreateAssetModelForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
-  const initialValues: NewStatus = {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  const initialValues: NewAssetModel = {
     name: data?.name ?? '',
+    categoryId:
+      categories.find((category: Category) => {
+        return category.name === data?.category;
+      })?.id ?? 0,
+    manufacturerId:
+      manufacturers.find((manufacturer: Manufacturer) => {
+        return manufacturer.name === data?.manufacturer;
+      })?.id ?? 0,
   };
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const categories: Category[] = await getAllCategories();
+        const manufacturers: Manufacturer[] = await getAllManufacturers();
+        setCategories(categories);
+        setManufacturers(manufacturers);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
+  }, []);
 
-  const handleSubmit = async (newStatus: NewStatus) => {
+  const handleSubmit = async (newAssetModel: NewAssetModel) => {
     try {
-      if (action === Actions.UPDATE) await updateStatus(data.id, newStatus);
-      else await createNewStatus(newStatus);
+      if (action === Actions.UPDATE)
+        await updateAssetModel(data.id, newAssetModel);
+      else await createNewAssetModel(newAssetModel);
       navigate(-1);
       toast.success(
         action === Actions.UPDATE
@@ -55,6 +88,20 @@ function CreateStatusForm(props: any) {
                   formik={formik}
                   required
                 />
+                <SelectField
+                  id="categoryId"
+                  fieldName="Category"
+                  formik={formik}
+                  data={categories}
+                  required
+                />
+                <SelectField
+                  id="manufacturerId"
+                  fieldName="Manufacturer"
+                  formik={formik}
+                  data={manufacturers}
+                  required
+                />
               </Box>
               <Box
                 sx={{
@@ -90,4 +137,4 @@ function CreateStatusForm(props: any) {
   );
 }
 
-export default CreateStatusForm;
+export default CreateAssetModelForm;

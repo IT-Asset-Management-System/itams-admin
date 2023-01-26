@@ -1,6 +1,15 @@
 export interface AssetModel {
   id: number;
   name: string;
+  category: string;
+  manufacturer: string;
+  numOfAssets: number;
+}
+
+export interface NewAssetModel {
+  name: string;
+  categoryId: number;
+  manufacturerId: number;
 }
 
 export interface Category {
@@ -21,7 +30,7 @@ export interface Manufacturer {
 export interface Status {
   id: number;
   name: string;
-  numOfAssets: number
+  numOfAssets: number;
 }
 
 export interface NewStatus {

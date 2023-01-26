@@ -18,6 +18,8 @@ import {
   CreateUser,
   AllStatuses,
   CreateStatus,
+  AllAssetModels,
+  CreateAssetModel,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
@@ -91,6 +93,21 @@ function App() {
                 <Route
                   path=":id/clone"
                   element={<CreateStatus action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="models">
+                <Route index element={<AllAssetModels />} />
+                <Route
+                  path="create"
+                  element={<CreateAssetModel action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":id/edit"
+                  element={<CreateAssetModel action={Actions.UPDATE} />}
+                />
+                <Route
+                  path=":id/clone"
+                  element={<CreateAssetModel action={Actions.CLONE} />}
                 />
               </Route>
               <Route path="account">
