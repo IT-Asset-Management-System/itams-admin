@@ -14,3 +14,5 @@ export { default as AllStatuses } from './AllStatuses';
 export { default as CreateStatus } from './CreateStatus';
 export { default as AllAssetModels } from './AllAssetModels';
 export { default as CreateAssetModel } from './CreateAssetModel';
+export { default as AllCategories } from './AllCategories';
+export { default as CreateCategory } from './CreateCategory';

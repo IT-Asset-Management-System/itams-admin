@@ -15,6 +15,11 @@ export interface NewAssetModel {
 export interface Category {
   id: number;
   name: string;
+  numOfAssets: number;
+}
+
+export interface NewCategory {
+  name: string;
 }
 
 export interface Department {

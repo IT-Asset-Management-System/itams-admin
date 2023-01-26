@@ -25,7 +25,7 @@ export default function MenuListComposition(props: any) {
   };
 
   return (
-    <Box onMouseOver={handleOpen} onMouseOut={handleClose}>
+    <Box onMouseOver={handleOpen}>
       <Button
         ref={anchorRef}
         id="composition-button"
@@ -47,7 +47,6 @@ export default function MenuListComposition(props: any) {
         role={undefined}
         placement="bottom-start"
         transition
-        disablePortal
       >
         {({ TransitionProps, placement }) => (
           <Grow

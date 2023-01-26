@@ -34,6 +34,7 @@ const pages: Page[] = [
     menuList: [
       { name: 'Statuses', destination: '/statuses' },
       { name: 'Asset Models', destination: '/models' },
+      { name: 'Categories', destination: '/categories' },
     ],
   },
 ];
