@@ -32,6 +32,8 @@ import {
   CreateLocation,
   AllSourceCodes,
   CreateSourceCode,
+  AllDigitalContents,
+  CreateDigitalContent,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
@@ -75,6 +77,21 @@ function App() {
                 <Route
                   path=":id/clone"
                   element={<CreateSourceCode action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="digital-content">
+                <Route index element={<AllDigitalContents />} />
+                <Route
+                  path="create"
+                  element={<CreateDigitalContent action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":id/edit"
+                  element={<CreateDigitalContent action={Actions.UPDATE} />}
+                />
+                <Route
+                  path=":id/clone"
+                  element={<CreateDigitalContent action={Actions.CLONE} />}
                 />
               </Route>
               <Route path="licenses">

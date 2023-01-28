@@ -26,3 +26,5 @@ export { default as AllLocations } from './AllLocations';
 export { default as CreateLocation } from './CreateLocation';
 export { default as AllSourceCodes } from './AllSourceCodes';
 export { default as CreateSourceCode } from './CreateSourceCode';
+export { default as AllDigitalContents } from './AllDigitalContents';
+export { default as CreateDigitalContent } from './CreateDigitalContent';

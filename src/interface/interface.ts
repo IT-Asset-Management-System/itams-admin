@@ -112,6 +112,23 @@ export interface NewSourceCode {
   url: string;
 }
 
+export interface DigitalContent {
+  id: number;
+  name: string;
+  owner: string;
+  description: string;
+  isPrivate: string;
+  url: string;
+}
+
+export interface NewDigitalContent {
+  name: string;
+  owner: string;
+  description: string;
+  isPrivate: boolean;
+  url: string;
+}
+
 export interface License {
   id: number;
   name: string;
