@@ -34,11 +34,11 @@ import {
   CreateSourceCode,
   AllDigitalContents,
   CreateDigitalContent,
+  Dashboard,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Dashboard } from '@mui/icons-material';
 import { Actions } from './interface/interface';
 
 function App() {

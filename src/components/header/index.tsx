@@ -25,6 +25,7 @@ interface Page {
   menuList?: MenuItemInterface[];
 }
 const pages: Page[] = [
+  { name: 'Dashboard', destination: '/', hasChild: false },
   { name: 'Assets', destination: '/hardware', hasChild: false },
   { name: 'Source codes', destination: '/source-code', hasChild: false },
   {
