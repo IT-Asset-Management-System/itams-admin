@@ -26,6 +26,7 @@ interface Page {
 }
 const pages: Page[] = [
   { name: 'Assets', destination: '/hardware', hasChild: false },
+  { name: 'Source codes', destination: '/source-code', hasChild: false },
   { name: 'Licenses', destination: '/licenses', hasChild: false },
   { name: 'People', destination: '/users', hasChild: false },
   {

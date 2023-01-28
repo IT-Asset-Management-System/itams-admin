@@ -30,6 +30,8 @@ import {
   CreateDepartment,
   AllLocations,
   CreateLocation,
+  AllSourceCodes,
+  CreateSourceCode,
 } from './pages';
 import AuthProvider from './context/AuthContext';
 import { ToastContainer } from 'react-toastify';
@@ -58,6 +60,21 @@ function App() {
                 <Route
                   path=":id/clone"
                   element={<CreateAsset action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="source-code">
+                <Route index element={<AllSourceCodes />} />
+                <Route
+                  path="create"
+                  element={<CreateSourceCode action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":id/edit"
+                  element={<CreateSourceCode action={Actions.UPDATE} />}
+                />
+                <Route
+                  path=":id/clone"
+                  element={<CreateSourceCode action={Actions.CLONE} />}
                 />
               </Route>
               <Route path="licenses">

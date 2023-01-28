@@ -95,6 +95,23 @@ export interface NewAsset {
   supplierId: number;
 }
 
+export interface SourceCode {
+  id: number;
+  name: string;
+  owner: string;
+  description: string;
+  isPrivate: string;
+  url: string;
+}
+
+export interface NewSourceCode {
+  name: string;
+  owner: string;
+  description: string;
+  isPrivate: boolean;
+  url: string;
+}
+
 export interface License {
   id: number;
   name: string;
