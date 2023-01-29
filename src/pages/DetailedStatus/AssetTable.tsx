@@ -18,7 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { deleteStatus, getAllStatuses } from '../../api/status';
+import { deleteAsset, getAllAssets } from '../../api/asset';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
 
@@ -29,8 +29,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Status } from '../../interface/interface';
-import { Link } from 'react-router-dom';
+import { Asset } from '../../interface/interface';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,7 +74,7 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Status;
+  id: keyof Asset;
   label: string;
   numeric: boolean;
 }
@@ -94,10 +93,29 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
-    id: 'numOfAssets',
+    id: 'assetModel',
     numeric: false,
     disablePadding: false,
-    label: 'Assets',
+    label: 'Model',
+  },
+  {
+    id: 'department',
+    numeric: false,
+    disablePadding: false,
+    label: 'Department',
+  },
+  {
+    id: 'supplier',
+    numeric: false,
+    disablePadding: false,
+    label: 'Supplier',
+  },
+
+  {
+    id: 'status',
+    numeric: false,
+    disablePadding: false,
+    label: 'Status',
   },
 ];
 
@@ -105,7 +123,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Status,
+    property: keyof Asset,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -123,7 +141,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof Status) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof Asset) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -228,15 +246,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function StatusTable() {
+export default function AssetTable(props: any) {
+  const {id} = props;
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Status>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
   );
-  const [rows, setRows] = React.useState<Status[]>([]);
+  const [rows, setRows] = React.useState<Asset[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -249,23 +268,23 @@ export default function StatusTable() {
     setOpen(false);
   };
 
-  const getData = async () => {
+  const getAssets = async () => {
     try {
-      const data = await getAllStatuses();
-      setRows(data);
+      const asset = await getAllAssets({statusId: id});
+      setRows(asset);
     } catch (err) {
       console.log(err);
     }
   };
   React.useEffect(() => {
-    getData();
+    getAssets();
   }, []);
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteStatus(id);
+      await deleteAsset(id);
       handleClose();
-      await getData();
+      await getAssets();
       setIdToDelete(0);
       toast.success('Deleted');
     } catch (err: any) {
@@ -276,7 +295,7 @@ export default function StatusTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Status,
+    property: keyof Asset,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -385,14 +404,15 @@ export default function StatusTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">
-                        <Link to={`${row.id}`} style={{ textDecoration: 'none' }}>{row.name}</Link>
-                      </TableCell>
-                      <TableCell align="left">{row.numOfAssets}</TableCell>
+                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">{row.assetModel}</TableCell>
+                      <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.supplier}</TableCell>
+                      <TableCell align="left">{row.status}</TableCell>
                       <TableCell align="left">
                         <Actions
                           id={row.id}
-                          path="statuses"
+                          path="hardware"
                           data={row}
                           onClickDelete={handleClickOpen}
                         />

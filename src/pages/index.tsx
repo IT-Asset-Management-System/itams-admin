@@ -11,6 +11,7 @@ export { default as CreateLicense } from './CreateLicense';
 export { default as AllUsers } from './AllUsers';
 export { default as CreateUser } from './CreateUser';
 export { default as AllStatuses } from './AllStatuses';
+export { default as DetailedStatus } from './DetailedStatus';
 export { default as CreateStatus } from './CreateStatus';
 export { default as AllAssetModels } from './AllAssetModels';
 export { default as CreateAssetModel } from './CreateAssetModel';

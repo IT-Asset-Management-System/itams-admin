@@ -95,6 +95,13 @@ export interface NewAsset {
   supplierId: number;
 }
 
+export interface AssetQuery {
+  assetModelId?: number;
+  departmentId?: number;
+  statusId?: number;
+  supplierId?: number;
+}
+
 export interface SourceCode {
   id: number;
   name: string;

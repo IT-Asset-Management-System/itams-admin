@@ -17,6 +17,7 @@ import {
   AllUsers,
   CreateUser,
   AllStatuses,
+  DetailedStatus,
   CreateStatus,
   AllAssetModels,
   CreateAssetModel,
@@ -56,11 +57,11 @@ function App() {
                   element={<CreateAsset action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":assetId/edit"
                   element={<CreateAsset action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":assetId/clone"
                   element={<CreateAsset action={Actions.CLONE} />}
                 />
               </Route>
@@ -71,11 +72,11 @@ function App() {
                   element={<CreateSourceCode action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":sourceCodeId/edit"
                   element={<CreateSourceCode action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":sourceCodeId/clone"
                   element={<CreateSourceCode action={Actions.CLONE} />}
                 />
               </Route>
@@ -86,11 +87,11 @@ function App() {
                   element={<CreateDigitalContent action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":digitalContentId/edit"
                   element={<CreateDigitalContent action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":digitalContentId/clone"
                   element={<CreateDigitalContent action={Actions.CLONE} />}
                 />
               </Route>
@@ -101,11 +102,11 @@ function App() {
                   element={<CreateLicense action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":licenseId/edit"
                   element={<CreateLicense action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":licenseId/clone"
                   element={<CreateLicense action={Actions.CLONE} />}
                 />
               </Route>
@@ -116,11 +117,11 @@ function App() {
                   element={<CreateUser action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":userId/edit"
                   element={<CreateUser action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":userId/clone"
                   element={<CreateUser action={Actions.CLONE} />}
                 />
               </Route>
@@ -130,12 +131,13 @@ function App() {
                   path="create"
                   element={<CreateStatus action={Actions.CREATE} />}
                 />
+                <Route path=":statusId" element={<DetailedStatus />} />
                 <Route
-                  path=":id/edit"
+                  path=":statusId/edit"
                   element={<CreateStatus action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":statusId/clone"
                   element={<CreateStatus action={Actions.CLONE} />}
                 />
               </Route>
@@ -146,11 +148,11 @@ function App() {
                   element={<CreateAssetModel action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":modelId/edit"
                   element={<CreateAssetModel action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":modelId/clone"
                   element={<CreateAssetModel action={Actions.CLONE} />}
                 />
               </Route>
@@ -161,11 +163,11 @@ function App() {
                   element={<CreateCategory action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":categoryId/edit"
                   element={<CreateCategory action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":categoryId/clone"
                   element={<CreateCategory action={Actions.CLONE} />}
                 />
               </Route>
@@ -176,11 +178,11 @@ function App() {
                   element={<CreateManufacturer action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":manufacturerId/edit"
                   element={<CreateManufacturer action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":manufacturerId/clone"
                   element={<CreateManufacturer action={Actions.CLONE} />}
                 />
               </Route>
@@ -191,11 +193,11 @@ function App() {
                   element={<CreateSupplier action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":supplierId/edit"
                   element={<CreateSupplier action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":supplierId/clone"
                   element={<CreateSupplier action={Actions.CLONE} />}
                 />
               </Route>
@@ -206,11 +208,11 @@ function App() {
                   element={<CreateDepartment action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":departmentId/edit"
                   element={<CreateDepartment action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":departmentId/clone"
                   element={<CreateDepartment action={Actions.CLONE} />}
                 />
               </Route>
@@ -221,11 +223,11 @@ function App() {
                   element={<CreateLocation action={Actions.CREATE} />}
                 />
                 <Route
-                  path=":id/edit"
+                  path=":locationId/edit"
                   element={<CreateLocation action={Actions.UPDATE} />}
                 />
                 <Route
-                  path=":id/clone"
+                  path=":locationId/clone"
                   element={<CreateLocation action={Actions.CLONE} />}
                 />
               </Route>
