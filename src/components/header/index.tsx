@@ -18,6 +18,7 @@ import { useAuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import MenuListComposition from '../MenuList';
 import { MenuItem as MenuItemInterface } from '../../interface/interface';
+import Notification from './Notification';
 interface Page {
   name: string;
   hasChild: boolean;
@@ -204,7 +205,16 @@ const Header = () => {
             )}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            <Notification />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="avatar" src={avatar} />
