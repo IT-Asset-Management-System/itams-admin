@@ -1,11 +1,13 @@
 export { default as Layout } from './Layout';
 export { default as Login } from './Login';
+export { default as Dashboard } from './Dashboard';
 export { default as NoPage } from './NoPage';
-export { default as AllAssets } from './AllAssets';
 export { default as Profile } from './Profile';
 export { default as ChangePassword } from './ChangePassword';
+export { default as AllAssets } from './AllAssets';
 export { default as CreateAsset } from './CreateAsset';
-export { default as Dashboard } from './Dashboard';
+export { default as AllRequestAssets } from './AllRequestAssets';
+export { default as AcceptRequest } from './AcceptRequest';
 export { default as AllLicenses } from './AllLicenses';
 export { default as CreateLicense } from './CreateLicense';
 export { default as AllUsers } from './AllUsers';

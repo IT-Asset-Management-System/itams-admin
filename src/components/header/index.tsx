@@ -27,7 +27,15 @@ interface Page {
 }
 const pages: Page[] = [
   { name: 'Dashboard', destination: '/', hasChild: false },
-  { name: 'Assets', destination: '/hardware', hasChild: false },
+  {
+    name: 'Assets',
+    destination: '/hardware',
+    hasChild: true,
+    menuList: [
+      { name: 'List All', destination: '/hardware' },
+      { name: 'All requests', destination: 'request-assets' },
+    ],
+  },
   { name: 'Source codes', destination: '/source-code', hasChild: false },
   {
     name: 'Digital contents',

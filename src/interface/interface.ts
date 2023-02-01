@@ -179,6 +179,26 @@ export enum Actions {
   CLONE,
 }
 
+export interface RequestAsset {
+  id: number;
+  name: string;
+  username: string;
+  assetModel: string;
+  date: string;
+  status: string;
+}
+
+export interface AcceptRequest {
+  id: number;
+  assetId: number;
+}
+
+export enum RequestAssetStatus {
+  REQUESTED = 'Requested',
+  REJECTED = 'Rejected',
+  ACCEPTED = 'Accepted',
+}
+
 export interface MenuItem {
   name: string;
   destination: string;

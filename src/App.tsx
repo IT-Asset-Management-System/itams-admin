@@ -8,10 +8,12 @@ import {
   Login,
   Layout,
   NoPage,
-  AllAssets,
   Profile,
-  CreateAsset,
   ChangePassword,
+  AllAssets,
+  CreateAsset,
+  AllRequestAssets,
+  AcceptRequest,
   AllLicenses,
   CreateLicense,
   AllUsers,
@@ -63,6 +65,13 @@ function App() {
                 <Route
                   path=":assetId/clone"
                   element={<CreateAsset action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="request-assets">
+                <Route index element={<AllRequestAssets />} />
+                <Route
+                  path=":requestAssetId/accept"
+                  element={<AcceptRequest />}
                 />
               </Route>
               <Route path="source-code">

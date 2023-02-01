@@ -267,7 +267,7 @@ export default function AssetTable() {
     setOpen(false);
   };
 
-  const getAssets = async () => {
+  const getData = async () => {
     try {
       const asset = await getAllAssets();
       setRows(asset);
@@ -276,14 +276,14 @@ export default function AssetTable() {
     }
   };
   React.useEffect(() => {
-    getAssets();
+    getData();
   }, []);
 
   const handleDelete = async (id: number) => {
     try {
       await deleteAsset(id);
       handleClose();
-      await getAssets();
+      await getData();
       setIdToDelete(0);
       toast.success('Deleted');
     } catch (err: any) {

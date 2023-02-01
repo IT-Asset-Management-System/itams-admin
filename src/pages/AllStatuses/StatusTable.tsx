@@ -386,7 +386,12 @@ export default function StatusTable() {
                         {row.id}
                       </TableCell>
                       <TableCell align="left">
-                        <Link to={`${row.id}`} style={{ textDecoration: 'none' }}>{row.name}</Link>
+                        <Link
+                          to={`${row.id}`}
+                          style={{ textDecoration: 'none' }}
+                        >
+                          {row.name}
+                        </Link>
                       </TableCell>
                       <TableCell align="left">{row.numOfAssets}</TableCell>
                       <TableCell align="left">

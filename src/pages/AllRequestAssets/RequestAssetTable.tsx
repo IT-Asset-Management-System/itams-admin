@@ -18,8 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { deleteAsset, getAllAssets } from '../../api/asset';
-import Actions from '../../components/Actions';
+import { rejectRequest, getAllRequestAssets } from '../../api/asset';
 import { toast } from 'react-toastify';
 
 import Button from '@mui/material/Button';
@@ -29,7 +28,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Asset } from '../../interface/interface';
+import { RequestAsset, RequestAssetStatus } from '../../interface/interface';
+import { formatDate } from '../../helpers/format';
+import RequestActions from '../../components/Actions/RequestActions';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -74,7 +75,7 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Asset;
+  id: keyof RequestAsset;
   label: string;
   numeric: boolean;
 }
@@ -93,22 +94,22 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
+    id: 'username',
+    numeric: false,
+    disablePadding: false,
+    label: 'Username',
+  },
+  {
     id: 'assetModel',
     numeric: false,
     disablePadding: false,
     label: 'Model',
   },
   {
-    id: 'department',
+    id: 'date',
     numeric: false,
     disablePadding: false,
-    label: 'Department',
-  },
-  {
-    id: 'supplier',
-    numeric: false,
-    disablePadding: false,
-    label: 'Supplier',
+    label: 'Date',
   },
 
   {
@@ -123,7 +124,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Asset,
+    property: keyof RequestAsset,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -141,7 +142,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof Asset) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof RequestAsset) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -246,47 +247,46 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function AssetTable(props: any) {
-  const { id } = props;
+export default function RequestAssetsTable() {
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof RequestAsset>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
   );
-  const [rows, setRows] = React.useState<Asset[]>([]);
+  const [rows, setRows] = React.useState<RequestAsset[]>([]);
 
   const [open, setOpen] = React.useState(false);
-  const [idToDelete, setIdToDelete] = React.useState<number>(0);
+  const [idToReject, setIdToReject] = React.useState<number>(0);
   const handleClickOpen = (id: number) => {
     setOpen(true);
-    setIdToDelete(id);
+    setIdToReject(id);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const getAssets = async () => {
+  const getData = async () => {
     try {
-      const asset = await getAllAssets({ statusId: id });
+      const asset = await getAllRequestAssets();
       setRows(asset);
     } catch (err) {
       console.log(err);
     }
   };
   React.useEffect(() => {
-    getAssets();
+    getData();
   }, []);
 
-  const handleDelete = async (id: number) => {
+  const handleReject = async (id: number) => {
     try {
-      await deleteAsset(id);
+      await rejectRequest(+id);
       handleClose();
-      await getAssets();
-      setIdToDelete(0);
-      toast.success('Deleted');
+      await getData();
+      setIdToReject(0);
+      toast.success('Rejected');
     } catch (err: any) {
       console.log(err);
       toast.error(err.response.data.message);
@@ -295,7 +295,7 @@ export default function AssetTable(props: any) {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Asset,
+    property: keyof RequestAsset,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -405,17 +405,19 @@ export default function AssetTable(props: any) {
                         {row.id}
                       </TableCell>
                       <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">{row.assetModel}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">{row.supplier}</TableCell>
+                      <TableCell align="left">{formatDate(row.date)}</TableCell>
                       <TableCell align="left">{row.status}</TableCell>
                       <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="hardware"
-                          data={row}
-                          onClickDelete={handleClickOpen}
-                        />
+                        {row.status === RequestAssetStatus.REQUESTED && (
+                          <RequestActions
+                            id={row.id}
+                            path="request-assets"
+                            data={row}
+                            onClickReject={handleClickOpen}
+                          />
+                        )}
                       </TableCell>
                     </TableRow>
                   );
@@ -449,15 +451,15 @@ export default function AssetTable(props: any) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{'Delete'}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">{'Reject'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Are you sure you wish to delete ?
+              Are you sure you wish to reject ?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={() => handleDelete(idToDelete)} autoFocus>
+            <Button onClick={() => handleReject(idToReject)} autoFocus>
               Yes
             </Button>
           </DialogActions>

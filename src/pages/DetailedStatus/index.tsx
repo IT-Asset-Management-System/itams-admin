@@ -4,11 +4,11 @@ import PageHeader from '../../components/PageHeader';
 import AssetTable from './AssetTable';
 
 function DetailedStatus() {
-  const {statusId} = useParams();
+  const { statusId } = useParams();
   return (
     <Box>
       <PageHeader name="Detailed Status" canGoBack />
-      <AssetTable id={statusId}/>
+      <AssetTable id={statusId} />
     </Box>
   );
 }
