@@ -17,12 +17,17 @@ export default function DatePickerField(props: any) {
   };
   return (
     <Box sx={{ flexGrow: 1, py: '16px' }}>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        sx={{ flexDirection: { xs: 'column', md: 'row' } }}
+        spacing={2}
+      >
         <Grid
-          xs={3}
+          xs={false}
+          md={3}
           sx={{
             display: 'flex',
-            justifyContent: 'right',
+            justifyContent: { md: 'right' },
             alignItems: 'center',
             pr: '16px',
           }}
@@ -31,7 +36,7 @@ export default function DatePickerField(props: any) {
             {required ? `${fieldName}*` : fieldName}
           </Typography>
         </Grid>
-        <Grid xs={9}>
+        <Grid xs={false} md={9}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DesktopDatePicker
               disabled={disabled}

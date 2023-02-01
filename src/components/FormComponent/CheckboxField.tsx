@@ -8,15 +8,19 @@ function CheckboxField(props: any) {
     setChecked(event.target.checked);
     formik.values[id] = event.target.checked;
   };
-  console.log('check', formik.values[id]);
   return (
     <Box sx={{ flexGrow: 1, py: '16px' }}>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        sx={{ flexDirection: { xs: 'column', md: 'row' } }}
+        spacing={2}
+      >
         <Grid
-          xs={3}
+          xs={false}
+          md={3}
           sx={{
             display: 'flex',
-            justifyContent: 'right',
+            justifyContent: { md: 'right' },
             alignItems: 'center',
             pr: '16px',
           }}
@@ -25,7 +29,7 @@ function CheckboxField(props: any) {
             {required ? `${fieldName}*` : fieldName}
           </Typography>
         </Grid>
-        <Grid xs={9}>
+        <Grid xs={false} md={9}>
           <Checkbox
             id={id}
             size="small"

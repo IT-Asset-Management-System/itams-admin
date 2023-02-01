@@ -4,21 +4,27 @@ function InputField(props: any) {
   const { id, fieldName, disabled, fullWidth, formik, required } = props;
   return (
     <Box sx={{ flexGrow: 1, py: '16px' }}>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        sx={{ flexDirection: { xs: 'column', md: 'row' } }}
+        spacing={2}
+      >
         <Grid
-          xs={3}
+          xs={false}
+          md={3}
           sx={{
             display: 'flex',
-            justifyContent: 'right',
+            justifyContent: { md: 'right' },
             alignItems: 'center',
             pr: '16px',
+            flexGrow: { xs: 1 },
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>
             {required ? `${fieldName}*` : fieldName}
           </Typography>
         </Grid>
-        <Grid xs={9}>
+        <Grid xs={false} md={9}>
           <TextField
             id={id}
             size="small"

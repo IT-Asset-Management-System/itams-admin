@@ -16,9 +16,10 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../../api/auth';
 import { useAuthContext } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
-import MenuListComposition from '../MenuList';
+import MenuListComposition from '../MenuList/MenuListComposition';
 import { MenuItem as MenuItemInterface } from '../../interface/interface';
 import Notification from './Notification';
+import NestedList from '../MenuList/NestedList';
 interface Page {
   name: string;
   hasChild: boolean;
@@ -162,10 +163,17 @@ const Header = () => {
               }}
             >
               {pages.map((page: Page) => (
-                <MenuItem key={page.name}>
-                  <Typography textTransform="capitalize" textAlign="center">
-                    {page.name}
-                  </Typography>
+                <MenuItem
+                  key={page.name}
+                  disableRipple={page.hasChild ? true : false}
+                >
+                  {page.hasChild ? (
+                    <NestedList data={page} />
+                  ) : (
+                    <Typography textTransform="capitalize" textAlign="center">
+                      {page.name}
+                    </Typography>
+                  )}
                 </MenuItem>
               ))}
             </Menu>
