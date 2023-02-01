@@ -56,6 +56,7 @@ const pages: Page[] = [
       { name: 'Suppliers', destination: '/suppliers' },
       { name: 'Departments', destination: '/departments' },
       { name: 'Locations', destination: '/locations' },
+      { name: 'Deprecations', destination: '/deprecations' },
     ],
   },
 ];

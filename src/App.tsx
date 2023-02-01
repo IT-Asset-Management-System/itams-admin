@@ -33,6 +33,8 @@ import {
   CreateDepartment,
   AllLocations,
   CreateLocation,
+  AllDeprecations,
+  CreateDeprecation,
   AllSourceCodes,
   CreateSourceCode,
   AllDigitalContents,
@@ -238,6 +240,17 @@ function App() {
                 <Route
                   path=":locationId/clone"
                   element={<CreateLocation action={Actions.CLONE} />}
+                />
+              </Route>
+              <Route path="deprecations">
+                <Route index element={<AllDeprecations />} />
+                <Route
+                  path="create"
+                  element={<CreateDeprecation action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":deprecationId/edit"
+                  element={<CreateDeprecation action={Actions.UPDATE} />}
                 />
               </Route>
               <Route path="account">

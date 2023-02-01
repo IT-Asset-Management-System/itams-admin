@@ -77,6 +77,19 @@ export interface NewLocation {
   address: string;
 }
 
+export interface Deprecation {
+  id: number;
+  name: string;
+  months: number;
+  category: string;
+}
+
+export interface NewDeprecation {
+  name: string;
+  months: number;
+  categoryId: number;
+}
+
 export interface Asset {
   id: number;
   name: string;
