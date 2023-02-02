@@ -90,6 +90,12 @@ export interface NewDeprecation {
   categoryId: number;
 }
 
+export interface Notification {
+  name: string;
+  type: string;
+  expiration_date: string;
+}
+
 export interface Asset {
   id: number;
   name: string;
