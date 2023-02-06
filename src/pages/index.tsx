@@ -8,6 +8,8 @@ export { default as AllAssets } from './AllAssets';
 export { default as CreateAsset } from './CreateAsset';
 export { default as AllRequestAssets } from './AllRequestAssets';
 export { default as AcceptRequest } from './AcceptRequest';
+export { default as AllAssetMaintenances } from './AllAssetMaintenances';
+export { default as CreateAssetMaintenance } from './CreateAssetMaintenance';
 export { default as AllLicenses } from './AllLicenses';
 export { default as CreateLicense } from './CreateLicense';
 export { default as AllUsers } from './AllUsers';

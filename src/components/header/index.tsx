@@ -33,7 +33,8 @@ const pages: Page[] = [
     hasChild: true,
     menuList: [
       { name: 'List All', destination: '/hardware' },
-      { name: 'All requests', destination: 'request-assets' },
+      { name: 'All Requests', destination: 'request-assets' },
+      { name: 'Asset Maintenances', destination: 'maintenances' },
     ],
   },
   { name: 'Source codes', destination: '/source-code', hasChild: false },
@@ -231,7 +232,7 @@ const Header = () => {
             <Notification />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="avatar" src={avatar} sizes="small"/>
+                <Avatar alt="avatar" src={avatar} sizes="small" />
               </IconButton>
             </Tooltip>
             <Menu

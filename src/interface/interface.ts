@@ -121,6 +121,26 @@ export interface AssetQuery {
   supplierId?: number;
 }
 
+export interface AssetMaintenance {
+  id: number;
+  asset_id: string;
+  asset_name: string;
+  supplier: string;
+  start_date: string;
+  end_date: string;
+  cost: number;
+  note: string;
+}
+
+export interface NewAssetMaintenance {
+  assetId: number;
+  supplierId: number;
+  start_date: string;
+  end_date: string;
+  cost: number;
+  note: string;
+}
+
 export interface SourceCode {
   id: number;
   name: string;

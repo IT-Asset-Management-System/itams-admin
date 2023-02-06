@@ -1,7 +1,8 @@
 import { Box, TextField, Typography, Grid } from '@mui/material';
 
 function InputField(props: any) {
-  const { id, fieldName, disabled, fullWidth, formik, required } = props;
+  const { id, fieldName, disabled, fullWidth, formik, required, multiline } =
+    props;
   return (
     <Box sx={{ flexGrow: 1, py: '16px' }}>
       <Grid
@@ -33,6 +34,8 @@ function InputField(props: any) {
             value={formik.values[id]}
             onChange={formik.handleChange}
             required={required}
+            multiline={multiline}
+            minRows={3}
           />
         </Grid>
       </Grid>

@@ -44,7 +44,12 @@ export default function DatePickerField(props: any) {
               onChange={handleChange}
               inputFormat="DD/MM/YYYY"
               renderInput={(params: any) => (
-                <TextField size="small" {...params} fullWidth={fullWidth} />
+                <TextField
+                  size="small"
+                  {...params}
+                  fullWidth={fullWidth}
+                  error={false}
+                />
               )}
             />
           </LocalizationProvider>

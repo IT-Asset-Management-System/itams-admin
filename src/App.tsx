@@ -14,6 +14,8 @@ import {
   CreateAsset,
   AllRequestAssets,
   AcceptRequest,
+  AllAssetMaintenances,
+  CreateAssetMaintenance,
   AllLicenses,
   CreateLicense,
   AllUsers,
@@ -74,6 +76,17 @@ function App() {
                 <Route
                   path=":requestAssetId/accept"
                   element={<AcceptRequest />}
+                />
+              </Route>
+              <Route path="maintenances">
+                <Route index element={<AllAssetMaintenances />} />
+                <Route
+                  path="create"
+                  element={<CreateAssetMaintenance action={Actions.CREATE} />}
+                />
+                <Route
+                  path=":assetMaintenanceId/edit"
+                  element={<CreateAssetMaintenance action={Actions.UPDATE} />}
                 />
               </Route>
               <Route path="source-code">
