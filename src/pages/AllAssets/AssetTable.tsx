@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,11 +15,17 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchIcon from '@mui/icons-material/Search';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { visuallyHidden } from '@mui/utils';
 import { deleteAsset, getAllAssets } from '../../api/asset';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
+import { CSVLink } from 'react-csv';
+import dayjs from 'dayjs';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -186,12 +191,57 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
+
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  data: Asset[];
+  getData: () => void;
+  searchData: (searchText: string) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, data, getData, searchData } = props;
 
   return (
     <Toolbar
@@ -207,28 +257,23 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {
-        numSelected > 0 && (
-          <Typography
-            sx={{ flex: '1 1 100%' }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        )
-        // : (
-        //   <Typography
-        //     sx={{ flex: '1 1 100%' }}
-        //     variant="h6"
-        //     id="tableTitle"
-        //     component="div"
-        //   >
-        //     All Assets
-        //   </Typography>
-        // )
-      }
+      {numSelected > 0 ? (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
+          {numSelected} selected
+        </Typography>
+      ) : (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        ></Typography>
+      )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -236,11 +281,37 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <Box
+          sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+        >
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={(event) => {
+                searchData(event.target.value);
+              }}
+            />
+          </Search>
+          <Tooltip title="Refresh">
+            <IconButton onClick={getData}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Export">
+            <IconButton>
+              <CSVLink
+                data={data}
+                filename={`asset-${dayjs().format('DD-MM-YYYY')}.csv`}
+              >
+                <FileDownloadIcon color="success" />
+              </CSVLink>
+            </IconButton>
+          </Tooltip>
+        </Box>
       )}
     </Toolbar>
   );
@@ -255,6 +326,7 @@ export default function AssetTable() {
     getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
   );
   const [rows, setRows] = React.useState<Asset[]>([]);
+  const [initRows, setInitRows] = React.useState<Asset[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -270,11 +342,28 @@ export default function AssetTable() {
   const getData = async () => {
     try {
       const asset = await getAllAssets();
+      setInitRows(asset);
       setRows(asset);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const searchData = (searchText: string) => {
+    setRows(
+      initRows.filter((item: Asset) =>
+        Object.keys(item).some(
+          (k: string) =>
+            item[k as keyof Asset] != null &&
+            item[k as keyof Asset]
+              .toString()
+              .toLowerCase()
+              .includes(searchText.toLowerCase()),
+        ),
+      ),
+    );
+  };
+
   React.useEffect(() => {
     getData();
   }, []);
@@ -351,7 +440,12 @@ export default function AssetTable() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          data={rows}
+          getData={getData}
+          searchData={searchData}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
