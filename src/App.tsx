@@ -20,6 +20,7 @@ import {
   CreateLicense,
   AllUsers,
   CreateUser,
+  ImportAssets,
   AllStatuses,
   DetailedStatus,
   CreateStatus,
@@ -148,6 +149,9 @@ function App() {
                   path=":userId/clone"
                   element={<CreateUser action={Actions.CLONE} />}
                 />
+              </Route>
+              <Route path="import">
+                <Route index element={<ImportAssets />} />
               </Route>
               <Route path="statuses">
                 <Route index element={<AllStatuses />} />

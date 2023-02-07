@@ -40,6 +40,7 @@ export default function Analytic(props: any) {
       </Box>
       <Box
         sx={{
+          borderRadius: '0px 0px 5px 5px',
           backgroundColor: '#ABD',
           py: '3px',
           display: 'flex',
@@ -55,7 +56,7 @@ export default function Analytic(props: any) {
             marginRight: '6px',
           }}
         >
-          view all
+          View All
         </Typography>
         <ArrowCircleRightSharpIcon style={{ fill: 'black' }} fontSize="small" />
       </Box>

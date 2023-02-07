@@ -108,6 +108,7 @@ export interface Asset {
 export interface NewAsset {
   name: string;
   purchase_cost: number;
+  purchase_date: string;
   assetModelId: number;
   departmentId: number;
   statusId: number;

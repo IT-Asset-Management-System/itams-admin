@@ -29,6 +29,11 @@ export const createNewAsset = async (asset: NewAsset) => {
   return response.data;
 };
 
+export const importAsset = async (assets: NewAsset[]) => {
+  const response = await axios.post('/asset/import-asset', assets);
+  return response.data;
+};
+
 export const getAllRequestAssets = async () => {
   const response = await axios.get('/asset/all-request-assets');
   return response.data;

@@ -45,6 +45,7 @@ const pages: Page[] = [
   },
   { name: 'Licenses', destination: '/licenses', hasChild: false },
   { name: 'People', destination: '/users', hasChild: false },
+  { name: 'Import', destination: '/import', hasChild: false },
   {
     name: 'Settings',
     hasChild: true,
@@ -170,7 +171,11 @@ const Header = () => {
                   {page.hasChild ? (
                     <NestedList data={page} />
                   ) : (
-                    <Typography textTransform="capitalize" textAlign="center">
+                    <Typography
+                      textTransform="capitalize"
+                      textAlign="center"
+                      onClick={() => navigate(page?.destination ?? '')}
+                    >
                       {page.name}
                     </Typography>
                   )}

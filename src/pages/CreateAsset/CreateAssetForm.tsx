@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import { getAllAssetModels } from '../../api/assetModel';
 import { getAllDepartments } from '../../api/department';
 import { getAllStatuses } from '../../api/status';
+import dayjs from 'dayjs';
+import DatePickerField from '../../components/FormComponent/DatePickerField';
 
 function CreateAssetForm(props: any) {
   const { data, action } = props;
@@ -29,6 +31,7 @@ function CreateAssetForm(props: any) {
   const initialValues: NewAsset = {
     name: data?.name ?? '',
     purchase_cost: data?.purchase_cost ?? 0,
+    purchase_date: data?.purchase_date ?? dayjs(),
     assetModelId:
       assetModels.find((assetModel: AssetModel) => {
         return assetModel.name === data?.assetModel;
@@ -109,6 +112,12 @@ function CreateAssetForm(props: any) {
                 <InputField
                   id="purchase_cost"
                   fieldName="Purchase cost"
+                  formik={formik}
+                  required
+                />
+                <DatePickerField
+                  id="purchase_date"
+                  fieldName="Purchase Date"
                   formik={formik}
                   required
                 />
