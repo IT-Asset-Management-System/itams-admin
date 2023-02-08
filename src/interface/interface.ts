@@ -96,6 +96,11 @@ export interface Notification {
   expiration_date: string;
 }
 
+export enum CheckType {
+  CHECKIN = 'checkin',
+  CHECKOUT = 'checkout',
+}
+
 export interface Asset {
   id: number;
   name: string;
@@ -103,7 +108,7 @@ export interface Asset {
   department: string;
   supplier: string;
   status: string;
-  user: string;
+  check_type: CheckType;
 }
 
 export interface NewAsset {

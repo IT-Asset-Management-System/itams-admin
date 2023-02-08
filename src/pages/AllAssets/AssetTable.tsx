@@ -34,7 +34,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Asset } from '../../interface/interface';
+import { Asset, CheckType } from '../../interface/interface';
 import { Checkin } from '../../components/CheckButton/Checkin';
 import { Checkout } from '../../components/CheckButton/Checkout';
 import { useAuthContext } from '../../context/AuthContext';
@@ -126,7 +126,7 @@ const headCells: readonly HeadCell[] = [
     label: 'Status',
   },
   {
-    id: 'user',
+    id: 'check_type',
     numeric: false,
     disablePadding: false,
     label: 'Checkin/Checkout',
@@ -514,7 +514,7 @@ export default function AssetTable() {
                       <TableCell align="left">{row.supplier}</TableCell>
                       <TableCell align="left">{row.status}</TableCell>
                       <TableCell align="left">
-                        {Boolean(row.user) ? (
+                        {Boolean(row.check_type === CheckType.CHECKIN) ? (
                           <Checkin id={row.id} path="hardware" data={row} />
                         ) : (
                           <Checkout id={row.id} path="hardware" data={row} />

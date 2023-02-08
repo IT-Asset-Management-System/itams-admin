@@ -407,7 +407,7 @@ export default function SourceCodeTable() {
                       <TableCell align="left">{row.owner}</TableCell>
                       <TableCell align="left">{row.description}</TableCell>
                       <TableCell align="left">
-                        <Checkbox checked={Boolean(row.isPrivate)} />
+                        <Checkbox checked={Boolean(row.isPrivate)} disabled />
                       </TableCell>
                       <TableCell align="left">
                         <Link target="_blank" href={row.url}>
