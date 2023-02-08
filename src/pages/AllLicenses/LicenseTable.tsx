@@ -31,6 +31,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
 import { License } from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
+import { useAuthContext } from '../../context/AuthContext';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -259,6 +260,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 export default function LicenseTable() {
+  const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof License>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -297,6 +299,7 @@ export default function LicenseTable() {
       handleClose();
       await getData();
       setIdToDelete(0);
+      await getNotifications();
       toast.success('Deleted');
     } catch (err: any) {
       console.log(err);

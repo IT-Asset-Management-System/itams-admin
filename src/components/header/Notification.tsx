@@ -9,28 +9,17 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
-import { getAllNotifications } from '../../api/notification';
-import { Notification as NotificationInterface } from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
+import { useAuthContext } from '../../context/AuthContext';
+import { Notification as NotificationInterface } from '../../interface/interface';
 
 const Notification = () => {
   const navigate = useNavigate();
-
-  const [notifications, setNotifications] = React.useState<
-    NotificationInterface[]
-  >([]);
+  const { notifications, getNotifications } = useAuthContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const getData = async () => {
-    try {
-      const data: NotificationInterface[] = await getAllNotifications();
-      setNotifications(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
   React.useEffect(() => {
-    getData();
+    getNotifications();
   }, []);
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {

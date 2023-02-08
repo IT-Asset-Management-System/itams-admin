@@ -37,6 +37,7 @@ import { getPref, Prefs, setPref } from '../../prefs';
 import { Asset } from '../../interface/interface';
 import { Checkin } from '../../components/CheckButton/Checkin';
 import { Checkout } from '../../components/CheckButton/Checkout';
+import { useAuthContext } from '../../context/AuthContext';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -124,6 +125,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Status',
   },
+  {
+    id: 'user',
+    numeric: false,
+    disablePadding: false,
+    label: 'Checkin/Checkout',
+  },
 ];
 
 interface EnhancedTableProps {
@@ -187,7 +194,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell>Checkin/Checkout</TableCell>
         <TableCell>Actions</TableCell>
       </TableRow>
     </TableHead>
@@ -321,6 +327,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 export default function AssetTable() {
+  const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -377,6 +384,7 @@ export default function AssetTable() {
       handleClose();
       await getData();
       setIdToDelete(0);
+      await getNotifications();
       toast.success('Deleted');
     } catch (err: any) {
       console.log(err);

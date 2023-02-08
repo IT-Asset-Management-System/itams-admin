@@ -1,12 +1,14 @@
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import Loading from '../components/Loading';
 import { useAuth } from '../hooks/useAuth';
+import { useNotification } from '../hooks/useNotification';
 
 const AuthContext = createContext<any>(null);
 
 function AuthProvider({ children }: any) {
   const { isLoading, authContext, isAuthenticated, avatar, getAuth } =
     useAuth();
+  const { notifications, getNotifications } = useNotification();
 
   useEffect(() => {
     getAuth();
@@ -21,6 +23,8 @@ function AuthProvider({ children }: any) {
         isAuthenticated,
         avatar,
         getAuth,
+        notifications,
+        getNotifications,
       }}
     >
       {children}

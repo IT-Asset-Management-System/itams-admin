@@ -20,10 +20,12 @@ import { getAllDepartments } from '../../api/department';
 import { getAllStatuses } from '../../api/status';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
+import { useAuthContext } from '../../context/AuthContext';
 
 function CreateAssetForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const { getNotifications } = useAuthContext();
   const [assetModels, setAssetModels] = useState<AssetModel[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [statuses, setStatuses] = useState<Status[]>([]);
@@ -71,6 +73,7 @@ function CreateAssetForm(props: any) {
     try {
       if (action === Actions.UPDATE) await updateAsset(data.id, newAsset);
       else await createNewAsset(newAsset);
+      await getNotifications();
       navigate(-1);
       toast.success(
         action === Actions.UPDATE

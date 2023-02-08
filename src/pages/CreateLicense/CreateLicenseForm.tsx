@@ -18,10 +18,12 @@ import { getAllManufacturers } from '../../api/manufacturer';
 import { createNewLicense, updateLicense } from '../../api/license';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import dayjs from 'dayjs';
+import { useAuthContext } from '../../context/AuthContext';
 
 function CreateLicenseForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const { getNotifications } = useAuthContext();
   const [categories, setCategories] = useState<Category[]>([]);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
@@ -63,6 +65,7 @@ function CreateLicenseForm(props: any) {
     try {
       if (action === Actions.UPDATE) await updateLicense(data.id, newLicense);
       else await createNewLicense(newLicense);
+      await getNotifications();
       navigate(-1);
       toast.success(
         action === Actions.UPDATE
