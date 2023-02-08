@@ -12,6 +12,8 @@ import {
   ChangePassword,
   AllAssets,
   CreateAsset,
+  CheckoutAsset,
+  CheckinAsset,
   AllRequestAssets,
   AcceptRequest,
   AllAssetMaintenances,
@@ -71,6 +73,8 @@ function App() {
                   path=":assetId/clone"
                   element={<CreateAsset action={Actions.CLONE} />}
                 />
+                <Route path=":assetId/checkout" element={<CheckoutAsset />} />
+                <Route path=":assetId/checkin" element={<CheckinAsset />} />
               </Route>
               <Route path="request-assets">
                 <Route index element={<AllRequestAssets />} />

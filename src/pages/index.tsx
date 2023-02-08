@@ -6,6 +6,8 @@ export { default as Profile } from './Profile';
 export { default as ChangePassword } from './ChangePassword';
 export { default as AllAssets } from './AllAssets';
 export { default as CreateAsset } from './CreateAsset';
+export { default as CheckoutAsset } from './CheckoutAsset';
+export { default as CheckinAsset } from './CheckinAsset';
 export { default as AllRequestAssets } from './AllRequestAssets';
 export { default as AcceptRequest } from './AcceptRequest';
 export { default as AllAssetMaintenances } from './AllAssetMaintenances';

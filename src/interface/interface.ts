@@ -103,6 +103,7 @@ export interface Asset {
   department: string;
   supplier: string;
   status: string;
+  user: string;
 }
 
 export interface NewAsset {
@@ -113,6 +114,22 @@ export interface NewAsset {
   departmentId: number;
   statusId: number;
   supplierId: number;
+}
+
+export interface CheckoutAsset {
+  assetId: number;
+  statusId: number;
+  userId: number;
+  checkout_date: string;
+  note: string;
+}
+
+export interface CheckinAsset {
+  assetId: number;
+  statusId: number;
+  departmentId: number;
+  checkin_date: string;
+  note: string;
 }
 
 export interface AssetQuery {

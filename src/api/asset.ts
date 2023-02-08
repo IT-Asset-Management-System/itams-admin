@@ -1,4 +1,10 @@
-import { AcceptRequest, AssetQuery, NewAsset } from '../interface/interface';
+import {
+  AcceptRequest,
+  AssetQuery,
+  CheckoutAsset,
+  CheckinAsset,
+  NewAsset,
+} from '../interface/interface';
 import axios from './axios';
 
 export const getAllAssets = async (assetQuery?: AssetQuery) => {
@@ -26,6 +32,16 @@ export const deleteAsset = async (id: number | string) => {
 
 export const createNewAsset = async (asset: NewAsset) => {
   const response = await axios.post('/asset/create-asset', asset);
+  return response.data;
+};
+
+export const checkoutAsset = async (asset: CheckoutAsset) => {
+  const response = await axios.post('/asset/checkout-asset', asset);
+  return response.data;
+};
+
+export const checkinAsset = async (asset: CheckinAsset) => {
+  const response = await axios.post('/asset/checkin-asset', asset);
   return response.data;
 };
 

@@ -35,6 +35,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
 import { Asset } from '../../interface/interface';
+import { Checkin } from '../../components/CheckButton/Checkin';
+import { Checkout } from '../../components/CheckButton/Checkout';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -185,6 +187,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell>Checkin/Checkout</TableCell>
         <TableCell>Actions</TableCell>
       </TableRow>
     </TableHead>
@@ -502,6 +505,13 @@ export default function AssetTable() {
                       <TableCell align="left">{row.department}</TableCell>
                       <TableCell align="left">{row.supplier}</TableCell>
                       <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">
+                        {Boolean(row.user) ? (
+                          <Checkin id={row.id} path="hardware" data={row} />
+                        ) : (
+                          <Checkout id={row.id} path="hardware" data={row} />
+                        )}
+                      </TableCell>
                       <TableCell align="left">
                         <Actions
                           id={row.id}
