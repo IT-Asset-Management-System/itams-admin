@@ -89,7 +89,7 @@ function CreateUserForm(props: any) {
                   id="password"
                   fieldName="Password"
                   formik={formik}
-                  required
+                  required={action === Actions.CREATE}
                 />
                 <InputField id="phone" fieldName="Phone" formik={formik} />
                 <SelectField

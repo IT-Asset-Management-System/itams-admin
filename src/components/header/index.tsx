@@ -46,6 +46,7 @@ const pages: Page[] = [
   { name: 'Licenses', destination: '/licenses', hasChild: false },
   { name: 'People', destination: '/users', hasChild: false },
   { name: 'Import', destination: '/import', hasChild: false },
+  { name: 'Inventory', destination: '/inventory', hasChild: false },
   {
     name: 'Settings',
     hasChild: true,

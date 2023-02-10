@@ -34,7 +34,7 @@ function CheckoutAssetForm(props: any) {
         return status.name === data?.status;
       })?.id ?? 0,
     checkout_date: data?.date ?? dayjs(),
-    note: '',
+    checkout_note: '',
   };
   useEffect(() => {
     const getData = async () => {

@@ -5,47 +5,36 @@ import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
 import {
   Actions,
-  AssetModel,
-  CheckinAsset,
-  Status,
-  Supplier,
+  NewInventory,
   Department,
+  Supplier,
 } from '../../interface/interface';
-import { getAllSuppliers } from '../../api/supplier';
 import SelectField from '../../components/FormComponent/SelectField';
-import { checkinAsset, createNewAsset, updateAsset } from '../../api/asset';
 import { useNavigate } from 'react-router-dom';
-import { getAllAssetModels } from '../../api/assetModel';
 import { getAllDepartments } from '../../api/department';
-import { getAllStatuses } from '../../api/status';
-import dayjs from 'dayjs';
+import { createNewInventory, updateInventory } from '../../api/inventory';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
+import dayjs from 'dayjs';
 
-function CheckinAssetForm(props: any) {
-  const { data } = props;
+function CreateInventoryForm(props: any) {
+  const { data, action } = props;
   const navigate = useNavigate();
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [statuses, setStatuses] = useState<Status[]>([]);
-  const initialValues: CheckinAsset = {
-    assetId: data?.id,
-    statusId:
-      statuses.find((status: Status) => {
-        return status.name === data?.status;
-      })?.id ?? 0,
+  const initialValues: NewInventory = {
+    name: data?.name ?? '',
+    start_date: data?.start_date ?? dayjs(),
+    end_date: data?.end_date ?? '',
+    note: data?.note ?? '',
     departmentId:
       departments.find((department: Department) => {
         return department.name === data?.department;
       })?.id ?? 0,
-    checkin_date: data?.date ?? dayjs(),
-    checkin_note: '',
   };
   useEffect(() => {
     const getData = async () => {
       try {
         const departments: Department[] = await getAllDepartments();
-        const statuses: Status[] = await getAllStatuses();
         setDepartments(departments);
-        setStatuses(statuses);
       } catch (err) {
         console.log(err);
       }
@@ -53,13 +42,19 @@ function CheckinAssetForm(props: any) {
     getData();
   }, []);
 
-  const handleSubmit = async (asset: CheckinAsset) => {
+  const handleSubmit = async (newInventory: NewInventory) => {
     try {
-      await checkinAsset(asset);
+      if (action === Actions.UPDATE)
+        await updateInventory(data.id, newInventory);
+      else await createNewInventory(newInventory);
       navigate(-1);
-      toast.success('Checkin successfully');
+      toast.success(
+        action === Actions.UPDATE
+          ? 'Update successfully'
+          : 'Create successfully',
+      );
     } catch (err: any) {
-      console.log('checkin asset', err);
+      console.log('Create inventory', err);
       toast.error(err.response.data.message);
     }
   };
@@ -85,18 +80,10 @@ function CheckinAssetForm(props: any) {
               <Box sx={{ mx: '60px', mt: '20px' }}>
                 <InputField
                   id="name"
-                  fieldName="Asset Name"
-                  fullWidth
+                  fieldName="Name"
                   formik={formik}
-                  value={data?.name}
-                  disabled
-                />
-                <SelectField
-                  id="statusId"
-                  fieldName="Status"
-                  formik={formik}
-                  data={statuses}
                   required
+                  fullWidth
                 />
                 <SelectField
                   id="departmentId"
@@ -104,12 +91,18 @@ function CheckinAssetForm(props: any) {
                   formik={formik}
                   data={departments}
                   required
+                  disabled={action === Actions.UPDATE}
                 />
                 <DatePickerField
-                  id="checkin_date"
-                  fieldName="Checkin Date"
+                  id="start_date"
+                  fieldName="Start Date"
                   formik={formik}
                   required
+                />
+                <DatePickerField
+                  id="end_date"
+                  fieldName="End Date"
+                  formik={formik}
                 />
                 <InputField
                   id="note"
@@ -153,4 +146,4 @@ function CheckinAssetForm(props: any) {
   );
 }
 
-export default CheckinAssetForm;
+export default CreateInventoryForm;

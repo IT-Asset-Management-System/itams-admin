@@ -23,6 +23,9 @@ import {
   AllUsers,
   CreateUser,
   ImportAssets,
+  AllInventories,
+  CreateInventory,
+  DetailedInventory,
   AllStatuses,
   DetailedStatus,
   CreateStatus,
@@ -156,6 +159,18 @@ function App() {
               </Route>
               <Route path="import">
                 <Route index element={<ImportAssets />} />
+              </Route>
+              <Route path="inventory">
+                <Route index element={<AllInventories />} />
+                <Route
+                  path="create"
+                  element={<CreateInventory action={Actions.CREATE} />}
+                />
+                <Route path=":inventoryId" element={<DetailedInventory />} />
+                <Route
+                  path=":inventoryId/edit"
+                  element={<CreateInventory action={Actions.UPDATE} />}
+                />
               </Route>
               <Route path="statuses">
                 <Route index element={<AllStatuses />} />

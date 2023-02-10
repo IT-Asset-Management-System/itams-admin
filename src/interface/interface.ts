@@ -126,7 +126,7 @@ export interface CheckoutAsset {
   statusId: number;
   userId: number;
   checkout_date: string;
-  note: string;
+  checkout_note: string;
 }
 
 export interface CheckinAsset {
@@ -134,7 +134,7 @@ export interface CheckinAsset {
   statusId: number;
   departmentId: number;
   checkin_date: string;
-  note: string;
+  checkin_note: string;
 }
 
 export interface AssetQuery {
@@ -233,6 +233,43 @@ export interface NewUser {
   password: string;
   phone: string;
   departmentId: number;
+}
+
+export interface Inventory {
+  id: number;
+  name: string;
+  start_date: string;
+  end_date: string;
+  department: string;
+  note: string;
+}
+
+export interface NewInventory {
+  name: string;
+  start_date: string;
+  end_date: string;
+  departmentId: number;
+  note: string;
+}
+
+export interface AssetToInventory {
+  id: number;
+  asset_name: string;
+  asset_id: number;
+  purchase_date: string;
+  purchase_cost: string;
+  old_cost: number;
+  old_status: string;
+  new_cost: number;
+  new_status: string;
+  check: string;
+}
+
+export interface UpdateAssetToInventory {
+  assetId: number;
+  new_cost: number;
+  newStatusId: number;
+  check: boolean;
 }
 
 export enum Actions {

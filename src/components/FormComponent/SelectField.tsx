@@ -1,7 +1,7 @@
 import { Box, MenuItem, Select, Typography, Grid } from '@mui/material';
 
 function SelectField(props: any) {
-  const { id, fieldName, formik, data, required } = props;
+  const { id, fieldName, formik, data, required, disabled } = props;
   return (
     <Box sx={{ flexGrow: 1, py: '16px' }}>
       <Grid
@@ -35,11 +35,12 @@ function SelectField(props: any) {
             }}
             onChange={formik.handleChange}
             required={required}
+            disabled={disabled}
           >
             {data?.map((i: any) => {
               return (
                 <MenuItem key={i.id} value={i.id}>
-                  {i.name}
+                  {`${i.id} - ${i.name}`}
                 </MenuItem>
               );
             })}
