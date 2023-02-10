@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,6 +15,9 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { deleteUser, getAllUsers } from '../../api/user';
@@ -31,6 +33,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
 import { User } from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
+import {
+  Search,
+  SearchIconWrapper,
+  StyledInputBase,
+} from '../../components/Search';
+import { styled, alpha } from '@mui/material/styles';
+import { CSVLink } from 'react-csv';
+import dayjs from 'dayjs';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -194,10 +204,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  data: User[];
+  getData: () => void;
+  searchData: (searchText: string) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, data, getData, searchData } = props;
 
   return (
     <Toolbar
@@ -213,28 +226,23 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {
-        numSelected > 0 && (
-          <Typography
-            sx={{ flex: '1 1 100%' }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        )
-        // : (
-        //   <Typography
-        //     sx={{ flex: '1 1 100%' }}
-        //     variant="h6"
-        //     id="tableTitle"
-        //     component="div"
-        //   >
-        //     All Assets
-        //   </Typography>
-        // )
-      }
+      {numSelected > 0 ? (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
+          {numSelected} selected
+        </Typography>
+      ) : (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        ></Typography>
+      )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -242,11 +250,37 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <Box
+          sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+        >
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={(event) => {
+                searchData(event.target.value);
+              }}
+            />
+          </Search>
+          <Tooltip title="Refresh">
+            <IconButton onClick={getData}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Export">
+            <IconButton>
+              <CSVLink
+                data={data}
+                filename={`asset-${dayjs().format('DD-MM-YYYY')}.csv`}
+              >
+                <FileDownloadIcon color="success" />
+              </CSVLink>
+            </IconButton>
+          </Tooltip>
+        </Box>
       )}
     </Toolbar>
   );
@@ -261,6 +295,7 @@ export default function UserTable() {
     getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
   );
   const [rows, setRows] = React.useState<User[]>([]);
+  const [initRows, setInitRows] = React.useState<User[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -276,11 +311,28 @@ export default function UserTable() {
   const getData = async () => {
     try {
       const data = await getAllUsers();
+      setInitRows(data);
       setRows(data);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const searchData = (searchText: string) => {
+    setRows(
+      initRows.filter((item: User) =>
+        Object.keys(item).some(
+          (k: string) =>
+            item[k as keyof User] != null &&
+            item[k as keyof User]
+              .toString()
+              .toLowerCase()
+              .includes(searchText.toLowerCase()),
+        ),
+      ),
+    );
+  };
+
   React.useEffect(() => {
     getData();
   }, []);
@@ -357,7 +409,12 @@ export default function UserTable() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          data={rows}
+          getData={getData}
+          searchData={searchData}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
