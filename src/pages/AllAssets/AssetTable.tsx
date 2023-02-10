@@ -38,6 +38,7 @@ import { Asset, CheckType } from '../../interface/interface';
 import { Checkin } from '../../components/CheckButton/Checkin';
 import { Checkout } from '../../components/CheckButton/Checkout';
 import { useAuthContext } from '../../context/AuthContext';
+import { formatDate } from '../../helpers/format';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -113,17 +114,40 @@ const headCells: readonly HeadCell[] = [
     label: 'Department',
   },
   {
+    id: 'purchase_date',
+    numeric: false,
+    disablePadding: false,
+    label: 'Purchase Date',
+  },
+  {
+    id: 'purchase_cost',
+    numeric: false,
+    disablePadding: false,
+    label: 'Purchase Cost',
+  },
+  {
+    id: 'current_cost',
+    numeric: false,
+    disablePadding: false,
+    label: 'Current Cost',
+  },
+  {
     id: 'supplier',
     numeric: false,
     disablePadding: false,
     label: 'Supplier',
   },
-
   {
     id: 'status',
     numeric: false,
     disablePadding: false,
     label: 'Status',
+  },
+  {
+    id: 'username',
+    numeric: false,
+    disablePadding: false,
+    label: 'User',
   },
   {
     id: 'check_type',
@@ -511,8 +535,14 @@ export default function AssetTable() {
                       <TableCell align="left">{row.name}</TableCell>
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.purchase_date)}
+                      </TableCell>
+                      <TableCell align="left">{row.purchase_cost}</TableCell>
+                      <TableCell align="left">{row.current_cost}</TableCell>
                       <TableCell align="left">{row.supplier}</TableCell>
                       <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">
                         {Boolean(row.check_type === CheckType.CHECKIN) ? (
                           <Checkin id={row.id} path="hardware" data={row} />

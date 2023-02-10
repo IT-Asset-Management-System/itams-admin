@@ -106,8 +106,12 @@ export interface Asset {
   name: string;
   assetModel: string;
   department: string;
+  purchase_date: string;
+  purchase_cost: number;
+  current_cost: number;
   supplier: string;
   status: string;
+  username: string;
   check_type: CheckType;
 }
 
@@ -224,6 +228,8 @@ export interface User {
   name: string;
   username: string;
   phone: string;
+  email: string;
+  birthday: string;
   department: string;
 }
 
@@ -232,6 +238,8 @@ export interface NewUser {
   username: string;
   password: string;
   phone: string;
+  email: string;
+  birthday: string;
   departmentId: number;
 }
 
@@ -284,6 +292,7 @@ export interface RequestAsset {
   username: string;
   assetModel: string;
   date: string;
+  note: string;
   status: string;
 }
 

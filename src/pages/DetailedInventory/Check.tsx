@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Checkbox, Typography, Grid } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 import { ActionTypes } from '../../components/reducers/useEditAssetToInventoryReducer';
 import { updateAssetToInventory } from '../../api/inventory';
 import { toast } from 'react-toastify';

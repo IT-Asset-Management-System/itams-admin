@@ -111,7 +111,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Date',
   },
-
+  {
+    id: 'note',
+    numeric: false,
+    disablePadding: false,
+    label: 'Note',
+  },
   {
     id: 'status',
     numeric: false,
@@ -408,6 +413,7 @@ export default function RequestAssetsTable() {
                       <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{formatDate(row.date)}</TableCell>
+                      <TableCell align="left">{row.note}</TableCell>
                       <TableCell align="left">{row.status}</TableCell>
                       <TableCell align="left">
                         {row.status === RequestAssetStatus.REQUESTED && (

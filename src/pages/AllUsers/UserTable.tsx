@@ -30,6 +30,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
 import { User } from '../../interface/interface';
+import { formatDate } from '../../helpers/format';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -103,6 +104,18 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     disablePadding: false,
     label: 'Phone',
+  },
+  {
+    id: 'email',
+    numeric: false,
+    disablePadding: false,
+    label: 'Email',
+  },
+  {
+    id: 'birthday',
+    numeric: false,
+    disablePadding: false,
+    label: 'Birthday',
   },
   {
     id: 'department',
@@ -399,6 +412,10 @@ export default function UserTable() {
                       <TableCell align="left">{row.name}</TableCell>
                       <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">{row.phone}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.birthday)}
+                      </TableCell>
                       <TableCell align="left">{row.department}</TableCell>
                       <TableCell align="left">
                         <Actions

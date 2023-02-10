@@ -19,6 +19,7 @@ function ProfileForm() {
 
   const initialValues = {
     name: authContext.name,
+    email: authContext.email,
   };
   console.log(initialValues);
 
@@ -55,11 +56,12 @@ function ProfileForm() {
           return (
             <Form>
               <Box sx={{ mx: '60px', mt: '20px' }}>
+                <InputField id="name" fieldName="Name" formik={formik} />
                 <InputField
-                  id="name"
-                  fieldName="Name"
-                  fullWidth
+                  id="email"
+                  fieldName="Email"
                   formik={formik}
+                  required
                 />
                 <UploadImage image={image} onImageChange={onImageChange} />
               </Box>

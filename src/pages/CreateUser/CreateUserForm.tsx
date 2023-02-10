@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { getAllDepartments } from '../../api/department';
 import { createNewUser, updateUser } from '../../api/user';
 import PasswordField from '../../components/FormComponent/PasswordField';
+import dayjs from 'dayjs';
+import DatePickerField from '../../components/FormComponent/DatePickerField';
 
 function CreateUserForm(props: any) {
   const { data, action } = props;
@@ -19,6 +21,8 @@ function CreateUserForm(props: any) {
     username: data?.username ?? '',
     password: '',
     phone: data?.phone ?? '',
+    email: data?.email ?? '',
+    birthday: data?.birthday ?? dayjs(),
     departmentId:
       departments.find((department: Department) => {
         return department.name === data?.department;
@@ -92,6 +96,17 @@ function CreateUserForm(props: any) {
                   required={action === Actions.CREATE}
                 />
                 <InputField id="phone" fieldName="Phone" formik={formik} />
+                <InputField
+                  id="email"
+                  fieldName="Email"
+                  formik={formik}
+                  required
+                />
+                <DatePickerField
+                  id="birthday"
+                  fieldName="Birthday"
+                  formik={formik}
+                />
                 <SelectField
                   id="departmentId"
                   fieldName="Department"
