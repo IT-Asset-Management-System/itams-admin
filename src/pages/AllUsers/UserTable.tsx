@@ -274,7 +274,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             <IconButton>
               <CSVLink
                 data={data}
-                filename={`asset-${dayjs().format('DD-MM-YYYY')}.csv`}
+                filename={`user-${dayjs().format('DD-MM-YYYY')}.csv`}
               >
                 <FileDownloadIcon color="success" />
               </CSVLink>

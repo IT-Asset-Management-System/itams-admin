@@ -17,6 +17,7 @@ export { default as CreateLicense } from './CreateLicense';
 export { default as AllUsers } from './AllUsers';
 export { default as CreateUser } from './CreateUser';
 export { default as ImportAssets } from './ImportAssets';
+export { default as ImportUsers } from './ImportUsers';
 export { default as AllInventories } from './AllInventories';
 export { default as CreateInventory } from './CreateInventory';
 export { default as DetailedInventory } from './DetailedInventory';

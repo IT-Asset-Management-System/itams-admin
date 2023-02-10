@@ -45,7 +45,14 @@ const pages: Page[] = [
   },
   { name: 'Licenses', destination: '/licenses', hasChild: false },
   { name: 'People', destination: '/users', hasChild: false },
-  { name: 'Import', destination: '/import', hasChild: false },
+  {
+    name: 'Import',
+    hasChild: true,
+    menuList: [
+      { name: 'Assets', destination: '/import/asset' },
+      { name: 'Users', destination: '/import/user' },
+    ],
+  },
   { name: 'Inventory', destination: '/inventory', hasChild: false },
   {
     name: 'Settings',

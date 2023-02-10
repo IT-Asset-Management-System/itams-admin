@@ -23,6 +23,7 @@ import {
   AllUsers,
   CreateUser,
   ImportAssets,
+  ImportUsers,
   AllInventories,
   CreateInventory,
   DetailedInventory,
@@ -158,7 +159,8 @@ function App() {
                 />
               </Route>
               <Route path="import">
-                <Route index element={<ImportAssets />} />
+                <Route path="asset" element={<ImportAssets />} />
+                <Route path="user" element={<ImportUsers />} />
               </Route>
               <Route path="inventory">
                 <Route index element={<AllInventories />} />

@@ -32,3 +32,8 @@ export const createNewUser = async (user: NewUser) => {
   const response = await axios.post('/user/create-user', user);
   return response.data;
 };
+
+export const importUser = async (users: NewUser[]) => {
+  const response = await axios.post('/user/import-user', users);
+  return response.data;
+};
