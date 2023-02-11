@@ -11,7 +11,10 @@ import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import { formatDate } from '../../helpers/format';
 import { useAuthContext } from '../../context/AuthContext';
-import { Notification as NotificationInterface } from '../../interface/interface';
+import {
+  Notification as NotificationInterface,
+  NotificationType,
+} from '../../interface/interface';
 
 const Notification = () => {
   const navigate = useNavigate();
@@ -81,7 +84,15 @@ const Notification = () => {
           }
         >
           {notifications.map((notification: NotificationInterface) => (
-            <ListItemButton divider>
+            <ListItemButton
+              onClick={() => {
+                if (notification.type === NotificationType.ASSET)
+                  navigate('/hardware');
+                else if (notification.type === NotificationType.LICENSE)
+                  navigate('licenses');
+              }}
+              divider
+            >
               <ListItemText
                 primary={notification.name}
                 secondary={`Expires in ${formatDate(

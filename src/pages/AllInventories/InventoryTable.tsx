@@ -105,6 +105,18 @@ const headCells: readonly HeadCell[] = [
     label: 'End date',
   },
   {
+    id: 'assets',
+    numeric: false,
+    disablePadding: false,
+    label: 'Assets',
+  },
+  {
+    id: 'remaining',
+    numeric: false,
+    disablePadding: false,
+    label: 'Remaining',
+  },
+  {
     id: 'note',
     numeric: false,
     disablePadding: false,
@@ -398,6 +410,8 @@ export default function InventoryTable() {
                       <TableCell align="left">
                         {formatDate(row.end_date)}
                       </TableCell>
+                      <TableCell align="left">{row.assets}</TableCell>
+                      <TableCell align="left">{row.remaining}</TableCell>
                       <TableCell align="left">{row.note}</TableCell>
                       <TableCell align="left">
                         <Actions

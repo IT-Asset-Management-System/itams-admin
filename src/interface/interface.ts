@@ -96,6 +96,11 @@ export interface Notification {
   expiration_date: string;
 }
 
+export enum NotificationType {
+  ASSET = 'Asset',
+  LICENSE = 'License',
+}
+
 export enum CheckType {
   CHECKIN = 'checkin',
   CHECKOUT = 'checkout',
@@ -249,6 +254,8 @@ export interface Inventory {
   start_date: string;
   end_date: string;
   department: string;
+  assets: number;
+  remaining: number;
   note: string;
 }
 
