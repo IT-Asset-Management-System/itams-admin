@@ -6,7 +6,7 @@ import { useNotification } from '../hooks/useNotification';
 const AuthContext = createContext<any>(null);
 
 function AuthProvider({ children }: any) {
-  const { isLoading, authContext, isAuthenticated, avatar, getAuth } =
+  const { isLoading, authContext, isAuthenticated, getAuth, updateAuth } =
     useAuth();
   const { notifications, getNotifications } = useNotification();
 
@@ -21,8 +21,8 @@ function AuthProvider({ children }: any) {
       value={{
         authContext,
         isAuthenticated,
-        avatar,
         getAuth,
+        updateAuth,
         notifications,
         getNotifications,
       }}

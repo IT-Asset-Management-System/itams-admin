@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 function ProfileForm() {
   const navigate = useNavigate();
-  const { authContext } = useAuthContext();
+  const { authContext, updateAuth } = useAuthContext();
   const [image, setImage] = useState<ImageListType>([]);
   const onImageChange = async (imageList: ImageListType) => {
     setImage(imageList);
@@ -26,10 +26,9 @@ function ProfileForm() {
   const handleSubmit = async (profile: any) => {
     try {
       await updateProfile(profile);
-      if (image.length > 0) {
-        await saveAvatar(image[0].file);
-        navigate(0);
-      } else toast.success('Update successfully');
+      if (image.length > 0) await saveAvatar(image[0].file);
+      toast.success('Update successfully');
+      await updateAuth();
     } catch (err: any) {
       console.log('update profile', err);
       toast.error(err.response.data.message);

@@ -77,7 +77,7 @@ const settings: MenuItemInterface[] = [
 
 const Header = () => {
   const navigate = useNavigate();
-  const { getAuth, avatar } = useAuthContext();
+  const { getAuth, authContext } = useAuthContext();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
@@ -245,7 +245,7 @@ const Header = () => {
             <Notification />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="avatar" src={avatar} sizes="small" />
+                <Avatar alt="avatar" src={authContext?.avatar} sizes="small" />
               </IconButton>
             </Tooltip>
             <Menu
