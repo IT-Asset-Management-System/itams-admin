@@ -29,7 +29,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { AssetModel } from '../../interface/interface';
+import { AssetModel, AssetModelQuery } from '../../interface/interface';
+import { Link } from 'react-router-dom';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -239,7 +240,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function AssetModelTable() {
+export default function AssetModelTable(assetModelQuery: AssetModelQuery) {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof AssetModel>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -262,7 +263,7 @@ export default function AssetModelTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllAssetModels();
+      const data = await getAllAssetModels(assetModelQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -396,7 +397,14 @@ export default function AssetModelTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">
+                        <Link
+                          to={`/models/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#00E' }}
+                        >
+                          {row.name}
+                        </Link>
+                      </TableCell>
                       <TableCell align="left">{row.numOfAssets}</TableCell>
                       <TableCell align="left">{row.category}</TableCell>
                       <TableCell align="left">{row.manufacturer}</TableCell>

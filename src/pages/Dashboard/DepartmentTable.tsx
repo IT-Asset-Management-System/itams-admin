@@ -80,13 +80,13 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
-    id: 'numOfAssets',
+    id: 'assets',
     numeric: false,
     disablePadding: false,
     label: 'Assets',
   },
   {
-    id: 'numOfUsers',
+    id: 'users',
     numeric: false,
     disablePadding: false,
     label: 'Users',
@@ -285,8 +285,8 @@ export default function DepartmentTable() {
                         {row.id}
                       </TableCell>
                       <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.numOfAssets}</TableCell>
-                      <TableCell align="left">{row.numOfUsers}</TableCell>
+                      <TableCell align="left">{row.assets}</TableCell>
+                      <TableCell align="left">{row.users}</TableCell>
                       <TableCell align="left">{row.location}</TableCell>
                     </TableRow>
                   );

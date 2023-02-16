@@ -12,6 +12,7 @@ import {
   ChangePassword,
   AllAssets,
   CreateAsset,
+  DetailedAsset,
   CheckoutAsset,
   CheckinAsset,
   AllRequestAssets,
@@ -21,6 +22,7 @@ import {
   AllLicenses,
   CreateLicense,
   AllUsers,
+  DetailedUser,
   CreateUser,
   ImportAssets,
   ImportUsers,
@@ -31,16 +33,22 @@ import {
   DetailedStatus,
   CreateStatus,
   AllAssetModels,
+  DetailedAssetModel,
   CreateAssetModel,
   AllCategories,
+  DetailedCategory,
   CreateCategory,
   AllManufacturers,
+  DetailedManufacturer,
   CreateManufacturer,
   AllSuppliers,
+  DetailedSupplier,
   CreateSupplier,
   AllDepartments,
+  DetailedDepartment,
   CreateDepartment,
   AllLocations,
+  DetailedLocation,
   CreateLocation,
   AllDeprecations,
   CreateDeprecation,
@@ -69,6 +77,7 @@ function App() {
                   path="create"
                   element={<CreateAsset action={Actions.CREATE} />}
                 />
+                <Route path=":assetId" element={<DetailedAsset />} />
                 <Route
                   path=":assetId/edit"
                   element={<CreateAsset action={Actions.UPDATE} />}
@@ -145,6 +154,7 @@ function App() {
               </Route>
               <Route path="users">
                 <Route index element={<AllUsers />} />
+                <Route path=":userId" element={<DetailedUser />} />
                 <Route
                   path="create"
                   element={<CreateUser action={Actions.CREATE} />}
@@ -196,6 +206,7 @@ function App() {
                   path="create"
                   element={<CreateAssetModel action={Actions.CREATE} />}
                 />
+                <Route path=":modelId" element={<DetailedAssetModel />} />
                 <Route
                   path=":modelId/edit"
                   element={<CreateAssetModel action={Actions.UPDATE} />}
@@ -211,6 +222,7 @@ function App() {
                   path="create"
                   element={<CreateCategory action={Actions.CREATE} />}
                 />
+                <Route path=":categoryId" element={<DetailedCategory />} />
                 <Route
                   path=":categoryId/edit"
                   element={<CreateCategory action={Actions.UPDATE} />}
@@ -227,6 +239,10 @@ function App() {
                   element={<CreateManufacturer action={Actions.CREATE} />}
                 />
                 <Route
+                  path=":manufacturerId"
+                  element={<DetailedManufacturer />}
+                />
+                <Route
                   path=":manufacturerId/edit"
                   element={<CreateManufacturer action={Actions.UPDATE} />}
                 />
@@ -241,6 +257,7 @@ function App() {
                   path="create"
                   element={<CreateSupplier action={Actions.CREATE} />}
                 />
+                <Route path=":supplierId" element={<DetailedSupplier />} />
                 <Route
                   path=":supplierId/edit"
                   element={<CreateSupplier action={Actions.UPDATE} />}
@@ -256,6 +273,7 @@ function App() {
                   path="create"
                   element={<CreateDepartment action={Actions.CREATE} />}
                 />
+                <Route path=":departmentId" element={<DetailedDepartment />} />
                 <Route
                   path=":departmentId/edit"
                   element={<CreateDepartment action={Actions.UPDATE} />}
@@ -267,6 +285,7 @@ function App() {
               </Route>
               <Route path="locations">
                 <Route index element={<AllLocations />} />
+                <Route path=":locationId" element={<DetailedLocation />} />
                 <Route
                   path="create"
                   element={<CreateLocation action={Actions.CREATE} />}

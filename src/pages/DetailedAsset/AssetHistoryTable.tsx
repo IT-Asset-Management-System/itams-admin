@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -16,11 +15,17 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchIcon from '@mui/icons-material/Search';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { visuallyHidden } from '@mui/utils';
-import { deleteAsset, getAllAssets } from '../../api/asset';
+import { deleteAsset, getAssetHistory } from '../../api/asset';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
+import { CSVLink } from 'react-csv';
+import dayjs from 'dayjs';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
 
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -29,7 +34,17 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Asset } from '../../interface/interface';
+import {
+  AssetHistory,
+  AssetHistoryQuery,
+  AssetQuery,
+  CheckType,
+} from '../../interface/interface';
+import { Checkin } from '../../components/CheckButton/Checkin';
+import { Checkout } from '../../components/CheckButton/Checkout';
+import { useAuthContext } from '../../context/AuthContext';
+import { formatDate } from '../../helpers/format';
+import { Link } from 'react-router-dom';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -74,7 +89,7 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Asset;
+  id: keyof AssetHistory;
   label: string;
   numeric: boolean;
 }
@@ -87,35 +102,40 @@ const headCells: readonly HeadCell[] = [
     label: 'ID',
   },
   {
-    id: 'name',
+    id: 'assetId',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'Asset ID',
   },
   {
-    id: 'assetModel',
+    id: 'assetName',
     numeric: false,
     disablePadding: false,
-    label: 'Model',
+    label: 'Asset Name',
   },
   {
-    id: 'department',
+    id: 'userId',
     numeric: false,
     disablePadding: false,
-    label: 'Department',
+    label: 'User ID',
   },
   {
-    id: 'supplier',
+    id: 'userName',
     numeric: false,
     disablePadding: false,
-    label: 'Supplier',
+    label: 'User Name',
   },
-
   {
-    id: 'status',
+    id: 'checkout_date',
     numeric: false,
     disablePadding: false,
-    label: 'Status',
+    label: 'Checkout Date',
+  },
+  {
+    id: 'checkin_date',
+    numeric: false,
+    disablePadding: false,
+    label: 'Checkin Date',
   },
 ];
 
@@ -123,7 +143,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Asset,
+    property: keyof AssetHistory,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -141,7 +161,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof Asset) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof AssetHistory) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -180,18 +200,63 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell>Actions</TableCell>
+        {/* <TableCell>Actions</TableCell> */}
       </TableRow>
     </TableHead>
   );
 }
 
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(1),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '12ch',
+      '&:focus': {
+        width: '20ch',
+      },
+    },
+  },
+}));
+
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  data: AssetHistory[];
+  getData: () => void;
+  searchData: (searchText: string) => void;
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, data, getData, searchData } = props;
 
   return (
     <Toolbar
@@ -207,28 +272,23 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
         }),
       }}
     >
-      {
-        numSelected > 0 && (
-          <Typography
-            sx={{ flex: '1 1 100%' }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        )
-        // : (
-        //   <Typography
-        //     sx={{ flex: '1 1 100%' }}
-        //     variant="h6"
-        //     id="tableTitle"
-        //     component="div"
-        //   >
-        //     All Assets
-        //   </Typography>
-        // )
-      }
+      {numSelected > 0 ? (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          color="inherit"
+          variant="subtitle1"
+          component="div"
+        >
+          {numSelected} selected
+        </Typography>
+      ) : (
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          variant="h6"
+          id="tableTitle"
+          component="div"
+        ></Typography>
+      )}
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
@@ -236,26 +296,55 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
-          <IconButton>
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
+        <Box
+          sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+        >
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+              onChange={(event) => {
+                searchData(event.target.value);
+              }}
+            />
+          </Search>
+          <Tooltip title="Refresh">
+            <IconButton onClick={getData}>
+              <RefreshIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Export">
+            <IconButton>
+              <CSVLink
+                data={data}
+                filename={`asset-${dayjs().format('DD-MM-YYYY')}.csv`}
+              >
+                <FileDownloadIcon color="success" />
+              </CSVLink>
+            </IconButton>
+          </Tooltip>
+        </Box>
       )}
     </Toolbar>
   );
 }
 
-export default function AssetTable(props: any) {
-  const { id } = props;
+export default function AssetHistoryTable(
+  assetHistoryQuery: AssetHistoryQuery,
+) {
+  const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof AssetHistory>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
   );
-  const [rows, setRows] = React.useState<Asset[]>([]);
+  const [rows, setRows] = React.useState<AssetHistory[]>([]);
+  const [initRows, setInitRows] = React.useState<AssetHistory[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -268,24 +357,42 @@ export default function AssetTable(props: any) {
     setOpen(false);
   };
 
-  const getAssets = async () => {
+  const getData = async () => {
     try {
-      const asset = await getAllAssets({ statusId: id });
+      const asset = await getAssetHistory(assetHistoryQuery);
+      setInitRows(asset);
       setRows(asset);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const searchData = (searchText: string) => {
+    setRows(
+      initRows.filter((item: AssetHistory) =>
+        Object.keys(item).some(
+          (k: string) =>
+            item[k as keyof AssetHistory] != null &&
+            item[k as keyof AssetHistory]
+              .toString()
+              .toLowerCase()
+              .includes(searchText.toLowerCase()),
+        ),
+      ),
+    );
+  };
+
   React.useEffect(() => {
-    getAssets();
+    getData();
   }, []);
 
   const handleDelete = async (id: number) => {
     try {
       await deleteAsset(id);
       handleClose();
-      await getAssets();
+      await getData();
       setIdToDelete(0);
+      await getNotifications();
       toast.success('Deleted');
     } catch (err: any) {
       console.log(err);
@@ -295,7 +402,7 @@ export default function AssetTable(props: any) {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Asset,
+    property: keyof AssetHistory,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -352,7 +459,12 @@ export default function AssetTable(props: any) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          data={rows}
+          getData={getData}
+          searchData={searchData}
+        />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
@@ -404,18 +516,15 @@ export default function AssetTable(props: any) {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.assetModel}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">{row.supplier}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">{row.assetId}</TableCell>
+                      <TableCell align="left">{row.assetName}</TableCell>
+                      <TableCell align="left">{row.userId}</TableCell>
+                      <TableCell align="left">{row.userName}</TableCell>
                       <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="hardware"
-                          data={row}
-                          onClickDelete={handleClickOpen}
-                        />
+                        {formatDate(row.checkout_date)}
+                      </TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.checkin_date)}
                       </TableCell>
                     </TableRow>
                   );

@@ -29,7 +29,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { License } from '../../interface/interface';
+import { License, LicenseQuery } from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -259,7 +259,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function LicenseTable() {
+export default function LicenseTable(licenseQuery: LicenseQuery) {
   const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof License>('id');
@@ -283,7 +283,7 @@ export default function LicenseTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllLicenses();
+      const data = await getAllLicenses(licenseQuery);
       setRows(data);
     } catch (err) {
       console.log(err);

@@ -1,8 +1,8 @@
-import { NewUser } from '../interface/interface';
+import { NewUser, UserQuery } from '../interface/interface';
 import axios from './axios';
 
-export const getAllUsers = async () => {
-  const response = await axios.get('/user/all-users');
+export const getAllUsers = async (userQuery?: UserQuery) => {
+  const response = await axios.get('/user/all-users', { params: userQuery });
   return response.data;
 };
 

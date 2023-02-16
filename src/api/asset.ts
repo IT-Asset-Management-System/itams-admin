@@ -4,11 +4,21 @@ import {
   CheckoutAsset,
   CheckinAsset,
   NewAsset,
+  AssetHistoryQuery,
 } from '../interface/interface';
 import axios from './axios';
 
 export const getAllAssets = async (assetQuery?: AssetQuery) => {
   const response = await axios.get('/asset/all-assets', { params: assetQuery });
+  return response.data;
+};
+
+export const getAssetHistory = async (
+  AssetHistoryQuery?: AssetHistoryQuery,
+) => {
+  const response = await axios.get('/asset/asset-history', {
+    params: AssetHistoryQuery,
+  });
   return response.data;
 };
 

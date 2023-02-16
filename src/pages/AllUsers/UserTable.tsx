@@ -31,7 +31,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { User } from '../../interface/interface';
+import { User, UserQuery } from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
 import {
   Search,
@@ -41,6 +41,7 @@ import {
 import { styled, alpha } from '@mui/material/styles';
 import { CSVLink } from 'react-csv';
 import dayjs from 'dayjs';
+import { Link } from 'react-router-dom';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -132,6 +133,12 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     disablePadding: false,
     label: 'Department',
+  },
+  {
+    id: 'assets',
+    numeric: false,
+    disablePadding: false,
+    label: 'Assets',
   },
 ];
 
@@ -286,7 +293,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function UserTable() {
+export default function UserTable(userQuery: UserQuery) {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof User>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -310,7 +317,7 @@ export default function UserTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllUsers();
+      const data = await getAllUsers(userQuery);
       setInitRows(data);
       setRows(data);
     } catch (err) {
@@ -466,7 +473,15 @@ export default function UserTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">
+                        {' '}
+                        <Link
+                          to={`/users/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#00E' }}
+                        >
+                          {row.name}
+                        </Link>
+                      </TableCell>
                       <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">{row.phone}</TableCell>
                       <TableCell align="left">{row.email}</TableCell>
@@ -474,6 +489,7 @@ export default function UserTable() {
                         {formatDate(row.birthday)}
                       </TableCell>
                       <TableCell align="left">{row.department}</TableCell>
+                      <TableCell align="left">{row.assets}</TableCell>
                       <TableCell align="left">
                         <Actions
                           id={row.id}

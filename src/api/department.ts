@@ -1,8 +1,8 @@
-import { NewDepartment } from '../interface/interface';
+import { DepartmentQuery, NewDepartment } from '../interface/interface';
 import axios from './axios';
 
-export const getAllDepartments = async () => {
-  const data = await axios.get('/department/all');
+export const getAllDepartments = async (departmentQuery?: DepartmentQuery) => {
+  const data = await axios.get('/department/all', { params: departmentQuery });
   return data.data;
 };
 

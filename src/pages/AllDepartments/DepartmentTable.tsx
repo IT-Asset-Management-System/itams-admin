@@ -29,7 +29,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Department } from '../../interface/interface';
+import { Department, DepartmentQuery } from '../../interface/interface';
+import { Link } from 'react-router-dom';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -93,13 +94,13 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
-    id: 'numOfAssets',
+    id: 'assets',
     numeric: false,
     disablePadding: false,
     label: 'Assets',
   },
   {
-    id: 'numOfUsers',
+    id: 'users',
     numeric: false,
     disablePadding: false,
     label: 'Users',
@@ -239,7 +240,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function DepartmentTable() {
+export default function DepartmentTable(departmentQuery: DepartmentQuery) {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Department>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -262,7 +263,7 @@ export default function DepartmentTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllDepartments();
+      const data = await getAllDepartments(departmentQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -396,9 +397,17 @@ export default function DepartmentTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.numOfAssets}</TableCell>
-                      <TableCell align="left">{row.numOfUsers}</TableCell>
+                      <TableCell align="left">
+                        {' '}
+                        <Link
+                          to={`/departments/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#00E' }}
+                        >
+                          {row.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell align="left">{row.assets}</TableCell>
+                      <TableCell align="left">{row.users}</TableCell>
                       <TableCell align="left">{row.location}</TableCell>
                       <TableCell align="left">
                         <Actions

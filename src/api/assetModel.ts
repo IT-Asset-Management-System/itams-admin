@@ -1,8 +1,8 @@
-import { NewAssetModel } from '../interface/interface';
+import { AssetModelQuery, NewAssetModel } from '../interface/interface';
 import axios from './axios';
 
-export const getAllAssetModels = async () => {
-  const data = await axios.get('/asset-model/all');
+export const getAllAssetModels = async (assetModelQuery?: AssetModelQuery) => {
+  const data = await axios.get('/asset-model/all', { params: assetModelQuery });
   return data.data;
 };
 

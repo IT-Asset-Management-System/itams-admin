@@ -1,8 +1,10 @@
-import { NewLicense } from '../interface/interface';
+import { LicenseQuery, NewLicense } from '../interface/interface';
 import axios from './axios';
 
-export const getAllLicenses = async () => {
-  const response = await axios.get('/license/all-licenses');
+export const getAllLicenses = async (licenseQuery?: LicenseQuery) => {
+  const response = await axios.get('/license/all-licenses', {
+    params: licenseQuery,
+  });
   return response.data;
 };
 
