@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
+import LicenseTable from '../AllLicenses/LicenseTable';
 import AssetTable from '../AllAssets/AssetTable';
+import AssetHistoryTable from '../DetailedAsset/AssetHistoryTable';
 
-function DetailedStatus() {
-  const { statusId } = useParams();
+function DetailedUser() {
+  const { userId } = useParams();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -14,7 +16,7 @@ function DetailedStatus() {
   };
   return (
     <Box>
-      <PageHeader name={`View Status ${statusId}`} canGoBack />
+      <PageHeader name={`View User ${userId}`} canGoBack />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box
@@ -35,13 +37,21 @@ function DetailedStatus() {
                 value="2"
                 sx={{ textTransform: 'capitalize' }}
               />
+              <Tab
+                label="History"
+                value="3"
+                sx={{ textTransform: 'capitalize' }}
+              />
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
             Information
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            <AssetTable statusId={Number(statusId)} />
+            <AssetTable userId={Number(userId)} />
+          </TabPanel>
+          <TabPanel value="3" sx={{ padding: 0 }}>
+            <AssetHistoryTable userId={Number(userId)} />
           </TabPanel>
         </TabContext>
       </Box>
@@ -49,4 +59,4 @@ function DetailedStatus() {
   );
 }
 
-export default DetailedStatus;
+export default DetailedUser;

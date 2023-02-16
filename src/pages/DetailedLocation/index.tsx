@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import AssetTable from '../AllAssets/AssetTable';
+import AssetModelTable from '../AllAssetModels/AssetModelTable';
+import LicenseTable from '../AllLicenses/LicenseTable';
+import DepartmentTable from '../AllDepartments/DepartmentTable';
 
-function DetailedStatus() {
-  const { statusId } = useParams();
+function DetailedLocation() {
+  const { locationId } = useParams();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -14,7 +16,7 @@ function DetailedStatus() {
   };
   return (
     <Box>
-      <PageHeader name={`View Status ${statusId}`} canGoBack />
+      <PageHeader name={`View Location ${locationId}`} canGoBack />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box
@@ -31,7 +33,7 @@ function DetailedStatus() {
                 sx={{ textTransform: 'capitalize' }}
               />
               <Tab
-                label="Assets"
+                label="Departments"
                 value="2"
                 sx={{ textTransform: 'capitalize' }}
               />
@@ -41,7 +43,7 @@ function DetailedStatus() {
             Information
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            <AssetTable statusId={Number(statusId)} />
+            <DepartmentTable locationId={Number(locationId)} />
           </TabPanel>
         </TabContext>
       </Box>
@@ -49,4 +51,4 @@ function DetailedStatus() {
   );
 }
 
-export default DetailedStatus;
+export default DetailedLocation;

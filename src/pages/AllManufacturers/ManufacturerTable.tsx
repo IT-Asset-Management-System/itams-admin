@@ -33,6 +33,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
 import { Manufacturer } from '../../interface/interface';
+import { Link } from 'react-router-dom';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -96,10 +97,16 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
-    id: 'numOfAssets',
+    id: 'assetModels',
     numeric: false,
     disablePadding: false,
-    label: 'Quantity',
+    label: 'Asset Models',
+  },
+  {
+    id: 'licenses',
+    numeric: false,
+    disablePadding: false,
+    label: 'Licenses',
   },
 ];
 
@@ -387,8 +394,16 @@ export default function ManufacturerTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
-                      <TableCell align="left">{row.numOfAssets}</TableCell>
+                      <TableCell align="left">
+                        <Link
+                          to={`/manufacturers/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#00E' }}
+                        >
+                          {row.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell align="left">{row.assetModels}</TableCell>
+                      <TableCell align="left">{row.licenses}</TableCell>
                       <TableCell align="left">
                         <Actions
                           id={row.id}

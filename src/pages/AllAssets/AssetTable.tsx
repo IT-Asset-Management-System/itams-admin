@@ -34,11 +34,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Asset, CheckType } from '../../interface/interface';
+import { Asset, AssetQuery, CheckType } from '../../interface/interface';
 import { Checkin } from '../../components/CheckButton/Checkin';
 import { Checkout } from '../../components/CheckButton/Checkout';
 import { useAuthContext } from '../../context/AuthContext';
 import { formatDate } from '../../helpers/format';
+import { Link } from 'react-router-dom';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -350,7 +351,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function AssetTable() {
+export default function AssetTable(assetQuery: AssetQuery) {
   const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Asset>('id');
@@ -375,7 +376,7 @@ export default function AssetTable() {
 
   const getData = async () => {
     try {
-      const asset = await getAllAssets();
+      const asset = await getAllAssets(assetQuery);
       setInitRows(asset);
       setRows(asset);
     } catch (err) {
@@ -532,7 +533,14 @@ export default function AssetTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">
+                        <Link
+                          to={`/hardware/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#00E' }}
+                        >
+                          {row.name}
+                        </Link>
+                      </TableCell>
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{row.department}</TableCell>
                       <TableCell align="left">

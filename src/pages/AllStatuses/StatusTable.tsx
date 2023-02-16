@@ -387,8 +387,8 @@ export default function StatusTable() {
                       </TableCell>
                       <TableCell align="left">
                         <Link
-                          to={`${row.id}`}
-                          style={{ textDecoration: 'none' }}
+                          to={`/statuses/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#00E' }}
                         >
                           {row.name}
                         </Link>

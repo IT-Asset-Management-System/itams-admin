@@ -6,6 +6,11 @@ export interface AssetModel {
   numOfAssets: number;
 }
 
+export interface AssetModelQuery {
+  categoryId?: number;
+  manufacturerId?: number;
+}
+
 export interface NewAssetModel {
   name: string;
   categoryId: number;
@@ -15,7 +20,8 @@ export interface NewAssetModel {
 export interface Category {
   id: number;
   name: string;
-  numOfAssets: number;
+  assetModels: number;
+  licenses: number;
 }
 
 export interface NewCategory {
@@ -25,9 +31,13 @@ export interface NewCategory {
 export interface Department {
   id: number;
   name: string;
-  numOfAssets: number;
-  numOfUsers: number;
+  assets: number;
+  users: number;
   location: string;
+}
+
+export interface DepartmentQuery {
+  locationId?: number;
 }
 
 export interface NewDepartment {
@@ -38,7 +48,8 @@ export interface NewDepartment {
 export interface Manufacturer {
   id: number;
   name: string;
-  numOfAssets: number;
+  assetModels: number;
+  licenses: number;
 }
 
 export interface NewManufacturer {
@@ -58,7 +69,8 @@ export interface NewStatus {
 export interface Supplier {
   id: number;
   name: string;
-  numOfAssets: number;
+  assets: number;
+  licenses: number;
 }
 
 export interface NewSupplier {
@@ -151,6 +163,22 @@ export interface AssetQuery {
   departmentId?: number;
   statusId?: number;
   supplierId?: number;
+  userId?: number;
+}
+
+export interface AssetHistory {
+  id: number;
+  assetId: number;
+  assetName: string;
+  userId: number;
+  userName: string;
+  checkout_date: string;
+  checkin_date: string;
+}
+
+export interface AssetHistoryQuery {
+  assetId?: number;
+  userId?: number;
 }
 
 export interface AssetMaintenance {
@@ -162,6 +190,10 @@ export interface AssetMaintenance {
   end_date: string;
   cost: number;
   note: string;
+}
+
+export interface AssetMaintenanceQuery {
+  assetId?: number;
 }
 
 export interface NewAssetMaintenance {
@@ -218,6 +250,12 @@ export interface License {
   supplier: string;
 }
 
+export interface LicenseQuery {
+  categoryId?: number;
+  manufacturerId?: number;
+  supplierId?: number;
+}
+
 export interface NewLicense {
   name: string;
   purchase_cost: string;
@@ -236,6 +274,11 @@ export interface User {
   email: string;
   birthday: string;
   department: string;
+  assets: number;
+}
+
+export interface UserQuery {
+  departmentId?: number;
 }
 
 export interface NewUser {

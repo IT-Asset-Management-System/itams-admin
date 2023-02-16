@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import AssetTable from '../AllAssets/AssetTable';
 
-function DetailedStatus() {
-  const { statusId } = useParams();
+function DetailedAssetModel() {
+  const { modelId } = useParams();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -14,7 +14,7 @@ function DetailedStatus() {
   };
   return (
     <Box>
-      <PageHeader name={`View Status ${statusId}`} canGoBack />
+      <PageHeader name={`View Model ${modelId}`} canGoBack />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box
@@ -41,7 +41,7 @@ function DetailedStatus() {
             Information
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            <AssetTable statusId={Number(statusId)} />
+            <AssetTable assetModelId={Number(modelId)} />
           </TabPanel>
         </TabContext>
       </Box>
@@ -49,4 +49,4 @@ function DetailedStatus() {
   );
 }
 
-export default DetailedStatus;
+export default DetailedAssetModel;

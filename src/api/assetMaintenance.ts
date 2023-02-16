@@ -1,8 +1,15 @@
-import { NewAssetMaintenance } from '../interface/interface';
+import {
+  AssetMaintenanceQuery,
+  NewAssetMaintenance,
+} from '../interface/interface';
 import axios from './axios';
 
-export const getAllAssetMaintenances = async () => {
-  const data = await axios.get('/asset-maintenance/all');
+export const getAllAssetMaintenances = async (
+  assetMaintenanceQuery?: AssetMaintenanceQuery,
+) => {
+  const data = await axios.get('/asset-maintenance/all', {
+    params: assetMaintenanceQuery,
+  });
   return data.data;
 };
 

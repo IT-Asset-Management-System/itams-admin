@@ -77,7 +77,7 @@ function CreateDepartmentForm(props: any) {
                 />
                 <SelectField
                   id="locationId"
-                  fieldName="location"
+                  fieldName="Location"
                   formik={formik}
                   data={locations}
                   required

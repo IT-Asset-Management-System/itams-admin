@@ -32,7 +32,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { AssetMaintenance } from '../../interface/interface';
+import {
+  AssetMaintenance,
+  AssetMaintenanceQuery,
+} from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -262,7 +265,9 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function AssetMaintenanceTable() {
+export default function AssetMaintenanceTable(
+  assetMaintenanceQuery: AssetMaintenanceQuery,
+) {
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof AssetMaintenance>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -285,7 +290,7 @@ export default function AssetMaintenanceTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllAssetMaintenances();
+      const data = await getAllAssetMaintenances(assetMaintenanceQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
