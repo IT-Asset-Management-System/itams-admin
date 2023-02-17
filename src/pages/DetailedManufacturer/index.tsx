@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import AssetModelTable from '../AllAssetModels/AssetModelTable';
 import LicenseTable from '../AllLicenses/LicenseTable';
+import ManufacturerInfo from './ManufacturerInfo';
 
 function DetailedManufacturer() {
   const { manufacturerId } = useParams();
@@ -44,7 +45,7 @@ function DetailedManufacturer() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <ManufacturerInfo manufacturerId={Number(manufacturerId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetModelTable manufacturerId={Number(manufacturerId)} />

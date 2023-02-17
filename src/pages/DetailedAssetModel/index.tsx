@@ -4,6 +4,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import AssetTable from '../AllAssets/AssetTable';
+import AssetModelInfo from './AssetModelInfo';
 
 function DetailedAssetModel() {
   const { modelId } = useParams();
@@ -38,7 +39,7 @@ function DetailedAssetModel() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <AssetModelInfo assetModelId={Number(modelId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetTable assetModelId={Number(modelId)} />

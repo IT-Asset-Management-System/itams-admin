@@ -7,9 +7,7 @@ export const getAllSuppliers = async () => {
 };
 
 export const getSupplierById = async (id: number | string) => {
-  const response = await axios.get('/supplier/get-supplier-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/supplier/get-supplier-by-id/${id}`);
   return response.data;
 };
 

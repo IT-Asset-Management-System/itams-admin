@@ -7,6 +7,7 @@ import AssetModelTable from '../AllAssetModels/AssetModelTable';
 import LicenseTable from '../AllLicenses/LicenseTable';
 import AssetTable from '../AllAssets/AssetTable';
 import UserTable from '../AllUsers/UserTable';
+import DepartmentInfo from './DepartmentInfo';
 
 function DetailedDepartment() {
   const { departmentId } = useParams();
@@ -46,7 +47,7 @@ function DetailedDepartment() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <DepartmentInfo departmentId={Number(departmentId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetTable departmentId={Number(departmentId)} />

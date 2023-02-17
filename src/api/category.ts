@@ -7,9 +7,7 @@ export const getAllCategories = async () => {
 };
 
 export const getCategoryById = async (id: number | string) => {
-  const response = await axios.get('/category/get-category-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/category/get-category-by-id/${id}`);
   return response.data;
 };
 

@@ -7,9 +7,9 @@ export const getAllManufacturers = async () => {
 };
 
 export const getManufacturerById = async (id: number | string) => {
-  const response = await axios.get('/manufacturer/get-manufacturer-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(
+    `/manufacturer/get-manufacturer-by-id/${id}`,
+  );
   return response.data;
 };
 
