@@ -106,6 +106,7 @@ export interface NewDeprecation {
 }
 
 export interface Notification {
+  itemId: string;
   name: string;
   type: string;
   expiration_date: string;

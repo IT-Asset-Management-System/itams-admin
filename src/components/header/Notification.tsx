@@ -87,9 +87,9 @@ const Notification = () => {
             <ListItemButton
               onClick={() => {
                 if (notification.type === NotificationType.ASSET)
-                  navigate('/hardware');
+                  navigate(`/hardware/${notification.itemId}`);
                 else if (notification.type === NotificationType.LICENSE)
-                  navigate('licenses');
+                  navigate(`/licenses`);
               }}
               divider
             >

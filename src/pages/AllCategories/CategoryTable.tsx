@@ -141,7 +141,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: '#FFF !important' }}>
         <TableCell padding="checkbox">
           <Checkbox
             color="primary"
@@ -159,6 +159,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontWeight: '700' }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -174,7 +175,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell>Actions</TableCell>
+        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -348,7 +349,10 @@ export default function CategoryTable() {
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{
+              minWidth: 750,
+              'tr:nth-child(2n+1)': { backgroundColor: '#f8f8f8' },
+            }}
             aria-labelledby="tableTitle"
             size="medium"
           >
