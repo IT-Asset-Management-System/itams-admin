@@ -348,7 +348,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 data={data}
                 filename={`asset-${dayjs().format('DD-MM-YYYY')}.csv`}
               >
-                <FileDownloadIcon color="success" />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <FileDownloadIcon sx={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+                </Box>
               </CSVLink>
             </IconButton>
           </Tooltip>
@@ -565,7 +573,26 @@ export default function AssetTable(assetQuery: AssetQuery) {
                       <TableCell align="left">{row.purchase_cost}</TableCell>
                       <TableCell align="left">{row.current_cost}</TableCell>
                       <TableCell align="left">{row.supplier}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: '5px',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: '30px',
+                              height: '30px',
+                              backgroundColor: row.statusColor,
+                              borderRadius: '50%',
+                            }}
+                          ></Box>
+                          {row.status}
+                        </Box>
+                      </TableCell>
                       <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">
                         {Boolean(row.check_type === CheckType.CHECKIN) ? (

@@ -5,12 +5,14 @@ import { toast } from 'react-toastify';
 import { Actions, NewStatus } from '../../interface/interface';
 import { useNavigate } from 'react-router-dom';
 import { createNewStatus, updateStatus } from '../../api/status';
+import ColorPickerField from '../../components/FormComponent/ColorPickerField';
 
 function CreateStatusForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
   const initialValues: NewStatus = {
     name: data?.name ?? '',
+    color: data?.color ?? '#666',
   };
 
   const handleSubmit = async (newStatus: NewStatus) => {
@@ -51,6 +53,13 @@ function CreateStatusForm(props: any) {
                 <InputField
                   id="name"
                   fieldName="Name"
+                  fullWidth
+                  formik={formik}
+                  required
+                />
+                <ColorPickerField
+                  id="color"
+                  fieldName="Color"
                   fullWidth
                   formik={formik}
                   required

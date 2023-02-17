@@ -284,7 +284,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 data={data}
                 filename={`user-${dayjs().format('DD-MM-YYYY')}.csv`}
               >
-                <FileDownloadIcon color="success" />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <FileDownloadIcon sx={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+                </Box>
               </CSVLink>
             </IconButton>
           </Tooltip>

@@ -94,6 +94,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
+    id: 'color',
+    numeric: false,
+    disablePadding: false,
+    label: 'Color',
+  },
+  {
     id: 'numOfAssets',
     numeric: false,
     disablePadding: false,
@@ -396,6 +402,16 @@ export default function StatusTable() {
                         >
                           {row.name}
                         </Link>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Box
+                          sx={{
+                            width: '30px',
+                            height: '30px',
+                            backgroundColor: row.color,
+                            borderRadius: '50%',
+                          }}
+                        ></Box>
                       </TableCell>
                       <TableCell align="left">{row.numOfAssets}</TableCell>
                       <TableCell align="left">

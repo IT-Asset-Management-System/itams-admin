@@ -62,11 +62,13 @@ export interface NewManufacturer {
 export interface Status {
   id: number;
   name: string;
+  color: string;
   numOfAssets: number;
 }
 
 export interface NewStatus {
   name: string;
+  color: string;
 }
 
 export interface Supplier {
@@ -133,6 +135,7 @@ export interface Asset {
   current_cost: number;
   supplier: string;
   status: string;
+  statusColor: string;
   username: string;
   check_type: CheckType;
 }

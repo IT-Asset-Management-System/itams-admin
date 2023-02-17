@@ -254,8 +254,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 export default function RequestAssetsTable() {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof RequestAsset>('id');
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<keyof RequestAsset>('status');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
@@ -418,7 +418,24 @@ export default function RequestAssetsTable() {
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{formatDate(row.date)}</TableCell>
                       <TableCell align="left">{row.note}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left"><Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: '5px',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: '30px',
+                              height: '30px',
+                              backgroundColor: row.status === RequestAssetStatus.REQUESTED? '#EFB700' : row.status === RequestAssetStatus.ACCEPTED ? '#008450':'#B81D13',
+                              borderRadius: '50%',
+                            }}
+                          ></Box>
+                          {row.status}
+                        </Box></TableCell>
                       <TableCell align="left">
                         {row.status === RequestAssetStatus.REQUESTED && (
                           <RequestActions
