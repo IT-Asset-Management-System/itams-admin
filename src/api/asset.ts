@@ -23,7 +23,7 @@ export const getAssetHistory = async (
 };
 
 export const getAssetById = async (id: number | string) => {
-  const response = await axios.get('/asset/get-asset-by-id', { data: { id } });
+  const response = await axios.get(`/asset/get-asset-by-id/${id}`);
   return response.data;
 };
 

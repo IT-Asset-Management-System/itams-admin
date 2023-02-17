@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import AssetMaintenanceTable from '../AllAssetMaintenances/AssetMaintenanceTable';
 import AssetHistoryTable from './AssetHistoryTable';
+import AssetInfo from './AssetInfo';
 
 function DetailedAsset() {
   const { assetId } = useParams();
@@ -44,7 +45,7 @@ function DetailedAsset() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <AssetInfo assetId={Number(assetId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetMaintenanceTable assetId={Number(assetId)} />

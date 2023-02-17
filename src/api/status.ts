@@ -7,9 +7,7 @@ export const getAllStatuses = async () => {
 };
 
 export const getStatusById = async (id: number | string) => {
-  const response = await axios.get('/status/get-status-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/status/get-status-by-id/${id}`);
   return response.data;
 };
 

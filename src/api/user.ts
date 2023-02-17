@@ -7,9 +7,7 @@ export const getAllUsers = async (userQuery?: UserQuery) => {
 };
 
 export const getUserById = async (id: number | string) => {
-  const response = await axios.get('/user/get-user-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/user/get-user-by-id/${id}`);
   return response.data;
 };
 

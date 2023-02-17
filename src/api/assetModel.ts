@@ -7,9 +7,7 @@ export const getAllAssetModels = async (assetModelQuery?: AssetModelQuery) => {
 };
 
 export const getAssetModelById = async (id: number | string) => {
-  const response = await axios.get('/asset-model/get-asset-model-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/asset-model/get-asset-model-by-id/${id}`);
   return response.data;
 };
 

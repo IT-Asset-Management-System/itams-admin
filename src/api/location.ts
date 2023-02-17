@@ -7,9 +7,7 @@ export const getAllLocations = async () => {
 };
 
 export const getLocationById = async (id: number | string) => {
-  const response = await axios.get('/location/get-location-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/location/get-location-by-id/${id}`);
   return response.data;
 };
 

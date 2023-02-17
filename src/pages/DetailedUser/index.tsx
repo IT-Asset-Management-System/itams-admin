@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader';
 import LicenseTable from '../AllLicenses/LicenseTable';
 import AssetTable from '../AllAssets/AssetTable';
 import AssetHistoryTable from '../DetailedAsset/AssetHistoryTable';
+import UserInfo from './UserInfo';
 
 function DetailedUser() {
   const { userId } = useParams();
@@ -45,7 +46,7 @@ function DetailedUser() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <UserInfo userId={Number(userId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetTable userId={Number(userId)} />

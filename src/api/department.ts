@@ -7,9 +7,7 @@ export const getAllDepartments = async (departmentQuery?: DepartmentQuery) => {
 };
 
 export const getDepartmentById = async (id: number | string) => {
-  const response = await axios.get('/department/get-department-by-id', {
-    data: { id },
-  });
+  const response = await axios.get(`/department/get-department-by-id/${id}`);
   return response.data;
 };
 

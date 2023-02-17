@@ -4,6 +4,7 @@ import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import AssetTable from '../AllAssets/AssetTable';
+import StatusInfo from './StatusInfo';
 
 function DetailedStatus() {
   const { statusId } = useParams();
@@ -38,7 +39,7 @@ function DetailedStatus() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <StatusInfo statusId={Number(statusId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetTable statusId={Number(statusId)} />

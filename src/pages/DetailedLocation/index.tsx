@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader';
 import AssetModelTable from '../AllAssetModels/AssetModelTable';
 import LicenseTable from '../AllLicenses/LicenseTable';
 import DepartmentTable from '../AllDepartments/DepartmentTable';
+import LocationInfo from './LocationInfo';
 
 function DetailedLocation() {
   const { locationId } = useParams();
@@ -40,7 +41,7 @@ function DetailedLocation() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <LocationInfo locationId={Number(locationId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <DepartmentTable locationId={Number(locationId)} />

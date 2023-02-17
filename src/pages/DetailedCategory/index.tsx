@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import AssetModelTable from '../AllAssetModels/AssetModelTable';
 import LicenseTable from '../AllLicenses/LicenseTable';
+import CategoryInfo from './CategoryInfo';
 
 function DetailedCategory() {
   const { categoryId } = useParams();
@@ -44,7 +45,7 @@ function DetailedCategory() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <CategoryInfo categoryId={Number(categoryId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetModelTable categoryId={Number(categoryId)} />

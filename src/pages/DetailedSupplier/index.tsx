@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
 import LicenseTable from '../AllLicenses/LicenseTable';
 import AssetTable from '../AllAssets/AssetTable';
+import SupplierInfo from './SupplierInfo';
 
 function DetailedSupplier() {
   const { supplierId } = useParams();
@@ -44,7 +45,7 @@ function DetailedSupplier() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            Information
+            <SupplierInfo supplierId={Number(supplierId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
             <AssetTable supplierId={Number(supplierId)} />
