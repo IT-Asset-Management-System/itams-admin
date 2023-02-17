@@ -103,6 +103,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
+    id: 'image',
+    numeric: false,
+    disablePadding: false,
+    label: 'Image',
+  },
+  {
     id: 'assetModel',
     numeric: false,
     disablePadding: false,
@@ -148,13 +154,13 @@ const headCells: readonly HeadCell[] = [
     id: 'username',
     numeric: false,
     disablePadding: false,
-    label: 'User',
+    label: 'Checked Out To',
   },
   {
     id: 'check_type',
     numeric: false,
     disablePadding: false,
-    label: 'Checkin/Checkout',
+    label: 'Checkin / Checkout',
   },
 ];
 
@@ -536,10 +542,16 @@ export default function AssetTable(assetQuery: AssetQuery) {
                       <TableCell align="left">
                         <Link
                           to={`/hardware/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#00E' }}
+                          style={{ textDecoration: 'none', color: '#296282' }}
                         >
                           {row.name}
                         </Link>
+                      </TableCell>
+                      <TableCell align="left">
+                        <img
+                          src={row.image}
+                          style={{ maxHeight: '40px' }}
+                        ></img>
                       </TableCell>
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{row.department}</TableCell>

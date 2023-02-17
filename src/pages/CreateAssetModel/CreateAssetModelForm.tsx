@@ -13,13 +13,23 @@ import SelectField from '../../components/FormComponent/SelectField';
 import { useNavigate } from 'react-router-dom';
 import { getAllCategories } from '../../api/category';
 import { getAllManufacturers } from '../../api/manufacturer';
-import { createNewAssetModel, updateAssetModel } from '../../api/assetModel';
+import {
+  createNewAssetModel,
+  updateAssetModel,
+  saveImage,
+} from '../../api/assetModel';
+import { ImageListType } from 'react-images-uploading';
+import { UploadImage } from '../../components/FormComponent/UploadImage';
 
 function CreateAssetModelForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [manufacturers, setManufacturers] = useState<Manufacturer[]>([]);
+  const [image, setImage] = useState<ImageListType>([]);
+  const onImageChange = async (imageList: ImageListType) => {
+    setImage(imageList);
+  };
   const initialValues: NewAssetModel = {
     name: data?.name ?? '',
     categoryId:
@@ -50,6 +60,7 @@ function CreateAssetModelForm(props: any) {
       if (action === Actions.UPDATE)
         await updateAssetModel(data.id, newAssetModel);
       else await createNewAssetModel(newAssetModel);
+      if (image.length > 0) await saveImage(data.id, image[0].file);
       navigate(-1);
       toast.success(
         action === Actions.UPDATE
@@ -102,6 +113,7 @@ function CreateAssetModelForm(props: any) {
                   data={manufacturers}
                   required
                 />
+                <UploadImage image={image} onImageChange={onImageChange} />
               </Box>
               <Box
                 sx={{

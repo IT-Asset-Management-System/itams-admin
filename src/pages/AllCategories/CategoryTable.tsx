@@ -94,6 +94,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
+    id: 'image',
+    numeric: false,
+    disablePadding: false,
+    label: 'Image',
+  },
+  {
     id: 'assetModels',
     numeric: false,
     disablePadding: false,
@@ -394,10 +400,16 @@ export default function CategoryTable() {
                       <TableCell align="left">
                         <Link
                           to={`/categories/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#00E' }}
+                          style={{ textDecoration: 'none', color: '#296282' }}
                         >
                           {row.name}
                         </Link>
+                      </TableCell>
+                      <TableCell align="left">
+                        <img
+                          src={row.image}
+                          style={{ maxHeight: '40px' }}
+                        ></img>
                       </TableCell>
                       <TableCell align="left">{row.assetModels}</TableCell>
                       <TableCell align="left">{row.licenses}</TableCell>

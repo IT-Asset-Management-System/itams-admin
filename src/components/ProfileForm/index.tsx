@@ -5,7 +5,7 @@ import { updateProfile, saveAvatar } from '../../api/admin';
 import { useAuthContext } from '../../context/AuthContext';
 import { useState } from 'react';
 import InputField from '../FormComponent/InputField';
-import { UploadImage } from './UploadImage';
+import { UploadImage } from '../FormComponent/UploadImage';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 

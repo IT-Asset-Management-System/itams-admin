@@ -401,7 +401,7 @@ export default function DepartmentTable(departmentQuery: DepartmentQuery) {
                         {' '}
                         <Link
                           to={`/departments/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#00E' }}
+                          style={{ textDecoration: 'none', color: '#296282' }}
                         >
                           {row.name}
                         </Link>

@@ -1,6 +1,7 @@
 export interface AssetModel {
   id: number;
   name: string;
+  image: string;
   category: string;
   manufacturer: string;
   numOfAssets: number;
@@ -20,6 +21,7 @@ export interface NewAssetModel {
 export interface Category {
   id: number;
   name: string;
+  image: string;
   assetModels: number;
   licenses: number;
 }
@@ -48,6 +50,7 @@ export interface NewDepartment {
 export interface Manufacturer {
   id: number;
   name: string;
+  image: string;
   assetModels: number;
   licenses: number;
 }
@@ -121,6 +124,7 @@ export enum CheckType {
 export interface Asset {
   id: number;
   name: string;
+  image: string;
   assetModel: string;
   department: string;
   purchase_date: string;

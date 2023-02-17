@@ -394,7 +394,7 @@ export default function SupplierTable() {
                       <TableCell align="left">
                         <Link
                           to={`/suppliers/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#00E' }}
+                          style={{ textDecoration: 'none', color: '#296282' }}
                         >
                           {row.name}
                         </Link>

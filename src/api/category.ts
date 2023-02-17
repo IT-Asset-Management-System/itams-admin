@@ -33,3 +33,17 @@ export const createNewCategory = async (category: NewCategory) => {
   const response = await axios.post('/category/create-category', category);
   return response.data;
 };
+
+export const saveImage = async (id: string, file: any) => {
+  const formData = new FormData();
+  formData.append('id', id);
+  formData.append('image', file, file.name);
+  const data = await axios.post('/category/save-image', formData, {
+    headers: {
+      accept: 'application/json',
+      'Accept-Language': 'en-US,en;q=0.8',
+      'Content-Type': `multipart/form-data`,
+    },
+  });
+  return data;
+};
