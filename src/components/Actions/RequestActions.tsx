@@ -22,18 +22,28 @@ function RequestActions(props: any) {
             '&:hover': { backgroundColor: '#46b8da' },
           }}
         >
-          <CheckIcon fontSize="small" sx={{ width: '16px', height: '16px', color: '#FFF' }}/>
+          <CheckIcon
+            fontSize="small"
+            sx={{ width: '16px', height: '16px', color: '#FFF' }}
+          />
         </IconButton>
       </Tooltip>
       <Tooltip title="Reject request">
-        <IconButton size="small" onClick={() => onClickReject(+id)}   sx={{
-              width: '30px',
-              height: '30px',
-              backgroundColor: '#dd4b39',
-              borderRadius: '3px',
-              '&:hover': { backgroundColor: '#d73925' },
-            }}>
-          <ClearIcon fontSize="small"  sx={{ width: '16px', height: '16px', color: '#FFF' }}/>
+        <IconButton
+          size="small"
+          onClick={() => onClickReject(+id)}
+          sx={{
+            width: '30px',
+            height: '30px',
+            backgroundColor: '#dd4b39',
+            borderRadius: '3px',
+            '&:hover': { backgroundColor: '#d73925' },
+          }}
+        >
+          <ClearIcon
+            fontSize="small"
+            sx={{ width: '16px', height: '16px', color: '#FFF' }}
+          />
         </IconButton>
       </Tooltip>
     </Stack>

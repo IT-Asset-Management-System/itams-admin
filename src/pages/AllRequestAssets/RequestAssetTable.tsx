@@ -418,7 +418,8 @@ export default function RequestAssetsTable() {
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{formatDate(row.date)}</TableCell>
                       <TableCell align="left">{row.note}</TableCell>
-                      <TableCell align="left"><Box
+                      <TableCell align="left">
+                        <Box
                           sx={{
                             display: 'flex',
                             flexDirection: 'row',
@@ -430,12 +431,18 @@ export default function RequestAssetsTable() {
                             sx={{
                               width: '30px',
                               height: '30px',
-                              backgroundColor: row.status === RequestAssetStatus.REQUESTED? '#EFB700' : row.status === RequestAssetStatus.ACCEPTED ? '#008450':'#B81D13',
+                              backgroundColor:
+                                row.status === RequestAssetStatus.REQUESTED
+                                  ? '#EFB700'
+                                  : row.status === RequestAssetStatus.ACCEPTED
+                                  ? '#008450'
+                                  : '#B81D13',
                               borderRadius: '50%',
                             }}
                           ></Box>
                           {row.status}
-                        </Box></TableCell>
+                        </Box>
+                      </TableCell>
                       <TableCell align="left">
                         {row.status === RequestAssetStatus.REQUESTED && (
                           <RequestActions
