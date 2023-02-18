@@ -38,6 +38,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Name',
   },
+  {
+    id: 'color',
+    numeric: false,
+    disablePadding: false,
+    label: 'Color',
+  },
 ];
 
 export default function StatusInfo(props: any) {

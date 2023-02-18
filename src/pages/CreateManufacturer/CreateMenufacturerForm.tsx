@@ -1,5 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
+import { useState } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
 import { Actions, NewManufacturer } from '../../interface/interface';
@@ -7,11 +8,18 @@ import { useNavigate } from 'react-router-dom';
 import {
   createNewManufacturer,
   updateManufacturer,
+  saveImage,
 } from '../../api/manufacturer';
+import { ImageListType } from 'react-images-uploading';
+import { UploadImage } from '../../components/FormComponent/UploadImage';
 
 function CreateManufacturerForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const [image, setImage] = useState<ImageListType>([]);
+  const onImageChange = async (imageList: ImageListType) => {
+    setImage(imageList);
+  };
   const initialValues: NewManufacturer = {
     name: data?.name ?? '',
   };
@@ -21,6 +29,7 @@ function CreateManufacturerForm(props: any) {
       if (action === Actions.UPDATE)
         await updateManufacturer(data.id, newManufacturer);
       else await createNewManufacturer(newManufacturer);
+      if (image.length > 0) await saveImage(data.id, image[0].file);
       navigate(-1);
       toast.success(
         action === Actions.UPDATE
@@ -59,6 +68,7 @@ function CreateManufacturerForm(props: any) {
                   formik={formik}
                   required
                 />
+                <UploadImage image={image} onImageChange={onImageChange} />
               </Box>
               <Box
                 sx={{

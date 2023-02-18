@@ -1,6 +1,7 @@
 export interface AssetModel {
   id: number;
   name: string;
+  image: string;
   category: string;
   manufacturer: string;
   numOfAssets: number;
@@ -20,6 +21,7 @@ export interface NewAssetModel {
 export interface Category {
   id: number;
   name: string;
+  image: string;
   assetModels: number;
   licenses: number;
 }
@@ -48,6 +50,7 @@ export interface NewDepartment {
 export interface Manufacturer {
   id: number;
   name: string;
+  image: string;
   assetModels: number;
   licenses: number;
 }
@@ -59,11 +62,13 @@ export interface NewManufacturer {
 export interface Status {
   id: number;
   name: string;
+  color: string;
   numOfAssets: number;
 }
 
 export interface NewStatus {
   name: string;
+  color: string;
 }
 
 export interface Supplier {
@@ -103,6 +108,7 @@ export interface NewDeprecation {
 }
 
 export interface Notification {
+  itemId: string;
   name: string;
   type: string;
   expiration_date: string;
@@ -121,6 +127,7 @@ export enum CheckType {
 export interface Asset {
   id: number;
   name: string;
+  image: string;
   assetModel: string;
   department: string;
   purchase_date: string;
@@ -128,6 +135,7 @@ export interface Asset {
   current_cost: number;
   supplier: string;
   status: string;
+  statusColor: string;
   username: string;
   check_type: CheckType;
 }

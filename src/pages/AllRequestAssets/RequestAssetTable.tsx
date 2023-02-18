@@ -153,7 +153,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: '#FFF !important' }}>
         <TableCell padding="checkbox">
           <Checkbox
             color="primary"
@@ -171,6 +171,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontWeight: '700' }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -186,7 +187,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell>Actions</TableCell>
+        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -253,8 +254,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 export default function RequestAssetsTable() {
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof RequestAsset>('id');
+  const [order, setOrder] = React.useState<Order>('desc');
+  const [orderBy, setOrderBy] = React.useState<keyof RequestAsset>('status');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
@@ -360,7 +361,10 @@ export default function RequestAssetsTable() {
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{
+              minWidth: 750,
+              'tr:nth-child(2n+1)': { backgroundColor: '#f8f8f8' },
+            }}
             aria-labelledby="tableTitle"
             size="medium"
           >
@@ -414,7 +418,31 @@ export default function RequestAssetsTable() {
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{formatDate(row.date)}</TableCell>
                       <TableCell align="left">{row.note}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: '5px',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: '30px',
+                              height: '30px',
+                              backgroundColor:
+                                row.status === RequestAssetStatus.REQUESTED
+                                  ? '#EFB700'
+                                  : row.status === RequestAssetStatus.ACCEPTED
+                                  ? '#008450'
+                                  : '#B81D13',
+                              borderRadius: '50%',
+                            }}
+                          ></Box>
+                          {row.status}
+                        </Box>
+                      </TableCell>
                       <TableCell align="left">
                         {row.status === RequestAssetStatus.REQUESTED && (
                           <RequestActions

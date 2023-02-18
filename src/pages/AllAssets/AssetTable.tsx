@@ -103,6 +103,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Name',
   },
   {
+    id: 'image',
+    numeric: false,
+    disablePadding: false,
+    label: 'Image',
+  },
+  {
     id: 'assetModel',
     numeric: false,
     disablePadding: false,
@@ -148,13 +154,13 @@ const headCells: readonly HeadCell[] = [
     id: 'username',
     numeric: false,
     disablePadding: false,
-    label: 'User',
+    label: 'Checked Out To',
   },
   {
     id: 'check_type',
     numeric: false,
     disablePadding: false,
-    label: 'Checkin/Checkout',
+    label: 'Checkin / Checkout',
   },
 ];
 
@@ -186,7 +192,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow sx={{ backgroundColor: '#FFF !important' }}>
         <TableCell padding="checkbox">
           <Checkbox
             color="primary"
@@ -204,6 +210,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
+            sx={{ fontWeight: '700' }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -219,7 +226,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell>Actions</TableCell>
+        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -341,7 +348,15 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 data={data}
                 filename={`asset-${dayjs().format('DD-MM-YYYY')}.csv`}
               >
-                <FileDownloadIcon color="success" />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <FileDownloadIcon sx={{ color: 'rgba(0, 0, 0, 0.54)' }} />
+                </Box>
               </CSVLink>
             </IconButton>
           </Tooltip>
@@ -484,7 +499,10 @@ export default function AssetTable(assetQuery: AssetQuery) {
         />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{
+              minWidth: 750,
+              'tr:nth-child(2n+1)': { backgroundColor: '#f8f8f8' },
+            }}
             aria-labelledby="tableTitle"
             size="medium"
           >
@@ -536,10 +554,16 @@ export default function AssetTable(assetQuery: AssetQuery) {
                       <TableCell align="left">
                         <Link
                           to={`/hardware/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#00E' }}
+                          style={{ textDecoration: 'none', color: '#296282' }}
                         >
                           {row.name}
                         </Link>
+                      </TableCell>
+                      <TableCell align="left">
+                        <img
+                          src={row.image}
+                          style={{ maxHeight: '40px' }}
+                        ></img>
                       </TableCell>
                       <TableCell align="left">{row.assetModel}</TableCell>
                       <TableCell align="left">{row.department}</TableCell>
@@ -549,7 +573,26 @@ export default function AssetTable(assetQuery: AssetQuery) {
                       <TableCell align="left">{row.purchase_cost}</TableCell>
                       <TableCell align="left">{row.current_cost}</TableCell>
                       <TableCell align="left">{row.supplier}</TableCell>
-                      <TableCell align="left">{row.status}</TableCell>
+                      <TableCell align="left">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            gap: '5px',
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: '30px',
+                              height: '30px',
+                              backgroundColor: row.statusColor,
+                              borderRadius: '50%',
+                            }}
+                          ></Box>
+                          {row.status}
+                        </Box>
+                      </TableCell>
                       <TableCell align="left">{row.username}</TableCell>
                       <TableCell align="left">
                         {Boolean(row.check_type === CheckType.CHECKIN) ? (

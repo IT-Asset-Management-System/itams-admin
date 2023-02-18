@@ -13,7 +13,7 @@ import {
 } from '../../interface/interface';
 import { getAllSuppliers } from '../../api/supplier';
 import SelectField from '../../components/FormComponent/SelectField';
-import { createNewAsset, updateAsset } from '../../api/asset';
+import { createNewAsset, updateAsset, saveImage } from '../../api/asset';
 import { useNavigate } from 'react-router-dom';
 import { getAllAssetModels } from '../../api/assetModel';
 import { getAllDepartments } from '../../api/department';
@@ -21,6 +21,8 @@ import { getAllStatuses } from '../../api/status';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import { useAuthContext } from '../../context/AuthContext';
+import { ImageListType } from 'react-images-uploading';
+import { UploadImage } from '../../components/FormComponent/UploadImage';
 
 function CreateAssetForm(props: any) {
   const { data, action } = props;
@@ -30,6 +32,10 @@ function CreateAssetForm(props: any) {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+  const [image, setImage] = useState<ImageListType>([]);
+  const onImageChange = async (imageList: ImageListType) => {
+    setImage(imageList);
+  };
   const initialValues: NewAsset = {
     name: data?.name ?? '',
     purchase_cost: data?.purchase_cost ?? 0,
@@ -73,6 +79,7 @@ function CreateAssetForm(props: any) {
     try {
       if (action === Actions.UPDATE) await updateAsset(data.id, newAsset);
       else await createNewAsset(newAsset);
+      if (image.length > 0) await saveImage(data.id, image[0].file);
       await getNotifications();
       navigate(-1);
       toast.success(
@@ -152,6 +159,7 @@ function CreateAssetForm(props: any) {
                   data={suppliers}
                   required
                 />
+                <UploadImage image={image} onImageChange={onImageChange} />
               </Box>
               <Box
                 sx={{

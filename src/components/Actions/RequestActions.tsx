@@ -14,13 +14,36 @@ function RequestActions(props: any) {
         <IconButton
           size="small"
           onClick={() => navigate(`/${path}/${id}/accept`, { state: data })}
+          sx={{
+            width: '30px',
+            height: '30px',
+            backgroundColor: '#00c0ef',
+            borderRadius: '3px',
+            '&:hover': { backgroundColor: '#46b8da' },
+          }}
         >
-          <CheckIcon fontSize="small" />
+          <CheckIcon
+            fontSize="small"
+            sx={{ width: '16px', height: '16px', color: '#FFF' }}
+          />
         </IconButton>
       </Tooltip>
       <Tooltip title="Reject request">
-        <IconButton size="small" onClick={() => onClickReject(+id)}>
-          <ClearIcon fontSize="small" />
+        <IconButton
+          size="small"
+          onClick={() => onClickReject(+id)}
+          sx={{
+            width: '30px',
+            height: '30px',
+            backgroundColor: '#dd4b39',
+            borderRadius: '3px',
+            '&:hover': { backgroundColor: '#d73925' },
+          }}
+        >
+          <ClearIcon
+            fontSize="small"
+            sx={{ width: '16px', height: '16px', color: '#FFF' }}
+          />
         </IconButton>
       </Tooltip>
     </Stack>

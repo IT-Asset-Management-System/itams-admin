@@ -38,3 +38,17 @@ export const createNewManufacturer = async (manufacturer: NewManufacturer) => {
   );
   return response.data;
 };
+
+export const saveImage = async (id: string, file: any) => {
+  const formData = new FormData();
+  formData.append('id', id);
+  formData.append('image', file, file.name);
+  const data = await axios.post('/manufacturer/save-image', formData, {
+    headers: {
+      accept: 'application/json',
+      'Accept-Language': 'en-US,en;q=0.8',
+      'Content-Type': `multipart/form-data`,
+    },
+  });
+  return data;
+};

@@ -9,14 +9,14 @@ export function Checkin(props: any) {
     <Box>
       <Button
         sx={{
-          background: '#00ff7a',
+          background: '#605ca8',
           borderRadius: '5px',
           textTransform: 'none',
           color: '#FFF',
           fontWeight: 700,
           fontSize: 14,
           '&:hover': {
-            background: '#00ff5e',
+            background: '#6f5faf',
           },
         }}
         onClick={handleClick}
