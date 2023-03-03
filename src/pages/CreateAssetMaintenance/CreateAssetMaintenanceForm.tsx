@@ -19,6 +19,7 @@ import {
 } from '../../api/assetMaintenance';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import dayjs from 'dayjs';
+import * as Yup from 'yup';
 
 function CreateAssetMaintenanceForm(props: any) {
   const { data, action } = props;
@@ -28,7 +29,7 @@ function CreateAssetMaintenanceForm(props: any) {
   const initialValues: NewAssetMaintenance = {
     start_date: data?.start_date ?? dayjs(),
     end_date: data?.end_date ?? '',
-    cost: data?.cost ?? '',
+    cost: data?.cost ?? 0,
     note: data?.note ?? '',
     assetId:
       assets.find((asset: Asset) => {
@@ -39,6 +40,13 @@ function CreateAssetMaintenanceForm(props: any) {
         return supplier.name === data?.supplier;
       })?.id ?? 0,
   };
+  const validationSchema = Yup.object({
+    cost: Yup.number()
+      .typeError('This value must be an number')
+      .min(0, 'This value must be greater than or equal to 0'),
+    start_date: Yup.date().typeError('Invalid date'),
+    end_date: Yup.date().typeError('Invalid date'),
+  });
   useEffect(() => {
     const getData = async () => {
       try {
@@ -82,6 +90,8 @@ function CreateAssetMaintenanceForm(props: any) {
     >
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
         enableReinitialize={true}
         onSubmit={handleSubmit}
       >

@@ -23,6 +23,7 @@ import DatePickerField from '../../components/FormComponent/DatePickerField';
 import { useAuthContext } from '../../context/AuthContext';
 import { ImageListType } from 'react-images-uploading';
 import { UploadImage } from '../../components/FormComponent/UploadImage';
+import * as Yup from 'yup';
 
 function CreateAssetForm(props: any) {
   const { data, action } = props;
@@ -57,6 +58,12 @@ function CreateAssetForm(props: any) {
         return supplier.name === data?.supplier;
       })?.id ?? 0,
   };
+  const validationSchema = Yup.object({
+    purchase_cost: Yup.number()
+      .typeError('This value must be an number')
+      .min(0, 'This value must be greater than or equal to 0'),
+    purchase_date: Yup.date().typeError('Invalid date'),
+  });
   useEffect(() => {
     const getData = async () => {
       try {
@@ -105,6 +112,8 @@ function CreateAssetForm(props: any) {
     >
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
         enableReinitialize={true}
         onSubmit={handleSubmit}
       >
