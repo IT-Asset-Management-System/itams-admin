@@ -88,12 +88,6 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
-    numeric: false,
-    disablePadding: true,
-    label: 'ID',
-  },
-  {
     id: 'asset_name',
     numeric: false,
     disablePadding: false,
@@ -274,7 +268,7 @@ export default function AssetMaintenanceTable(
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
-    getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
+    Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
   const [rows, setRows] = React.useState<AssetMaintenance[]>([]);
 
@@ -419,14 +413,6 @@ export default function AssetMaintenanceTable(
                           }}
                           onClick={(event) => handleClick(event, row.id)}
                         />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
                       </TableCell>
                       <TableCell align="left">{row.asset_name}</TableCell>
                       <TableCell align="left">{row.asset_id}</TableCell>

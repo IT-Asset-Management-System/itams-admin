@@ -17,6 +17,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Asset } from '../../interface/interface';
 import { useAuthContext } from '../../context/AuthContext';
+import { formatDate } from '../../helpers/format';
 
 interface HeadCell {
   disablePadding: boolean;
@@ -86,12 +87,6 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'User',
   },
-  {
-    id: 'check_type',
-    numeric: false,
-    disablePadding: false,
-    label: 'Checkin/Checkout',
-  },
 ];
 
 export default function AssetInfo(props: any) {
@@ -113,6 +108,7 @@ export default function AssetInfo(props: any) {
   const getData = async () => {
     try {
       const asset: Asset = await getAssetById(assetId);
+      asset.purchase_date = formatDate(asset.purchase_date);
       console.log(asset);
       setRows(asset);
     } catch (err) {

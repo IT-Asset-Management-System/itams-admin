@@ -96,12 +96,6 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
-    numeric: false,
-    disablePadding: true,
-    label: 'ID',
-  },
-  {
     id: 'assetId',
     numeric: false,
     disablePadding: false,
@@ -350,7 +344,7 @@ export default function AssetHistoryTable(
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
-    getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
+    Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
   const [rows, setRows] = React.useState<AssetHistory[]>([]);
   const [initRows, setInitRows] = React.useState<AssetHistory[]>([]);
@@ -519,14 +513,6 @@ export default function AssetHistoryTable(
                           }}
                           onClick={(event) => handleClick(event, row.id)}
                         />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
                       </TableCell>
                       <TableCell align="left">{row.assetId}</TableCell>
                       <TableCell align="left">{row.assetName}</TableCell>
