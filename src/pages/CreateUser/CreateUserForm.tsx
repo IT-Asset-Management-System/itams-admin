@@ -11,6 +11,7 @@ import { createNewUser, updateUser } from '../../api/user';
 import PasswordField from '../../components/FormComponent/PasswordField';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
+import * as Yup from 'yup';
 
 function CreateUserForm(props: any) {
   const { data, action } = props;
@@ -28,6 +29,10 @@ function CreateUserForm(props: any) {
         return department.name === data?.department;
       })?.id ?? 0,
   };
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid email'),
+    birthday: Yup.date().typeError('Invalid date'),
+  });
   useEffect(() => {
     const getData = async () => {
       try {
@@ -68,6 +73,8 @@ function CreateUserForm(props: any) {
     >
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
         enableReinitialize={true}
         onSubmit={handleSubmit}
       >

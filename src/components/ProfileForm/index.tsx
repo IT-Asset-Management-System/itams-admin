@@ -8,6 +8,7 @@ import InputField from '../FormComponent/InputField';
 import { UploadImage } from '../FormComponent/UploadImage';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 function ProfileForm() {
   const navigate = useNavigate();
@@ -21,7 +22,9 @@ function ProfileForm() {
     name: authContext.name,
     email: authContext.email,
   };
-  console.log(initialValues);
+  const validationSchema = Yup.object({
+    email: Yup.string().email('Invalid email'),
+  });
 
   const handleSubmit = async (profile: any) => {
     try {
@@ -47,6 +50,7 @@ function ProfileForm() {
     >
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
         validateOnChange={false}
         validateOnBlur={false}
         onSubmit={handleSubmit}

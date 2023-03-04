@@ -256,7 +256,7 @@ export default function DigitalContentTable() {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
-    getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
+    Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
   const [rows, setRows] = React.useState<DigitalContent[]>([]);
 

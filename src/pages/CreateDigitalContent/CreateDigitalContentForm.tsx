@@ -79,7 +79,7 @@ function CreateDigitalContentForm(props: any) {
                 />
                 <CheckboxField
                   id="isPrivate"
-                  fieldName="Is Private"
+                  fieldName="Private"
                   formik={formik}
                 />
                 <InputField

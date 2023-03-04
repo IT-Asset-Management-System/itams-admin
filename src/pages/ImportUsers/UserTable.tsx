@@ -165,7 +165,7 @@ export default function UserTable(props: UserTableProps) {
   const [orderBy, setOrderBy] = React.useState<keyof NewUser>('name');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
-    getPref<number>(Prefs.ROWS_PER_PAGE) ?? 5,
+    Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
 
   const handleRequestSort = (
