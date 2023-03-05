@@ -1,7 +1,7 @@
 import { Box, MenuItem } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useState } from 'react';
-import { ActionTypes } from '../../components/reducers/useEditAssetToInventoryReducer';
+import { ActionTypes } from '../../reducer/useEditAssetToInventoryReducer';
 import { Status } from '../../interface/interface';
 
 function SelectField(props: any) {

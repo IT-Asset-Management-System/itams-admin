@@ -35,8 +35,8 @@ import { getAllStatuses } from '../../api/status';
 import SelectField from './Select';
 import useEditPageReducer, {
   ActionTypes,
-} from '../../components/reducers/useEditAssetToInventoryReducer';
-import useEditAssetToInventoryReducer from '../../components/reducers/useEditAssetToInventoryReducer';
+} from '../../reducer/useEditAssetToInventoryReducer';
+import useEditAssetToInventoryReducer from '../../reducer/useEditAssetToInventoryReducer';
 import Check from './Check';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {

@@ -1,5 +1,5 @@
 import { useReducer } from 'react';
-import { AssetToInventory } from '../../interface/interface';
+import { AssetToInventory } from '../interface/interface';
 
 export const enum ActionTypes {
   EDIT_COST = 'edit_cost',
