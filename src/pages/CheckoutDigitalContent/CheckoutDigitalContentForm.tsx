@@ -1,33 +1,49 @@
 import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
+import { useState, useEffect } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
-import { CheckinSourceCode, Asset } from '../../interface/interface';
-import { checkinSourceCode } from '../../api/sourceCode';
+import { CheckoutDigitalContent, SourceCode } from '../../interface/interface';
+import SelectField from '../../components/FormComponent/SelectField';
+import { checkoutDigitalContent } from '../../api/digitalContent';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
+import { getAllSourceCodes } from '../../api/sourceCode';
 
-function CheckinSourceCodeForm(props: any) {
+function CheckoutSourceCodeForm(props: any) {
   const { data } = props;
   const navigate = useNavigate();
-  const initialValues: CheckinSourceCode = {
-    sourceCodeToUserId: data?.id,
-    end_date: data?.date ?? dayjs(),
-    end_note: '',
+  const [sourceCodes, setSourceCodes] = useState<SourceCode[]>([]);
+  const initialValues: CheckoutDigitalContent = {
+    digitalContentId: data?.id,
+    sourceCodeId: 0,
+    checkout_date: data?.date ?? dayjs(),
+    checkout_note: '',
   };
   const validationSchema = Yup.object({
-    end_date: Yup.date().typeError('Invalid date'),
+    checkout_date: Yup.date().typeError('Invalid date'),
   });
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const sourceCodes: SourceCode[] = await getAllSourceCodes();
+        setSourceCodes(sourceCodes);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
+  }, []);
 
-  const handleSubmit = async (sourceCode: CheckinSourceCode) => {
+  const handleSubmit = async (sourceCode: CheckoutDigitalContent) => {
     try {
-      await checkinSourceCode(sourceCode);
+      await checkoutDigitalContent(sourceCode);
       navigate(-1);
-      toast.success('Checkin successfully');
+      toast.success('Checkout successfully');
     } catch (err: any) {
-      console.log('Checkin sourceCode', err);
+      console.log('Checkout source code', err);
       toast.error(err.response.data.message);
     }
   };
@@ -55,20 +71,27 @@ function CheckinSourceCodeForm(props: any) {
               <Box sx={{ mx: '60px', mt: '20px' }}>
                 <InputField
                   id="name"
-                  fieldName="Source Code Name"
+                  fieldName="Digital Content Name"
                   fullWidth
                   formik={formik}
-                  value={data?.sourceCodeName}
+                  value={data?.name}
                   disabled
                 />
+                <SelectField
+                  id="sourceCodeId"
+                  fieldName="SourceCode"
+                  formik={formik}
+                  data={sourceCodes}
+                  required
+                />
                 <DatePickerField
-                  id="end_date"
-                  fieldName="End Date"
+                  id="checkout_date"
+                  fieldName="Checkout Date"
                   formik={formik}
                   required
                 />
                 <InputField
-                  id="end_note"
+                  id="checkout_note"
                   fieldName="Note"
                   formik={formik}
                   multiline
@@ -109,4 +132,4 @@ function CheckinSourceCodeForm(props: any) {
   );
 }
 
-export default CheckinSourceCodeForm;
+export default CheckoutSourceCodeForm;

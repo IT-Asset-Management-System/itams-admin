@@ -276,6 +276,35 @@ export interface NewDigitalContent {
   url: string;
 }
 
+export interface CheckoutDigitalContent {
+  digitalContentId: number;
+  sourceCodeId: number;
+  checkout_date: string;
+  checkout_note: string;
+}
+
+export interface CheckinDigitalContent {
+  digitalContentToSourceCodeId: number;
+  checkin_date: string;
+  checkin_note: string;
+}
+
+export interface DigitalContentToSourceCode {
+  id: number;
+  digitalContentId: number;
+  digitalContentName: string;
+  sourceCodeId: number;
+  sourceCodeName: string;
+  checkout_date: string;
+  checkin_date: string;
+}
+
+export interface DigitalContentToSourceCodeQuery {
+  digitalContentId?: number;
+  sourceCodeId?: number;
+  withDeleted?: boolean;
+}
+
 export interface License {
   id: number;
   name: string;

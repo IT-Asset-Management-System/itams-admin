@@ -23,7 +23,7 @@ function CheckoutSourceCodeForm(props: any) {
     start_note: '',
   };
   const validationSchema = Yup.object({
-    checkout_date: Yup.date().typeError('Invalid date'),
+    start_date: Yup.date().typeError('Invalid date'),
   });
   useEffect(() => {
     const getData = async () => {

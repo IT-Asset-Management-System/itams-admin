@@ -2,32 +2,32 @@ import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
-import { CheckinSourceCode, Asset } from '../../interface/interface';
-import { checkinSourceCode } from '../../api/sourceCode';
+import { CheckinDigitalContent } from '../../interface/interface';
+import { checkinDigitalContent } from '../../api/digitalContent';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
 
-function CheckinSourceCodeForm(props: any) {
+function CheckinDigitalContentForm(props: any) {
   const { data } = props;
   const navigate = useNavigate();
-  const initialValues: CheckinSourceCode = {
-    sourceCodeToUserId: data?.id,
-    end_date: data?.date ?? dayjs(),
-    end_note: '',
+  const initialValues: CheckinDigitalContent = {
+    digitalContentToSourceCodeId: data?.id,
+    checkin_date: data?.date ?? dayjs(),
+    checkin_note: '',
   };
   const validationSchema = Yup.object({
-    end_date: Yup.date().typeError('Invalid date'),
+    Checkin_date: Yup.date().typeError('Invalid date'),
   });
 
-  const handleSubmit = async (sourceCode: CheckinSourceCode) => {
+  const handleSubmit = async (digitalContent: CheckinDigitalContent) => {
     try {
-      await checkinSourceCode(sourceCode);
+      await checkinDigitalContent(digitalContent);
       navigate(-1);
       toast.success('Checkin successfully');
     } catch (err: any) {
-      console.log('Checkin sourceCode', err);
+      console.log('Checkin Digital Content', err);
       toast.error(err.response.data.message);
     }
   };
@@ -55,20 +55,20 @@ function CheckinSourceCodeForm(props: any) {
               <Box sx={{ mx: '60px', mt: '20px' }}>
                 <InputField
                   id="name"
-                  fieldName="Source Code Name"
+                  fieldName="Digital Content Name"
                   fullWidth
                   formik={formik}
-                  value={data?.sourceCodeName}
+                  value={data?.digitalContentName}
                   disabled
                 />
                 <DatePickerField
-                  id="end_date"
-                  fieldName="End Date"
+                  id="checkin_date"
+                  fieldName="Checkin Date"
                   formik={formik}
                   required
                 />
                 <InputField
-                  id="end_note"
+                  id="checkin_note"
                   fieldName="Note"
                   formik={formik}
                   multiline
@@ -109,4 +109,4 @@ function CheckinSourceCodeForm(props: any) {
   );
 }
 
-export default CheckinSourceCodeForm;
+export default CheckinDigitalContentForm;

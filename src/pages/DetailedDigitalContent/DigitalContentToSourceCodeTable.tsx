@@ -18,10 +18,6 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import {
-  deleteDigitalContent,
-  getAllDigitalContents,
-} from '../../api/digitalContent';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
 
@@ -32,10 +28,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { DigitalContent } from '../../interface/interface';
+import {
+  DigitalContentToSourceCode,
+  DigitalContentToSourceCodeQuery,
+} from '../../interface/interface';
+import { formatDate } from '../../helpers/format';
+import { useAuthContext } from '../../context/AuthContext';
 import { Checkout } from '../../components/CheckButton/Checkout';
-import { Link as LinkDOM } from 'react-router-dom';
-import Link from '@mui/material/Link';
+import { Link } from 'react-router-dom';
+import { Checkin } from '../../components/CheckButton/Checkin';
+import {
+  deleteDigitalContent,
+  getDigitalContentToSourceCode,
+} from '../../api/digitalContent';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -80,47 +85,23 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof DigitalContent;
+  id: keyof DigitalContentToSourceCode;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
+    id: 'sourceCodeId',
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: 'SourceCode ID',
   },
   {
-    id: 'name',
+    id: 'sourceCodeName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
-  },
-  {
-    id: 'owner',
-    numeric: false,
-    disablePadding: false,
-    label: 'Owner',
-  },
-  {
-    id: 'description',
-    numeric: false,
-    disablePadding: false,
-    label: 'Description',
-  },
-  {
-    id: 'isPrivate',
-    numeric: false,
-    disablePadding: false,
-    label: 'Private',
-  },
-  {
-    id: 'url',
-    numeric: false,
-    disablePadding: false,
-    label: 'Url',
+    label: 'SourceCode Name',
   },
 ];
 
@@ -128,7 +109,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof DigitalContent,
+    property: keyof DigitalContentToSourceCode,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -146,7 +127,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof DigitalContent) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof DigitalContentToSourceCode) =>
+    (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -187,7 +169,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           </TableCell>
         ))}
         <TableCell sx={{ fontWeight: '700' }}>Checkout</TableCell>
-        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -253,15 +234,19 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function DigitalContentTable() {
+export default function DigitalContentToSourceCodeTable(
+  digitalContentToSourceCodeQuery: DigitalContentToSourceCodeQuery,
+) {
+  const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof DigitalContent>('id');
+  const [orderBy, setOrderBy] =
+    React.useState<keyof DigitalContentToSourceCode>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
-  const [rows, setRows] = React.useState<DigitalContent[]>([]);
+  const [rows, setRows] = React.useState<DigitalContentToSourceCode[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -276,7 +261,9 @@ export default function DigitalContentTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllDigitalContents();
+      const data = await getDigitalContentToSourceCode(
+        digitalContentToSourceCodeQuery,
+      );
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -292,6 +279,7 @@ export default function DigitalContentTable() {
       handleClose();
       await getData();
       setIdToDelete(0);
+      await getNotifications();
       toast.success('Deleted');
     } catch (err: any) {
       console.log(err);
@@ -301,7 +289,7 @@ export default function DigitalContentTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof DigitalContent,
+    property: keyof DigitalContentToSourceCode,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -405,45 +393,13 @@ export default function DigitalContentTable() {
                           onClick={(event) => handleClick(event, row.id)}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
-                      </TableCell>
+                      <TableCell align="left">{row.sourceCodeId}</TableCell>
+                      <TableCell align="left">{row.sourceCodeName}</TableCell>
                       <TableCell align="left">
-                        <LinkDOM
-                          to={`/digital-content/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#296282' }}
-                        >
-                          {row.name}
-                        </LinkDOM>
-                      </TableCell>
-                      <TableCell align="left">{row.owner}</TableCell>
-                      <TableCell align="left">{row.description}</TableCell>
-                      <TableCell align="left">
-                        <Checkbox checked={Boolean(row.isPrivate)} disabled />
-                      </TableCell>
-                      <TableCell align="left">
-                        <Link target="_blank" href={row.url}>
-                          {row.url}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">
-                        <Checkout
+                        <Checkin
                           id={row.id}
                           path="digital-content"
                           data={row}
-                        />
-                      </TableCell>
-                      <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="digital-content"
-                          data={row}
-                          onClickDelete={handleClickOpen}
                         />
                       </TableCell>
                     </TableRow>

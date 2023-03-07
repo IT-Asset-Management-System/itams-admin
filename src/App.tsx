@@ -61,7 +61,10 @@ import {
   CheckoutSourceCode,
   CheckinSourceCode,
   AllDigitalContents,
+  DetailedDigitalContent,
   CreateDigitalContent,
+  CheckoutDigitalContent,
+  CheckinDigitalContent,
   Dashboard,
 } from './pages';
 import AuthProvider from './context/AuthContext';
@@ -140,6 +143,10 @@ function App() {
               <Route path="digital-content">
                 <Route index element={<AllDigitalContents />} />
                 <Route
+                  path=":digitalContentId"
+                  element={<DetailedDigitalContent />}
+                />
+                <Route
                   path="create"
                   element={<CreateDigitalContent action={Actions.CREATE} />}
                 />
@@ -150,6 +157,14 @@ function App() {
                 <Route
                   path=":digitalContentId/clone"
                   element={<CreateDigitalContent action={Actions.CLONE} />}
+                />
+                <Route
+                  path=":digitalContentId/checkout"
+                  element={<CheckoutDigitalContent />}
+                />
+                <Route
+                  path=":digitalContentId/checkin"
+                  element={<CheckinDigitalContent />}
                 />
               </Route>
               <Route path="licenses">

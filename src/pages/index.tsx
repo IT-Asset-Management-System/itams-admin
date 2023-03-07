@@ -55,4 +55,7 @@ export { default as CreateSourceCode } from './CreateSourceCode';
 export { default as CheckoutSourceCode } from './CheckoutSourceCode';
 export { default as CheckinSourceCode } from './CheckinSourceCode';
 export { default as AllDigitalContents } from './AllDigitalContents';
+export { default as DetailedDigitalContent } from './DetailedDigitalContent';
 export { default as CreateDigitalContent } from './CreateDigitalContent';
+export { default as CheckoutDigitalContent } from './CheckoutDigitalContent';
+export { default as CheckinDigitalContent } from './CheckinDigitalContent';

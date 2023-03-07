@@ -6,7 +6,10 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { deleteSourceCode, getSourceCodeById } from '../../api/sourceCode';
+import {
+  deleteDigitalContent,
+  getDigitalContentById,
+} from '../../api/digitalContent';
 import { toast } from 'react-toastify';
 
 import Button from '@mui/material/Button';
@@ -15,13 +18,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { SourceCode } from '../../interface/interface';
+import { DigitalContent } from '../../interface/interface';
 import { useAuthContext } from '../../context/AuthContext';
 import { formatDate } from '../../helpers/format';
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof SourceCode;
+  id: keyof DigitalContent;
   label: string;
   numeric: boolean;
 }
@@ -65,10 +68,10 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
-export default function SourceCodeInfo(props: any) {
-  const { sourceCodeId } = props;
+export default function DigitalContentInfo(props: any) {
+  const { digitalContentId } = props;
   const { getNotifications } = useAuthContext();
-  const [rows, setRows] = React.useState<SourceCode>();
+  const [rows, setRows] = React.useState<DigitalContent>();
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -83,10 +86,12 @@ export default function SourceCodeInfo(props: any) {
 
   const getData = async () => {
     try {
-      const sourceCode: SourceCode = await getSourceCodeById(sourceCodeId);
-      sourceCode.isPrivate = sourceCode.isPrivate.toString();
-      console.log(sourceCode);
-      setRows(sourceCode);
+      const digitalContent: DigitalContent = await getDigitalContentById(
+        digitalContentId,
+      );
+      digitalContent.isPrivate = digitalContent.isPrivate.toString();
+      console.log(digitalContent);
+      setRows(digitalContent);
     } catch (err) {
       console.log(err);
     }
@@ -98,7 +103,7 @@ export default function SourceCodeInfo(props: any) {
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteSourceCode(id);
+      await deleteDigitalContent(id);
       handleClose();
       await getData();
       setIdToDelete(0);
