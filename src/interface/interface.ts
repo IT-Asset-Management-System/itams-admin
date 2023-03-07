@@ -230,6 +230,35 @@ export interface NewSourceCode {
   url: string;
 }
 
+export interface CheckoutSourceCode {
+  sourceCodeId: number;
+  userId: number;
+  start_date: string;
+  start_note: string;
+}
+
+export interface CheckinSourceCode {
+  sourceCodeToUserId: number;
+  end_date: string;
+  end_note: string;
+}
+
+export interface SourceCodeToUser {
+  id: number;
+  sourceCodeId: number;
+  sourceCodeName: string;
+  userId: number;
+  userName: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface SourceCodeToUserQuery {
+  sourceCodeId?: number;
+  userId?: number;
+  withDeleted?: boolean;
+}
+
 export interface DigitalContent {
   id: number;
   name: string;
@@ -275,7 +304,7 @@ export interface CheckoutLicense {
 }
 
 export interface CheckinLicense {
-  licenseId: number;
+  licenseToAssetId: number;
   checkin_date: string;
   checkin_note: string;
 }

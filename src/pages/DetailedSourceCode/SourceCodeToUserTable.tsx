@@ -18,11 +18,6 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import {
-  deleteLicense,
-  getAllLicenses,
-  getLicenseToAsset,
-} from '../../api/license';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
 
@@ -33,12 +28,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { LicenseToAsset, LicenseToAssetQuery } from '../../interface/interface';
+import {
+  SourceCodeToUser,
+  SourceCodeToUserQuery,
+} from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
 import { useAuthContext } from '../../context/AuthContext';
 import { Checkout } from '../../components/CheckButton/Checkout';
 import { Link } from 'react-router-dom';
 import { Checkin } from '../../components/CheckButton/Checkin';
+import { deleteSourceCode, getSourceCodeToUser } from '../../api/sourceCode';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -83,23 +82,23 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof LicenseToAsset;
+  id: keyof SourceCodeToUser;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'assetId',
+    id: 'userId',
     numeric: false,
     disablePadding: true,
-    label: 'Asset ID',
+    label: 'User ID',
   },
   {
-    id: 'assetName',
+    id: 'userName',
     numeric: false,
     disablePadding: false,
-    label: 'Asset Name',
+    label: 'User Name',
   },
 ];
 
@@ -107,7 +106,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof LicenseToAsset,
+    property: keyof SourceCodeToUser,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -125,7 +124,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof LicenseToAsset) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof SourceCodeToUser) =>
+    (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -231,18 +231,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function LicenseToAssetTable(
-  licenseToAssetQuery: LicenseToAssetQuery,
+export default function SourceCodeToUserTable(
+  sourceCodeToUserQuery: SourceCodeToUserQuery,
 ) {
   const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof LicenseToAsset>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof SourceCodeToUser>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
-  const [rows, setRows] = React.useState<LicenseToAsset[]>([]);
+  const [rows, setRows] = React.useState<SourceCodeToUser[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -257,7 +257,7 @@ export default function LicenseToAssetTable(
 
   const getData = async () => {
     try {
-      const data = await getLicenseToAsset(licenseToAssetQuery);
+      const data = await getSourceCodeToUser(sourceCodeToUserQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -269,7 +269,7 @@ export default function LicenseToAssetTable(
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteLicense(id);
+      await deleteSourceCode(id);
       handleClose();
       await getData();
       setIdToDelete(0);
@@ -283,7 +283,7 @@ export default function LicenseToAssetTable(
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof LicenseToAsset,
+    property: keyof SourceCodeToUser,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -387,10 +387,10 @@ export default function LicenseToAssetTable(
                           onClick={(event) => handleClick(event, row.id)}
                         />
                       </TableCell>
-                      <TableCell align="left">{row.assetId}</TableCell>
-                      <TableCell align="left">{row.assetName}</TableCell>
+                      <TableCell align="left">{row.userId}</TableCell>
+                      <TableCell align="left">{row.userName}</TableCell>
                       <TableCell align="left">
-                        <Checkin id={row.id} path="licenses" data={row} />
+                        <Checkin id={row.id} path="source-code" data={row} />
                       </TableCell>
                     </TableRow>
                   );

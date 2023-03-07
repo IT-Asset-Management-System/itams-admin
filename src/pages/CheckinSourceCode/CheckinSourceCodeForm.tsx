@@ -2,32 +2,32 @@ import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
-import { CheckinLicense, Asset } from '../../interface/interface';
-import { checkinLicense } from '../../api/license';
+import { CheckinSourceCode, Asset } from '../../interface/interface';
+import { checkinSourceCode } from '../../api/sourceCode';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
 
-function CheckinLicenseForm(props: any) {
+function CheckinSourceForm(props: any) {
   const { data } = props;
   const navigate = useNavigate();
-  const initialValues: CheckinLicense = {
-    licenseToAssetId: data?.id,
-    checkin_date: data?.date ?? dayjs(),
-    checkin_note: '',
+  const initialValues: CheckinSourceCode = {
+    sourceCodeToUserId: data?.id,
+    end_date: data?.date ?? dayjs(),
+    end_note: '',
   };
   const validationSchema = Yup.object({
     Checkin_date: Yup.date().typeError('Invalid date'),
   });
 
-  const handleSubmit = async (license: CheckinLicense) => {
+  const handleSubmit = async (sourceCode: CheckinSourceCode) => {
     try {
-      await checkinLicense(license);
+      await checkinSourceCode(sourceCode);
       navigate(-1);
       toast.success('Checkin successfully');
     } catch (err: any) {
-      console.log('Checkin license', err);
+      console.log('Checkin sourceCode', err);
       toast.error(err.response.data.message);
     }
   };
@@ -55,20 +55,20 @@ function CheckinLicenseForm(props: any) {
               <Box sx={{ mx: '60px', mt: '20px' }}>
                 <InputField
                   id="name"
-                  fieldName="License Name"
+                  fieldName="Source Code Name"
                   fullWidth
                   formik={formik}
-                  value={data?.licenseName}
+                  value={data?.sourceCodeName}
                   disabled
                 />
                 <DatePickerField
-                  id="checkin_date"
-                  fieldName="Checkin Date"
+                  id="end_date"
+                  fieldName="End Date"
                   formik={formik}
                   required
                 />
                 <InputField
-                  id="checkin_note"
+                  id="end_note"
                   fieldName="Note"
                   formik={formik}
                   multiline
@@ -109,4 +109,4 @@ function CheckinLicenseForm(props: any) {
   );
 }
 
-export default CheckinLicenseForm;
+export default CheckinSourceForm;

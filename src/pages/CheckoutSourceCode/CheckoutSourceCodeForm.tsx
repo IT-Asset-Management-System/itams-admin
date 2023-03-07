@@ -1,33 +1,49 @@
 import { Box, Button } from '@mui/material';
 import { Formik, Form } from 'formik';
+import { useState, useEffect } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
-import { CheckinLicense, Asset } from '../../interface/interface';
-import { checkinLicense } from '../../api/license';
+import { CheckoutSourceCode, User } from '../../interface/interface';
+import SelectField from '../../components/FormComponent/SelectField';
+import { checkoutSourceCode } from '../../api/sourceCode';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
+import { getAllUsers } from '../../api/user';
 
-function CheckinLicenseForm(props: any) {
+function CheckoutSourceCodeForm(props: any) {
   const { data } = props;
   const navigate = useNavigate();
-  const initialValues: CheckinLicense = {
-    licenseToAssetId: data?.id,
-    checkin_date: data?.date ?? dayjs(),
-    checkin_note: '',
+  const [users, setUsers] = useState<User[]>([]);
+  const initialValues: CheckoutSourceCode = {
+    sourceCodeId: data?.id,
+    userId: 0,
+    start_date: data?.date ?? dayjs(),
+    start_note: '',
   };
   const validationSchema = Yup.object({
-    Checkin_date: Yup.date().typeError('Invalid date'),
+    checkout_date: Yup.date().typeError('Invalid date'),
   });
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const users: User[] = await getAllUsers();
+        setUsers(users);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getData();
+  }, []);
 
-  const handleSubmit = async (license: CheckinLicense) => {
+  const handleSubmit = async (sourceCode: CheckoutSourceCode) => {
     try {
-      await checkinLicense(license);
+      await checkoutSourceCode(sourceCode);
       navigate(-1);
-      toast.success('Checkin successfully');
+      toast.success('Checkout successfully');
     } catch (err: any) {
-      console.log('Checkin license', err);
+      console.log('Checkout source code', err);
       toast.error(err.response.data.message);
     }
   };
@@ -55,20 +71,27 @@ function CheckinLicenseForm(props: any) {
               <Box sx={{ mx: '60px', mt: '20px' }}>
                 <InputField
                   id="name"
-                  fieldName="License Name"
+                  fieldName="Source Code Name"
                   fullWidth
                   formik={formik}
-                  value={data?.licenseName}
+                  value={data?.name}
                   disabled
                 />
+                <SelectField
+                  id="userId"
+                  fieldName="User"
+                  formik={formik}
+                  data={users}
+                  required
+                />
                 <DatePickerField
-                  id="checkin_date"
-                  fieldName="Checkin Date"
+                  id="start_date"
+                  fieldName="Start Date"
                   formik={formik}
                   required
                 />
                 <InputField
-                  id="checkin_note"
+                  id="start_note"
                   fieldName="Note"
                   formik={formik}
                   multiline
@@ -109,4 +132,4 @@ function CheckinLicenseForm(props: any) {
   );
 }
 
-export default CheckinLicenseForm;
+export default CheckoutSourceCodeForm;

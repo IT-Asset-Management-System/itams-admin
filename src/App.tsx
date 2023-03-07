@@ -56,7 +56,10 @@ import {
   AllDeprecations,
   CreateDeprecation,
   AllSourceCodes,
+  DetailedSourceCode,
   CreateSourceCode,
+  CheckoutSourceCode,
+  CheckinSourceCode,
   AllDigitalContents,
   CreateDigitalContent,
   Dashboard,
@@ -112,6 +115,7 @@ function App() {
               </Route>
               <Route path="source-code">
                 <Route index element={<AllSourceCodes />} />
+                <Route path=":sourceCodeId" element={<DetailedSourceCode />} />
                 <Route
                   path="create"
                   element={<CreateSourceCode action={Actions.CREATE} />}
@@ -123,6 +127,14 @@ function App() {
                 <Route
                   path=":sourceCodeId/clone"
                   element={<CreateSourceCode action={Actions.CLONE} />}
+                />
+                <Route
+                  path=":sourceCodeId/checkout"
+                  element={<CheckoutSourceCode />}
+                />
+                <Route
+                  path=":sourceCodeId/checkin"
+                  element={<CheckinSourceCode />}
                 />
               </Route>
               <Route path="digital-content">
