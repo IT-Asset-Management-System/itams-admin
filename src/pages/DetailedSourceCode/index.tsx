@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader';
 import SourceCodeInfo from './SourceCodeInfo';
 import SourceCodeToAssetTable from './SourceCodeToUserTable';
 import SourceCodeHistoryTable from './SourceCodeHistoryTable';
+import DigitalContentToSourceCodeTable from '../DetailedDigitalContent/DigitalContentToSourceCodeTable';
 
 function DetailedSourceCode() {
   const { sourceCodeId } = useParams();
@@ -37,9 +38,14 @@ function DetailedSourceCode() {
                 value="2"
                 sx={{ textTransform: 'capitalize' }}
               />
+               <Tab
+                label="Digital Contents"
+                value="3"
+                sx={{ textTransform: 'capitalize' }}
+              />
               <Tab
                 label="History"
-                value="3"
+                value="4"
                 sx={{ textTransform: 'capitalize' }}
               />
             </TabList>
@@ -51,6 +57,9 @@ function DetailedSourceCode() {
             <SourceCodeToAssetTable sourceCodeId={Number(sourceCodeId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
+            <DigitalContentToSourceCodeTable sourceCodeId={Number(sourceCodeId)} />
+          </TabPanel>
+          <TabPanel value="4" sx={{ padding: 0 }}>
             <SourceCodeHistoryTable
               sourceCodeId={Number(sourceCodeId)}
               withDeleted={true}

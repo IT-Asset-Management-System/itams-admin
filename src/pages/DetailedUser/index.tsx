@@ -7,6 +7,7 @@ import LicenseTable from '../AllLicenses/LicenseTable';
 import AssetTable from '../AllAssets/AssetTable';
 import AssetHistoryTable from '../DetailedAsset/AssetHistoryTable';
 import UserInfo from './UserInfo';
+import SourceCodeToUserTable from '../DetailedSourceCode/SourceCodeToUserTable';
 
 function DetailedUser() {
   const { userId } = useParams();
@@ -39,8 +40,13 @@ function DetailedUser() {
                 sx={{ textTransform: 'capitalize' }}
               />
               <Tab
-                label="History"
+                label="Source Codes"
                 value="3"
+                sx={{ textTransform: 'capitalize' }}
+              />
+              <Tab
+                label="History"
+                value="4"
                 sx={{ textTransform: 'capitalize' }}
               />
             </TabList>
@@ -52,6 +58,9 @@ function DetailedUser() {
             <AssetTable userId={Number(userId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
+            <SourceCodeToUserTable userId={Number(userId)} />
+          </TabPanel>
+          <TabPanel value="4" sx={{ padding: 0 }}>
             <AssetHistoryTable userId={Number(userId)} />
           </TabPanel>
         </TabContext>
