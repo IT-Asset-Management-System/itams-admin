@@ -20,7 +20,10 @@ import {
   AllAssetMaintenances,
   CreateAssetMaintenance,
   AllLicenses,
+  DetailedLicense,
   CreateLicense,
+  CheckoutLicense,
+  CheckinLicense,
   AllUsers,
   DetailedUser,
   CreateUser,
@@ -139,6 +142,7 @@ function App() {
               </Route>
               <Route path="licenses">
                 <Route index element={<AllLicenses />} />
+                <Route path=":licenseId" element={<DetailedLicense />} />
                 <Route
                   path="create"
                   element={<CreateLicense action={Actions.CREATE} />}
@@ -151,6 +155,11 @@ function App() {
                   path=":licenseId/clone"
                   element={<CreateLicense action={Actions.CLONE} />}
                 />
+                <Route
+                  path=":licenseId/checkout"
+                  element={<CheckoutLicense />}
+                />
+                <Route path=":licenseId/checkin" element={<CheckinLicense />} />
               </Route>
               <Route path="users">
                 <Route index element={<AllUsers />} />

@@ -250,9 +250,12 @@ export interface NewDigitalContent {
 export interface License {
   id: number;
   name: string;
+  key: string;
   purchase_cost: string;
   purchase_date: string;
   expiration_date: string;
+  seats: string;
+  available: string;
   category: string;
   manufacturer: string;
   supplier: string;
@@ -264,11 +267,42 @@ export interface LicenseQuery {
   supplierId?: number;
 }
 
+export interface CheckoutLicense {
+  licenseId: number;
+  assetId: number;
+  checkout_date: string;
+  checkout_note: string;
+}
+
+export interface CheckinLicense {
+  licenseId: number;
+  checkin_date: string;
+  checkin_note: string;
+}
+
+export interface LicenseToAsset {
+  id: number;
+  licenseId: number;
+  licenseName: string;
+  assetId: number;
+  assetName: string;
+  checkout_date: string;
+  checkin_date: string;
+}
+
+export interface LicenseToAssetQuery {
+  licenseId?: number;
+  assetId?: number;
+  withDeleted?: boolean;
+}
+
 export interface NewLicense {
   name: string;
+  key: string;
   purchase_cost: string;
   purchase_date: string;
   expiration_date: string;
+  seats: number;
   categoryId: number;
   manufacturerId: number;
   supplierId: number;

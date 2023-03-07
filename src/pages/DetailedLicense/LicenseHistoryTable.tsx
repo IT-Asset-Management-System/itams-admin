@@ -18,7 +18,11 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { deleteLicense, getAllLicenses } from '../../api/license';
+import {
+  deleteLicense,
+  getAllLicenses,
+  getLicenseToAsset,
+} from '../../api/license';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
 
@@ -29,11 +33,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { License, LicenseQuery } from '../../interface/interface';
+import { LicenseToAsset, LicenseToAssetQuery } from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
 import { useAuthContext } from '../../context/AuthContext';
 import { Checkout } from '../../components/CheckButton/Checkout';
 import { Link } from 'react-router-dom';
+import { Checkin } from '../../components/CheckButton/Checkin';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -78,85 +83,55 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof License;
+  id: keyof LicenseToAsset;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
+    id: 'licenseId',
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: 'License ID',
   },
   {
-    id: 'name',
+    id: 'licenseName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'License Name',
   },
   {
-    id: 'key',
+    id: 'assetId',
     numeric: false,
-    disablePadding: false,
-    label: 'Key',
-  },
-  // {
-  //   id: 'purchase_cost',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Purchase cost',
-  // },
-  // {
-  //   id: 'purchase_date',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Purchase date',
-  // },
-  {
-    id: 'expiration_date',
-    numeric: false,
-    disablePadding: false,
-    label: 'Expiration date',
+    disablePadding: true,
+    label: 'Asset ID',
   },
   {
-    id: 'seats',
+    id: 'assetName',
     numeric: false,
     disablePadding: false,
-    label: 'Seats',
+    label: 'Asset Name',
   },
   {
-    id: 'available',
+    id: 'checkout_date',
     numeric: false,
     disablePadding: false,
-    label: 'Available',
+    label: 'Checkout Date',
   },
   {
-    id: 'category',
+    id: 'checkin_date',
     numeric: false,
     disablePadding: false,
-    label: 'Category',
+    label: 'Checkin Date',
   },
-  {
-    id: 'manufacturer',
-    numeric: false,
-    disablePadding: false,
-    label: 'Manufacturer',
-  },
-  // {
-  //   id: 'supplier',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Supplier',
-  // },
 ];
 
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof License,
+    property: keyof LicenseToAsset,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -174,7 +149,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof License) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof LicenseToAsset) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -214,8 +189,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell sx={{ fontWeight: '700' }}>Checkout</TableCell>
-        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -281,16 +254,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function LicenseTable(licenseQuery: LicenseQuery) {
+export default function LicenseHistoryTable(
+  licenseToAssetQuery: LicenseToAssetQuery,
+) {
   const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof License>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof LicenseToAsset>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
-  const [rows, setRows] = React.useState<License[]>([]);
+  const [rows, setRows] = React.useState<LicenseToAsset[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -305,7 +280,7 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
 
   const getData = async () => {
     try {
-      const data = await getAllLicenses(licenseQuery);
+      const data = await getLicenseToAsset(licenseToAssetQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -331,7 +306,7 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof License,
+    property: keyof LicenseToAsset,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -435,47 +410,15 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
                           onClick={(event) => handleClick(event, row.id)}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
+                      <TableCell align="left">{row.licenseId}</TableCell>
+                      <TableCell align="left">{row.licenseName}</TableCell>
+                      <TableCell align="left">{row.assetId}</TableCell>
+                      <TableCell align="left">{row.assetName}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.checkout_date)}
                       </TableCell>
                       <TableCell align="left">
-                        <Link
-                          to={`/licenses/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#296282' }}
-                        >
-                          {row.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">{row.key}</TableCell>
-                      {/* <TableCell align="left">{row.purchase_cost}</TableCell>
-                      <TableCell align="left">
-                        {formatDate(row.purchase_date)}
-                      </TableCell> */}
-                      <TableCell align="left">
-                        {formatDate(row.expiration_date)}
-                      </TableCell>
-                      <TableCell align="left">{row.seats}</TableCell>
-                      <TableCell align="left">{row.available}</TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
-                      <TableCell align="left">{row.manufacturer}</TableCell>
-                      {/* <TableCell align="left">{row.supplier}</TableCell> */}
-                      <TableCell align="left">
-                        {Number(row.available) > 0 && (
-                          <Checkout id={row.id} path="licenses" data={row} />
-                        )}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="licenses"
-                          data={row}
-                          onClickDelete={handleClickOpen}
-                        />
+                        {formatDate(row.checkin_date)}
                       </TableCell>
                     </TableRow>
                   );
