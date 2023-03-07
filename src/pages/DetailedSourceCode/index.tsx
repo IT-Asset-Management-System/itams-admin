@@ -3,14 +3,13 @@ import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import LicenseTable from '../AllLicenses/LicenseTable';
-import AssetTable from '../AllAssets/AssetTable';
-import AssetHistoryTable from '../DetailedAsset/AssetHistoryTable';
-import UserInfo from './UserInfo';
-import SourceCodeToUserTable from '../DetailedSourceCode/SourceCodeToUserTable';
+import SourceCodeInfo from './SourceCodeInfo';
+import SourceCodeToAssetTable from './SourceCodeToUserTable';
+import SourceCodeHistoryTable from './SourceCodeHistoryTable';
+import DigitalContentToSourceCodeTable from '../DetailedDigitalContent/DigitalContentToSourceCodeTable';
 
-function DetailedUser() {
-  const { userId } = useParams();
+function DetailedSourceCode() {
+  const { sourceCodeId } = useParams();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -18,7 +17,7 @@ function DetailedUser() {
   };
   return (
     <Box>
-      <PageHeader name={`View User ${userId}`} canGoBack />
+      <PageHeader name={`View SourceCode ${sourceCodeId}`} canGoBack />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box
@@ -35,12 +34,12 @@ function DetailedUser() {
                 sx={{ textTransform: 'capitalize' }}
               />
               <Tab
-                label="Assets"
+                label="Users"
                 value="2"
                 sx={{ textTransform: 'capitalize' }}
               />
-              <Tab
-                label="Source Codes"
+               <Tab
+                label="Digital Contents"
                 value="3"
                 sx={{ textTransform: 'capitalize' }}
               />
@@ -52,16 +51,19 @@ function DetailedUser() {
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            <UserInfo userId={Number(userId)} />
+            <SourceCodeInfo sourceCodeId={Number(sourceCodeId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            <AssetTable userId={Number(userId)} />
+            <SourceCodeToAssetTable sourceCodeId={Number(sourceCodeId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
-            <SourceCodeToUserTable userId={Number(userId)} />
+            <DigitalContentToSourceCodeTable sourceCodeId={Number(sourceCodeId)} />
           </TabPanel>
           <TabPanel value="4" sx={{ padding: 0 }}>
-            <AssetHistoryTable userId={Number(userId)} />
+            <SourceCodeHistoryTable
+              sourceCodeId={Number(sourceCodeId)}
+              withDeleted={true}
+            />
           </TabPanel>
         </TabContext>
       </Box>
@@ -69,4 +71,4 @@ function DetailedUser() {
   );
 }
 
-export default DetailedUser;
+export default DetailedSourceCode;

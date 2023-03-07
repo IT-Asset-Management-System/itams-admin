@@ -1,6 +1,6 @@
 import { Box, TextField } from '@mui/material';
 import { useState } from 'react';
-import { ActionTypes } from '../../components/reducers/useEditAssetToInventoryReducer';
+import { ActionTypes } from '../../reducer/useEditAssetToInventoryReducer';
 
 function Input(props: any) {
   const {

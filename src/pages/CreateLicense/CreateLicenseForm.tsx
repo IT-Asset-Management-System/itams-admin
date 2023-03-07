@@ -30,9 +30,11 @@ function CreateLicenseForm(props: any) {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const initialValues: NewLicense = {
     name: data?.name ?? '',
+    key: data?.key ?? '',
     purchase_cost: data?.purchase_cost ?? 0,
     purchase_date: data?.purchase_date ?? dayjs(),
     expiration_date: data?.expiration_date ?? dayjs(),
+    seats: data?.seats ?? 0,
     categoryId:
       categories.find((category: Category) => {
         return category.name === data?.category;
@@ -48,10 +50,15 @@ function CreateLicenseForm(props: any) {
   };
   const validationSchema = Yup.object({
     purchase_cost: Yup.number()
-      .typeError('This value must be an number')
+      .typeError('This value must be a number')
       .min(0, 'This value must be greater than or equal to 0'),
     purchase_date: Yup.date().typeError('Invalid date'),
     expiration_date: Yup.date().typeError('Invalid date'),
+    seats: Yup.number()
+      .typeError('This value must be a number')
+      .integer()
+      .typeError('This value must be an integer')
+      .min(0, 'This value must be greater than or equal to 0'),
   });
   useEffect(() => {
     const getData = async () => {
@@ -115,6 +122,13 @@ function CreateLicenseForm(props: any) {
                   required
                 />
                 <InputField
+                  id="key"
+                  fieldName="Key"
+                  fullWidth
+                  formik={formik}
+                  required
+                />
+                <InputField
                   id="purchase_cost"
                   fieldName="Purchase cost"
                   formik={formik}
@@ -129,6 +143,13 @@ function CreateLicenseForm(props: any) {
                 <DatePickerField
                   id="expiration_date"
                   fieldName="Expiration Date"
+                  formik={formik}
+                  required
+                />
+                <InputField
+                  id="seats"
+                  fieldName="Seats"
+                  fullWidth
                   formik={formik}
                   required
                 />

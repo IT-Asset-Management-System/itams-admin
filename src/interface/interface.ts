@@ -230,6 +230,35 @@ export interface NewSourceCode {
   url: string;
 }
 
+export interface CheckoutSourceCode {
+  sourceCodeId: number;
+  userId: number;
+  start_date: string;
+  start_note: string;
+}
+
+export interface CheckinSourceCode {
+  sourceCodeToUserId: number;
+  end_date: string;
+  end_note: string;
+}
+
+export interface SourceCodeToUser {
+  id: number;
+  sourceCodeId: number;
+  sourceCodeName: string;
+  userId: number;
+  userName: string;
+  start_date: string;
+  end_date: string;
+}
+
+export interface SourceCodeToUserQuery {
+  sourceCodeId?: number;
+  userId?: number;
+  withDeleted?: boolean;
+}
+
 export interface DigitalContent {
   id: number;
   name: string;
@@ -247,12 +276,44 @@ export interface NewDigitalContent {
   url: string;
 }
 
+export interface CheckoutDigitalContent {
+  digitalContentId: number;
+  sourceCodeId: number;
+  checkout_date: string;
+  checkout_note: string;
+}
+
+export interface CheckinDigitalContent {
+  digitalContentToSourceCodeId: number;
+  checkin_date: string;
+  checkin_note: string;
+}
+
+export interface DigitalContentToSourceCode {
+  id: number;
+  digitalContentId: number;
+  digitalContentName: string;
+  sourceCodeId: number;
+  sourceCodeName: string;
+  checkout_date: string;
+  checkin_date: string;
+}
+
+export interface DigitalContentToSourceCodeQuery {
+  digitalContentId?: number;
+  sourceCodeId?: number;
+  withDeleted?: boolean;
+}
+
 export interface License {
   id: number;
   name: string;
+  key: string;
   purchase_cost: string;
   purchase_date: string;
   expiration_date: string;
+  seats: string;
+  available: string;
   category: string;
   manufacturer: string;
   supplier: string;
@@ -264,11 +325,42 @@ export interface LicenseQuery {
   supplierId?: number;
 }
 
+export interface CheckoutLicense {
+  licenseId: number;
+  assetId: number;
+  checkout_date: string;
+  checkout_note: string;
+}
+
+export interface CheckinLicense {
+  licenseToAssetId: number;
+  checkin_date: string;
+  checkin_note: string;
+}
+
+export interface LicenseToAsset {
+  id: number;
+  licenseId: number;
+  licenseName: string;
+  assetId: number;
+  assetName: string;
+  checkout_date: string;
+  checkin_date: string;
+}
+
+export interface LicenseToAssetQuery {
+  licenseId?: number;
+  assetId?: number;
+  withDeleted?: boolean;
+}
+
 export interface NewLicense {
   name: string;
+  key: string;
   purchase_cost: string;
   purchase_date: string;
   expiration_date: string;
+  seats: number;
   categoryId: number;
   manufacturerId: number;
   supplierId: number;

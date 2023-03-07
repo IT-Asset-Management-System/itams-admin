@@ -18,7 +18,6 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { deleteLicense, getAllLicenses } from '../../api/license';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
 
@@ -29,11 +28,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { License, LicenseQuery } from '../../interface/interface';
+import {
+  SourceCodeToUser,
+  SourceCodeToUserQuery,
+} from '../../interface/interface';
 import { formatDate } from '../../helpers/format';
 import { useAuthContext } from '../../context/AuthContext';
 import { Checkout } from '../../components/CheckButton/Checkout';
 import { Link } from 'react-router-dom';
+import { Checkin } from '../../components/CheckButton/Checkin';
+import { deleteSourceCode, getSourceCodeToUser } from '../../api/sourceCode';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -78,85 +82,31 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof License;
+  id: keyof SourceCodeToUser;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
+    id: 'userId',
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: 'User ID',
   },
   {
-    id: 'name',
+    id: 'userName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'User Name',
   },
-  {
-    id: 'key',
-    numeric: false,
-    disablePadding: false,
-    label: 'Key',
-  },
-  // {
-  //   id: 'purchase_cost',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Purchase cost',
-  // },
-  // {
-  //   id: 'purchase_date',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Purchase date',
-  // },
-  {
-    id: 'expiration_date',
-    numeric: false,
-    disablePadding: false,
-    label: 'Expiration date',
-  },
-  {
-    id: 'seats',
-    numeric: false,
-    disablePadding: false,
-    label: 'Seats',
-  },
-  {
-    id: 'available',
-    numeric: false,
-    disablePadding: false,
-    label: 'Available',
-  },
-  {
-    id: 'category',
-    numeric: false,
-    disablePadding: false,
-    label: 'Category',
-  },
-  {
-    id: 'manufacturer',
-    numeric: false,
-    disablePadding: false,
-    label: 'Manufacturer',
-  },
-  // {
-  //   id: 'supplier',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Supplier',
-  // },
 ];
 
 interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof License,
+    property: keyof SourceCodeToUser,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -174,7 +124,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof License) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof SourceCodeToUser) =>
+    (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -215,7 +166,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
           </TableCell>
         ))}
         <TableCell sx={{ fontWeight: '700' }}>Checkout</TableCell>
-        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -281,16 +231,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function LicenseTable(licenseQuery: LicenseQuery) {
+export default function SourceCodeToUserTable(
+  sourceCodeToUserQuery: SourceCodeToUserQuery,
+) {
   const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof License>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof SourceCodeToUser>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
-  const [rows, setRows] = React.useState<License[]>([]);
+  const [rows, setRows] = React.useState<SourceCodeToUser[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -305,7 +257,7 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
 
   const getData = async () => {
     try {
-      const data = await getAllLicenses(licenseQuery);
+      const data = await getSourceCodeToUser(sourceCodeToUserQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -317,7 +269,7 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteLicense(id);
+      await deleteSourceCode(id);
       handleClose();
       await getData();
       setIdToDelete(0);
@@ -331,7 +283,7 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof License,
+    property: keyof SourceCodeToUser,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -435,47 +387,10 @@ export default function LicenseTable(licenseQuery: LicenseQuery) {
                           onClick={(event) => handleClick(event, row.id)}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
-                      </TableCell>
+                      <TableCell align="left">{row.userId}</TableCell>
+                      <TableCell align="left">{row.userName}</TableCell>
                       <TableCell align="left">
-                        <Link
-                          to={`/licenses/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#296282' }}
-                        >
-                          {row.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">{row.key}</TableCell>
-                      {/* <TableCell align="left">{row.purchase_cost}</TableCell>
-                      <TableCell align="left">
-                        {formatDate(row.purchase_date)}
-                      </TableCell> */}
-                      <TableCell align="left">
-                        {formatDate(row.expiration_date)}
-                      </TableCell>
-                      <TableCell align="left">{row.seats}</TableCell>
-                      <TableCell align="left">{row.available}</TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
-                      <TableCell align="left">{row.manufacturer}</TableCell>
-                      {/* <TableCell align="left">{row.supplier}</TableCell> */}
-                      <TableCell align="left">
-                        {Number(row.available) > 0 && (
-                          <Checkout id={row.id} path="licenses" data={row} />
-                        )}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="licenses"
-                          data={row}
-                          onClickDelete={handleClickOpen}
-                        />
+                        <Checkin id={row.id} path="source-code" data={row} />
                       </TableCell>
                     </TableRow>
                   );

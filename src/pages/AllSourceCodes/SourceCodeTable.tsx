@@ -30,6 +30,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
 import { SourceCode } from '../../interface/interface';
+import { Checkout } from '../../components/CheckButton/Checkout';
+import { Link as LinkDOM } from 'react-router-dom';
 import Link from '@mui/material/Link';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -181,6 +183,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell sx={{ fontWeight: '700' }}>Checkout</TableCell>
         <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
       </TableRow>
     </TableHead>
@@ -407,7 +410,14 @@ export default function SourceCodeTable() {
                       >
                         {row.id}
                       </TableCell>
-                      <TableCell align="left">{row.name}</TableCell>
+                      <TableCell align="left">
+                        <LinkDOM
+                          to={`/source-code/${row.id}`}
+                          style={{ textDecoration: 'none', color: '#296282' }}
+                        >
+                          {row.name}
+                        </LinkDOM>
+                      </TableCell>
                       <TableCell align="left">{row.owner}</TableCell>
                       <TableCell align="left">{row.description}</TableCell>
                       <TableCell align="left">
@@ -417,6 +427,9 @@ export default function SourceCodeTable() {
                         <Link target="_blank" href={row.url}>
                           {row.url}
                         </Link>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Checkout id={row.id} path="source-code" data={row} />
                       </TableCell>
                       <TableCell align="left">
                         <Actions

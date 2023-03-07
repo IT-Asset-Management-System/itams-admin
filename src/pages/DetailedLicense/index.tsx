@@ -3,14 +3,12 @@ import { Box, Tab } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { useParams } from 'react-router-dom';
 import PageHeader from '../../components/PageHeader';
-import LicenseTable from '../AllLicenses/LicenseTable';
-import AssetTable from '../AllAssets/AssetTable';
-import AssetHistoryTable from '../DetailedAsset/AssetHistoryTable';
-import UserInfo from './UserInfo';
-import SourceCodeToUserTable from '../DetailedSourceCode/SourceCodeToUserTable';
+import LicenseInfo from './LicenseInfo';
+import LicenseToAssetTable from './LicenseToAssetTable';
+import LicenseHistoryTable from './LicenseHistoryTable';
 
-function DetailedUser() {
-  const { userId } = useParams();
+function DetailedLicense() {
+  const { licenseId } = useParams();
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -18,7 +16,7 @@ function DetailedUser() {
   };
   return (
     <Box>
-      <PageHeader name={`View User ${userId}`} canGoBack />
+      <PageHeader name={`View license ${licenseId}`} canGoBack />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box
@@ -40,28 +38,23 @@ function DetailedUser() {
                 sx={{ textTransform: 'capitalize' }}
               />
               <Tab
-                label="Source Codes"
-                value="3"
-                sx={{ textTransform: 'capitalize' }}
-              />
-              <Tab
                 label="History"
-                value="4"
+                value="3"
                 sx={{ textTransform: 'capitalize' }}
               />
             </TabList>
           </Box>
           <TabPanel value="1" sx={{ padding: 0 }}>
-            <UserInfo userId={Number(userId)} />
+            <LicenseInfo licenseId={Number(licenseId)} />
           </TabPanel>
           <TabPanel value="2" sx={{ padding: 0 }}>
-            <AssetTable userId={Number(userId)} />
+            <LicenseToAssetTable licenseId={Number(licenseId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
-            <SourceCodeToUserTable userId={Number(userId)} />
-          </TabPanel>
-          <TabPanel value="4" sx={{ padding: 0 }}>
-            <AssetHistoryTable userId={Number(userId)} />
+            <LicenseHistoryTable
+              licenseId={Number(licenseId)}
+              withDeleted={true}
+            />
           </TabPanel>
         </TabContext>
       </Box>
@@ -69,4 +62,4 @@ function DetailedUser() {
   );
 }
 
-export default DetailedUser;
+export default DetailedLicense;

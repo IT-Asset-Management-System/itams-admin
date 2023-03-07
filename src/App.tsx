@@ -20,7 +20,10 @@ import {
   AllAssetMaintenances,
   CreateAssetMaintenance,
   AllLicenses,
+  DetailedLicense,
   CreateLicense,
+  CheckoutLicense,
+  CheckinLicense,
   AllUsers,
   DetailedUser,
   CreateUser,
@@ -53,9 +56,15 @@ import {
   AllDeprecations,
   CreateDeprecation,
   AllSourceCodes,
+  DetailedSourceCode,
   CreateSourceCode,
+  CheckoutSourceCode,
+  CheckinSourceCode,
   AllDigitalContents,
+  DetailedDigitalContent,
   CreateDigitalContent,
+  CheckoutDigitalContent,
+  CheckinDigitalContent,
   Dashboard,
 } from './pages';
 import AuthProvider from './context/AuthContext';
@@ -109,6 +118,7 @@ function App() {
               </Route>
               <Route path="source-code">
                 <Route index element={<AllSourceCodes />} />
+                <Route path=":sourceCodeId" element={<DetailedSourceCode />} />
                 <Route
                   path="create"
                   element={<CreateSourceCode action={Actions.CREATE} />}
@@ -121,9 +131,21 @@ function App() {
                   path=":sourceCodeId/clone"
                   element={<CreateSourceCode action={Actions.CLONE} />}
                 />
+                <Route
+                  path=":sourceCodeId/checkout"
+                  element={<CheckoutSourceCode />}
+                />
+                <Route
+                  path=":sourceCodeId/checkin"
+                  element={<CheckinSourceCode />}
+                />
               </Route>
               <Route path="digital-content">
                 <Route index element={<AllDigitalContents />} />
+                <Route
+                  path=":digitalContentId"
+                  element={<DetailedDigitalContent />}
+                />
                 <Route
                   path="create"
                   element={<CreateDigitalContent action={Actions.CREATE} />}
@@ -136,9 +158,18 @@ function App() {
                   path=":digitalContentId/clone"
                   element={<CreateDigitalContent action={Actions.CLONE} />}
                 />
+                <Route
+                  path=":digitalContentId/checkout"
+                  element={<CheckoutDigitalContent />}
+                />
+                <Route
+                  path=":digitalContentId/checkin"
+                  element={<CheckinDigitalContent />}
+                />
               </Route>
               <Route path="licenses">
                 <Route index element={<AllLicenses />} />
+                <Route path=":licenseId" element={<DetailedLicense />} />
                 <Route
                   path="create"
                   element={<CreateLicense action={Actions.CREATE} />}
@@ -151,6 +182,11 @@ function App() {
                   path=":licenseId/clone"
                   element={<CreateLicense action={Actions.CLONE} />}
                 />
+                <Route
+                  path=":licenseId/checkout"
+                  element={<CheckoutLicense />}
+                />
+                <Route path=":licenseId/checkin" element={<CheckinLicense />} />
               </Route>
               <Route path="users">
                 <Route index element={<AllUsers />} />
