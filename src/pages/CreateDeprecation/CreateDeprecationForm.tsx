@@ -8,6 +8,7 @@ import SelectField from '../../components/FormComponent/SelectField';
 import { useNavigate } from 'react-router-dom';
 import { getAllCategories } from '../../api/category';
 import { createNewDeprecation, updateDeprecation } from '../../api/deprecation';
+import * as Yup from 'yup';
 
 function CreateDeprecationForm(props: any) {
   const { data, action } = props;
@@ -21,6 +22,13 @@ function CreateDeprecationForm(props: any) {
         return category.name === data?.category;
       })?.id ?? 0,
   };
+  const validationSchema = Yup.object({
+    months: Yup.number()
+    .typeError('This value must be a number')
+    .integer()
+    .typeError('This value must be an integer')
+    .min(0, 'This value must be greater than or equal to 0'),
+  });
   useEffect(() => {
     const getData = async () => {
       try {
@@ -63,6 +71,8 @@ function CreateDeprecationForm(props: any) {
     >
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
         enableReinitialize={true}
         onSubmit={handleSubmit}
       >
