@@ -114,7 +114,7 @@ function CreateAssetForm(props: any) {
         initialValues={initialValues}
         validationSchema={validationSchema}
         validateOnChange={false}
-        enableReinitialize={true}
+        enableReinitialize={action === Actions.UPDATE ? true : false}
         onSubmit={handleSubmit}
       >
         {(formik) => {
