@@ -100,6 +100,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'User Name',
   },
+  {
+    id: 'start_date',
+    numeric: false,
+    disablePadding: false,
+    label: 'Start Date',
+  },
 ];
 
 interface EnhancedTableProps {
@@ -165,7 +171,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell sx={{ fontWeight: '700' }}>Checkout</TableCell>
+        <TableCell sx={{ fontWeight: '700' }}>Checkin</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -390,6 +396,9 @@ export default function SourceCodeToUserTable(
                       <TableCell align="left">{row.userId}</TableCell>
                       <TableCell align="left">{row.userName}</TableCell>
                       <TableCell align="left">
+                        {formatDate(row.start_date)}
+                      </TableCell>
+                      <TableCell align="left">
                         <Checkin id={row.id} path="source-code" data={row} />
                       </TableCell>
                     </TableRow>
@@ -402,6 +411,11 @@ export default function SourceCodeToUserTable(
                   }}
                 >
                   <TableCell colSpan={6} />
+                </TableRow>
+              )}
+              {rows.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={100} align='center'>No data</TableCell>
                 </TableRow>
               )}
             </TableBody>

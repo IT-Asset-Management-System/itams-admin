@@ -103,6 +103,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'SourceCode Name',
   },
+  {
+    id: 'checkout_date',
+    numeric: false,
+    disablePadding: false,
+    label: 'Checkout Date',
+  },
 ];
 
 interface EnhancedTableProps {
@@ -168,7 +174,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell sx={{ fontWeight: '700' }}>Checkout</TableCell>
+        <TableCell sx={{ fontWeight: '700' }}>Checkin</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -396,6 +402,9 @@ export default function DigitalContentToSourceCodeTable(
                       <TableCell align="left">{row.sourceCodeId}</TableCell>
                       <TableCell align="left">{row.sourceCodeName}</TableCell>
                       <TableCell align="left">
+                        {formatDate(row.checkout_date)}
+                      </TableCell>
+                      <TableCell align="left">
                         <Checkin
                           id={row.id}
                           path="digital-content"
@@ -412,6 +421,11 @@ export default function DigitalContentToSourceCodeTable(
                   }}
                 >
                   <TableCell colSpan={6} />
+                </TableRow>
+              )}
+              {rows.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={100} align='center'>No data</TableCell>
                 </TableRow>
               )}
             </TableBody>

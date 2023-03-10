@@ -18,7 +18,6 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { deleteCategory, getAllCategories } from '../../api/category';
 import Actions from '../../components/Actions';
 import { toast } from 'react-toastify';
 
@@ -29,8 +28,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { getPref, Prefs, setPref } from '../../prefs';
-import { Category } from '../../interface/interface';
+import {
+  SourceCodeToUser,
+  SourceCodeToUserQuery,
+} from '../../interface/interface';
+import { formatDate } from '../../helpers/format';
+import { useAuthContext } from '../../context/AuthContext';
+import { Checkout } from '../../components/CheckButton/Checkout';
 import { Link } from 'react-router-dom';
+import { Checkin } from '../../components/CheckButton/Checkin';
+import { deleteSourceCode, getSourceCodeToUser } from '../../api/sourceCode';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,41 +82,29 @@ function stableSort<T>(
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Category;
+  id: keyof SourceCodeToUser;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'id',
+    id: 'sourceCodeId',
     numeric: false,
     disablePadding: true,
-    label: 'ID',
+    label: 'Source Code ID',
   },
   {
-    id: 'name',
+    id: 'sourceCodeName',
     numeric: false,
     disablePadding: false,
-    label: 'Name',
+    label: 'SourceCode Name',
   },
   {
-    id: 'image',
+    id: 'start_date',
     numeric: false,
     disablePadding: false,
-    label: 'Image',
-  },
-  {
-    id: 'assetModels',
-    numeric: false,
-    disablePadding: false,
-    label: 'Asset Models',
-  },
-  {
-    id: 'licenses',
-    numeric: false,
-    disablePadding: false,
-    label: 'Licenses',
+    label: 'Start Date',
   },
 ];
 
@@ -117,7 +112,7 @@ interface EnhancedTableProps {
   numSelected: number;
   onRequestSort: (
     event: React.MouseEvent<unknown>,
-    property: keyof Category,
+    property: keyof SourceCodeToUser,
   ) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
@@ -135,7 +130,8 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     onRequestSort,
   } = props;
   const createSortHandler =
-    (property: keyof Category) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof SourceCodeToUser) =>
+    (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -175,7 +171,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             </TableSortLabel>
           </TableCell>
         ))}
-        <TableCell sx={{ fontWeight: '700' }}>Actions</TableCell>
+        <TableCell sx={{ fontWeight: '700' }}>Checkin</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -241,15 +237,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 
-export default function CategoryTable() {
+export default function UserToSourceCodeTable(
+  sourceCodeToUserQuery: SourceCodeToUserQuery,
+) {
+  const { getNotifications } = useAuthContext();
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Category>('id');
+  const [orderBy, setOrderBy] = React.useState<keyof SourceCodeToUser>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
   );
-  const [rows, setRows] = React.useState<Category[]>([]);
+  const [rows, setRows] = React.useState<SourceCodeToUser[]>([]);
 
   const [open, setOpen] = React.useState(false);
   const [idToDelete, setIdToDelete] = React.useState<number>(0);
@@ -264,7 +263,7 @@ export default function CategoryTable() {
 
   const getData = async () => {
     try {
-      const data = await getAllCategories();
+      const data = await getSourceCodeToUser(sourceCodeToUserQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
@@ -276,10 +275,11 @@ export default function CategoryTable() {
 
   const handleDelete = async (id: number) => {
     try {
-      await deleteCategory(id);
+      await deleteSourceCode(id);
       handleClose();
       await getData();
       setIdToDelete(0);
+      await getNotifications();
       toast.success('Deleted');
     } catch (err: any) {
       console.log(err);
@@ -289,7 +289,7 @@ export default function CategoryTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Category,
+    property: keyof SourceCodeToUser,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -393,37 +393,13 @@ export default function CategoryTable() {
                           onClick={(event) => handleClick(event, row.id)}
                         />
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
+                      <TableCell align="left">{row.sourceCodeId}</TableCell>
+                      <TableCell align="left">{row.sourceCodeName}</TableCell>
+                      <TableCell align="left">
+                        {formatDate(row.start_date)}
                       </TableCell>
                       <TableCell align="left">
-                        <Link
-                          to={`/categories/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#296282' }}
-                        >
-                          {row.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">
-                        <img
-                          src={row.image}
-                          style={{ maxHeight: '40px' }}
-                        ></img>
-                      </TableCell>
-                      <TableCell align="left">{row.assetModels}</TableCell>
-                      <TableCell align="left">{row.licenses}</TableCell>
-                      <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="categories"
-                          data={row}
-                          onClickDelete={handleClickOpen}
-                        />
+                        <Checkin id={row.id} path="source-code" data={row} />
                       </TableCell>
                     </TableRow>
                   );
