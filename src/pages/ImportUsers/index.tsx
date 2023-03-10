@@ -1,4 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { useState } from 'react';
 import UserTable from './UserTable';
 import Papa, { ParseResult } from 'papaparse';
@@ -7,6 +8,7 @@ import { toast } from 'react-toastify';
 import { importUser } from '../../api/user';
 
 function ImportUsers() {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<NewUser[]>([]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -18,6 +20,7 @@ function ImportUsers() {
   };
 
   const handleClick = async () => {
+    setLoading(true);
     try {
       await importUser(data);
       toast.success('Import successfully');
@@ -25,6 +28,7 @@ function ImportUsers() {
       console.log('Import User', err);
       toast.error(err.response.data.message ?? 'Failed to import');
     }
+    setLoading(false);
   };
 
   return (
@@ -46,7 +50,8 @@ function ImportUsers() {
             name="file"
             onChange={handleChange}
           />
-          <Button
+          <LoadingButton
+            loading={loading}
             sx={{
               background: '#007aff',
               borderRadius: '5px',
@@ -61,7 +66,7 @@ function ImportUsers() {
             onClick={handleClick}
           >
             Import
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
       <UserTable rows={data} />

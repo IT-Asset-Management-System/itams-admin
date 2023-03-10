@@ -1,4 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { useState } from 'react';
 import AssetTable from './AssetTable';
 import Papa, { ParseResult } from 'papaparse';
@@ -7,6 +8,7 @@ import { toast } from 'react-toastify';
 import { importAsset } from '../../api/asset';
 
 function ImportAssets() {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<NewAsset[]>([]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
@@ -18,6 +20,7 @@ function ImportAssets() {
   };
 
   const handleClick = async () => {
+    setLoading(true);
     try {
       await importAsset(data);
       toast.success('Import successfully');
@@ -25,6 +28,7 @@ function ImportAssets() {
       console.log('Import asset', err);
       toast.error(err.response.data.message ?? 'Failed to import');
     }
+    setLoading(false);
   };
 
   return (
@@ -46,7 +50,8 @@ function ImportAssets() {
             name="file"
             onChange={handleChange}
           />
-          <Button
+          <LoadingButton
+            loading={loading}
             sx={{
               mt: { xs: '10px' },
               background: '#007aff',
@@ -62,7 +67,7 @@ function ImportAssets() {
             onClick={handleClick}
           >
             Import
-          </Button>
+          </LoadingButton>
         </Box>
       </Box>
       <AssetTable rows={data} />

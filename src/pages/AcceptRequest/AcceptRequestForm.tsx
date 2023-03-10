@@ -1,4 +1,5 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -9,8 +10,9 @@ import { getAssetsByModel, acceptRequest } from '../../api/asset';
 import { getAllAssetModels } from '../../api/assetModel';
 
 function AcceptRequestForm(props: any) {
-  const { data } = props;
+  const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [assets, setAssets] = useState<Asset[]>([]);
   const initialValues: AcceptRequest = {
     id: data?.id ?? '',
@@ -34,6 +36,7 @@ function AcceptRequestForm(props: any) {
   }, []);
 
   const handleSubmit = async (data: AcceptRequest) => {
+    setLoading(true);
     try {
       await acceptRequest(data);
       navigate(-1);
@@ -42,6 +45,7 @@ function AcceptRequestForm(props: any) {
       console.log('Accept request', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -79,7 +83,8 @@ function AcceptRequestForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -95,7 +100,7 @@ function AcceptRequestForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

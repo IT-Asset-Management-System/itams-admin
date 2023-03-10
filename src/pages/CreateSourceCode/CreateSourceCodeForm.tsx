@@ -1,5 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
+import { useState } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
 import { Actions, NewSourceCode } from '../../interface/interface';
@@ -10,6 +12,7 @@ import CheckboxField from '../../components/FormComponent/CheckboxField';
 function CreateSourceCodeForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const initialValues: NewSourceCode = {
     name: data?.name ?? '',
     owner: data?.owner ?? '',
@@ -19,6 +22,7 @@ function CreateSourceCodeForm(props: any) {
   };
 
   const handleSubmit = async (newSourceCode: NewSourceCode) => {
+    setLoading(true);
     try {
       if (action === Actions.UPDATE)
         await updateSourceCode(data.id, newSourceCode);
@@ -33,6 +37,7 @@ function CreateSourceCodeForm(props: any) {
       console.log('Create asset', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -95,7 +100,8 @@ function CreateSourceCodeForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -111,7 +117,7 @@ function CreateSourceCodeForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );
