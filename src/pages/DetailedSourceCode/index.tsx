@@ -6,7 +6,7 @@ import PageHeader from '../../components/PageHeader';
 import SourceCodeInfo from './SourceCodeInfo';
 import SourceCodeToAssetTable from './SourceCodeToUserTable';
 import SourceCodeHistoryTable from './SourceCodeHistoryTable';
-import DigitalContentToSourceCodeTable from '../DetailedDigitalContent/DigitalContentToSourceCodeTable';
+import SourceCodeToDigitalContentTable from './SourceCodeToDigitalContentTable';
 
 function DetailedSourceCode() {
   const { sourceCodeId } = useParams();
@@ -57,7 +57,7 @@ function DetailedSourceCode() {
             <SourceCodeToAssetTable sourceCodeId={Number(sourceCodeId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
-            <DigitalContentToSourceCodeTable
+            <SourceCodeToDigitalContentTable
               sourceCodeId={Number(sourceCodeId)}
             />
           </TabPanel>

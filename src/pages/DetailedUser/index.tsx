@@ -7,7 +7,7 @@ import LicenseTable from '../AllLicenses/LicenseTable';
 import AssetTable from '../AllAssets/AssetTable';
 import AssetHistoryTable from '../DetailedAsset/AssetHistoryTable';
 import UserInfo from './UserInfo';
-import SourceCodeToUserTable from '../DetailedSourceCode/SourceCodeToUserTable';
+import UserToSourceCodeTable from './UserToSourceCodeTable';
 
 function DetailedUser() {
   const { userId } = useParams();
@@ -58,7 +58,7 @@ function DetailedUser() {
             <AssetTable userId={Number(userId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
-            <SourceCodeToUserTable userId={Number(userId)} />
+            <UserToSourceCodeTable userId={Number(userId)} />
           </TabPanel>
           <TabPanel value="4" sx={{ padding: 0 }}>
             <AssetHistoryTable userId={Number(userId)} />
