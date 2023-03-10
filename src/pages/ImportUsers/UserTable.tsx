@@ -244,7 +244,9 @@ export default function UserTable(props: UserTableProps) {
               )}
               {rows.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={100} align='center'>No data</TableCell>
+                  <TableCell colSpan={100} align="center">
+                    No data
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
