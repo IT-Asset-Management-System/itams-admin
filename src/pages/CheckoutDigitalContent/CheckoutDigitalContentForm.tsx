@@ -1,4 +1,5 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import InputField from '../../components/FormComponent/InputField';
@@ -13,8 +14,9 @@ import * as Yup from 'yup';
 import { getAllSourceCodes } from '../../api/sourceCode';
 
 function CheckoutSourceCodeForm(props: any) {
-  const { data } = props;
+  const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [sourceCodes, setSourceCodes] = useState<SourceCode[]>([]);
   const initialValues: CheckoutDigitalContent = {
     digitalContentId: data?.id,
@@ -38,6 +40,7 @@ function CheckoutSourceCodeForm(props: any) {
   }, []);
 
   const handleSubmit = async (sourceCode: CheckoutDigitalContent) => {
+    setLoading(true);
     try {
       await checkoutDigitalContent(sourceCode);
       navigate(-1);
@@ -46,6 +49,7 @@ function CheckoutSourceCodeForm(props: any) {
       console.log('Checkout source code', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -106,7 +110,8 @@ function CheckoutSourceCodeForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -122,7 +127,7 @@ function CheckoutSourceCodeForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

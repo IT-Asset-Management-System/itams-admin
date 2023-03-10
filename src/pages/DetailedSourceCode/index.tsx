@@ -38,7 +38,7 @@ function DetailedSourceCode() {
                 value="2"
                 sx={{ textTransform: 'capitalize' }}
               />
-               <Tab
+              <Tab
                 label="Digital Contents"
                 value="3"
                 sx={{ textTransform: 'capitalize' }}
@@ -57,7 +57,9 @@ function DetailedSourceCode() {
             <SourceCodeToAssetTable sourceCodeId={Number(sourceCodeId)} />
           </TabPanel>
           <TabPanel value="3" sx={{ padding: 0 }}>
-            <DigitalContentToSourceCodeTable sourceCodeId={Number(sourceCodeId)} />
+            <DigitalContentToSourceCodeTable
+              sourceCodeId={Number(sourceCodeId)}
+            />
           </TabPanel>
           <TabPanel value="4" sx={{ padding: 0 }}>
             <SourceCodeHistoryTable

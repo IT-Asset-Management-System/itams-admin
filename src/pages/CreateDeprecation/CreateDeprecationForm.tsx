@@ -1,4 +1,5 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import InputField from '../../components/FormComponent/InputField';
@@ -8,10 +9,12 @@ import SelectField from '../../components/FormComponent/SelectField';
 import { useNavigate } from 'react-router-dom';
 import { getAllCategories } from '../../api/category';
 import { createNewDeprecation, updateDeprecation } from '../../api/deprecation';
+import * as Yup from 'yup';
 
 function CreateDeprecationForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const initialValues: NewDeprecation = {
     name: data?.name ?? '',
@@ -21,6 +24,13 @@ function CreateDeprecationForm(props: any) {
         return category.name === data?.category;
       })?.id ?? 0,
   };
+  const validationSchema = Yup.object({
+    months: Yup.number()
+      .typeError('This value must be a number')
+      .integer()
+      .typeError('This value must be an integer')
+      .min(0, 'This value must be greater than or equal to 0'),
+  });
   useEffect(() => {
     const getData = async () => {
       try {
@@ -34,6 +44,7 @@ function CreateDeprecationForm(props: any) {
   }, []);
 
   const handleSubmit = async (newDeprecation: NewDeprecation) => {
+    setLoading(true);
     try {
       newDeprecation.months = Number(newDeprecation.months);
       if (action === Actions.UPDATE)
@@ -49,6 +60,7 @@ function CreateDeprecationForm(props: any) {
       console.log('Create asset', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -63,6 +75,8 @@ function CreateDeprecationForm(props: any) {
     >
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
+        validateOnChange={false}
         enableReinitialize={true}
         onSubmit={handleSubmit}
       >
@@ -100,7 +114,8 @@ function CreateDeprecationForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -116,7 +131,7 @@ function CreateDeprecationForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

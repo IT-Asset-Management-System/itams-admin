@@ -1,5 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
+import { useState } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
 import { CheckinSourceCode, Asset } from '../../interface/interface';
@@ -10,8 +12,9 @@ import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
 
 function CheckinSourceCodeForm(props: any) {
-  const { data } = props;
+  const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const initialValues: CheckinSourceCode = {
     sourceCodeToUserId: data?.id,
     end_date: data?.date ?? dayjs(),
@@ -22,6 +25,7 @@ function CheckinSourceCodeForm(props: any) {
   });
 
   const handleSubmit = async (sourceCode: CheckinSourceCode) => {
+    setLoading(true);
     try {
       await checkinSourceCode(sourceCode);
       navigate(-1);
@@ -30,6 +34,7 @@ function CheckinSourceCodeForm(props: any) {
       console.log('Checkin sourceCode', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -83,7 +88,8 @@ function CheckinSourceCodeForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -99,7 +105,7 @@ function CheckinSourceCodeForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

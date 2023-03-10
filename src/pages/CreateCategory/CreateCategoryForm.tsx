@@ -1,4 +1,5 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 import { useState } from 'react';
 import InputField from '../../components/FormComponent/InputField';
@@ -16,6 +17,7 @@ import { UploadImage } from '../../components/FormComponent/UploadImage';
 function CreateCategoryForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [image, setImage] = useState<ImageListType>([]);
   const onImageChange = async (imageList: ImageListType) => {
     setImage(imageList);
@@ -25,6 +27,7 @@ function CreateCategoryForm(props: any) {
   };
 
   const handleSubmit = async (newCategory: NewCategory) => {
+    setLoading(true);
     try {
       if (action === Actions.UPDATE) await updateCategory(data.id, newCategory);
       else await createNewCategory(newCategory);
@@ -39,6 +42,7 @@ function CreateCategoryForm(props: any) {
       console.log('Create asset', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -77,7 +81,8 @@ function CreateCategoryForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -93,7 +98,7 @@ function CreateCategoryForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

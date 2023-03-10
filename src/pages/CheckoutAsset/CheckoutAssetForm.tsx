@@ -1,4 +1,5 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import InputField from '../../components/FormComponent/InputField';
@@ -22,8 +23,9 @@ import dayjs from 'dayjs';
 import DatePickerField from '../../components/FormComponent/DatePickerField';
 
 function CheckoutAssetForm(props: any) {
-  const { data } = props;
+  const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const initialValues: CheckoutAsset = {
@@ -51,6 +53,7 @@ function CheckoutAssetForm(props: any) {
   }, []);
 
   const handleSubmit = async (asset: CheckoutAsset) => {
+    setLoading(true);
     try {
       await checkoutAsset(asset);
       navigate(-1);
@@ -59,6 +62,7 @@ function CheckoutAssetForm(props: any) {
       console.log('Checkout asset', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -124,7 +128,8 @@ function CheckoutAssetForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -140,7 +145,7 @@ function CheckoutAssetForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

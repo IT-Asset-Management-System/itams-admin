@@ -1,5 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
+import { useState } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
 import { Actions, NewStatus } from '../../interface/interface';
@@ -10,12 +12,14 @@ import ColorPickerField from '../../components/FormComponent/ColorPickerField';
 function CreateStatusForm(props: any) {
   const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const initialValues: NewStatus = {
     name: data?.name ?? '',
     color: data?.color ?? '#666',
   };
 
   const handleSubmit = async (newStatus: NewStatus) => {
+    setLoading(true);
     try {
       if (action === Actions.UPDATE) await updateStatus(data.id, newStatus);
       else await createNewStatus(newStatus);
@@ -29,6 +33,7 @@ function CreateStatusForm(props: any) {
       console.log('Create asset', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -73,7 +78,8 @@ function CreateStatusForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -89,7 +95,7 @@ function CreateStatusForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

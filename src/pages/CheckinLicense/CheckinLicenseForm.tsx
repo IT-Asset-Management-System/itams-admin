@@ -1,5 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
+import { useState } from 'react';
 import InputField from '../../components/FormComponent/InputField';
 import { toast } from 'react-toastify';
 import { CheckinLicense, Asset } from '../../interface/interface';
@@ -10,8 +12,9 @@ import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
 
 function CheckinLicenseForm(props: any) {
-  const { data } = props;
+  const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const initialValues: CheckinLicense = {
     licenseToAssetId: data?.id,
     checkin_date: data?.date ?? dayjs(),
@@ -22,6 +25,7 @@ function CheckinLicenseForm(props: any) {
   });
 
   const handleSubmit = async (license: CheckinLicense) => {
+    setLoading(true);
     try {
       await checkinLicense(license);
       navigate(-1);
@@ -30,6 +34,7 @@ function CheckinLicenseForm(props: any) {
       console.log('Checkin license', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -83,7 +88,8 @@ function CheckinLicenseForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -99,7 +105,7 @@ function CheckinLicenseForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );

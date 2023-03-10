@@ -1,4 +1,5 @@
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Formik, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import InputField from '../../components/FormComponent/InputField';
@@ -13,8 +14,9 @@ import DatePickerField from '../../components/FormComponent/DatePickerField';
 import * as Yup from 'yup';
 
 function CheckoutLicenseForm(props: any) {
-  const { data } = props;
+  const { data, action } = props;
   const navigate = useNavigate();
+  const [loading, setLoading] = useState<boolean>(false);
   const [assets, setAssets] = useState<Asset[]>([]);
   const initialValues: CheckoutLicense = {
     licenseId: data?.id,
@@ -38,6 +40,7 @@ function CheckoutLicenseForm(props: any) {
   }, []);
 
   const handleSubmit = async (license: CheckoutLicense) => {
+    setLoading(true);
     try {
       await checkoutLicense(license);
       navigate(-1);
@@ -46,6 +49,7 @@ function CheckoutLicenseForm(props: any) {
       console.log('Checkout license', err);
       toast.error(err.response.data.message);
     }
+    setLoading(false);
   };
 
   return (
@@ -114,7 +118,8 @@ function CheckoutLicenseForm(props: any) {
                   justifyContent: 'right',
                 }}
               >
-                <Button
+                <LoadingButton
+                  loading={loading}
                   type="submit"
                   sx={{
                     background: '#007aff',
@@ -130,7 +135,7 @@ function CheckoutLicenseForm(props: any) {
                   }}
                 >
                   Save
-                </Button>
+                </LoadingButton>
               </Box>
             </Form>
           );
