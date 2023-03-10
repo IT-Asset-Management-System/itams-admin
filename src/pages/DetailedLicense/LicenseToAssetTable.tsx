@@ -238,6 +238,7 @@ export default function LicenseToAssetTable(
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof LicenseToAsset>('id');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
+  const [loading, setLoading] = React.useState<boolean>(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
     Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
@@ -256,12 +257,14 @@ export default function LicenseToAssetTable(
   };
 
   const getData = async () => {
+    setLoading(true);
     try {
       const data = await getLicenseToAsset(licenseToAssetQuery);
       setRows(data);
     } catch (err) {
       console.log(err);
     }
+    setLoading(false);
   };
   React.useEffect(() => {
     getData();
@@ -404,9 +407,18 @@ export default function LicenseToAssetTable(
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
-              {rows.length === 0 && (
+              {rows.length === 0 && !loading && (
                 <TableRow>
-                  <TableCell colSpan={100} align='center'>No data</TableCell>
+                  <TableCell colSpan={100} align="center">
+                    No data
+                  </TableCell>
+                </TableRow>
+              )}
+              {rows.length === 0 && loading && (
+                <TableRow>
+                  <TableCell colSpan={100} align="center">
+                    Loading...
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
