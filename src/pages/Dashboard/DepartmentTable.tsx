@@ -188,7 +188,9 @@ export default function DepartmentTable() {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
-    Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
+    Number(getPref(Prefs.ROWS_PER_PAGE)) === 0
+      ? 5
+      : Number(getPref(Prefs.ROWS_PER_PAGE)),
   );
   const [rows, setRows] = React.useState<Department[]>([]);
 
@@ -306,7 +308,9 @@ export default function DepartmentTable() {
               )}
               {rows.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={100} align='center'>No data</TableCell>
+                  <TableCell colSpan={100} align="center">
+                    No data
+                  </TableCell>
                 </TableRow>
               )}
             </TableBody>
