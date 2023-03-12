@@ -360,7 +360,9 @@ export default function DetailedInventoryTable(props: any) {
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(
-    Number(getPref(Prefs.ROWS_PER_PAGE)) ?? 5,
+    Number(getPref(Prefs.ROWS_PER_PAGE)) === 0
+      ? 5
+      : Number(getPref(Prefs.ROWS_PER_PAGE)),
   );
   const { rows, dispatchEdit } = useEditAssetToInventoryReducer(initData);
 
