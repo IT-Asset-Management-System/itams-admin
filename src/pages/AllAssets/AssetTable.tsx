@@ -522,7 +522,7 @@ export default function AssetTable(assetQuery: AssetQuery) {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {!loading && stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -633,7 +633,7 @@ export default function AssetTable(assetQuery: AssetQuery) {
                   </TableCell>
                 </TableRow>
               )}
-              {rows.length === 0 && loading && (
+              {loading && (
                 <TableRow>
                   <TableCell colSpan={100} align="center">
                     Loading...

@@ -407,7 +407,7 @@ export default function InventoryTable() {
                       <TableCell align="left">
                         <Link
                           to={`${row.id}`}
-                          style={{ textDecoration: 'none' }}
+                          style={{ textDecoration: 'none', color: '#296282' }}
                         >
                           {row.name}
                         </Link>
