@@ -17,6 +17,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { User } from '../../interface/interface';
 import { useAuthContext } from '../../context/AuthContext';
+import { formatDate } from '../../helpers/format';
 interface HeadCell {
   disablePadding: boolean;
   id: keyof User;
@@ -88,6 +89,7 @@ export default function UserInfo(props: any) {
   const getData = async () => {
     try {
       const user: User = await getUserById(userId);
+      user.birthday = formatDate(user.birthday);
       console.log(user);
       setRows(user);
     } catch (err) {

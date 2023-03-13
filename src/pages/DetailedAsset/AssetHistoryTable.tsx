@@ -493,7 +493,7 @@ export default function AssetHistoryTable(
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.sort(getComparator(order, orderBy)).slice() */}
-              {stableSort(rows, getComparator(order, orderBy))
+              {!loading && stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
@@ -548,7 +548,7 @@ export default function AssetHistoryTable(
                   </TableCell>
                 </TableRow>
               )}
-              {rows.length === 0 && loading && (
+              {loading && (
                 <TableRow>
                   <TableCell colSpan={100} align="center">
                     Loading...
