@@ -35,6 +35,7 @@ const pages: Page[] = [
       { name: 'List All', destination: '/hardware' },
       { name: 'All Requests', destination: 'request-assets' },
       { name: 'Asset Maintenances', destination: 'maintenances' },
+      { name: 'Deleted Assets', destination: '/hardware/deleted' },
     ],
   },
   { name: 'Source codes', destination: '/source-code', hasChild: false },

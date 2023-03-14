@@ -13,6 +13,11 @@ export const getAllAssets = async (assetQuery?: AssetQuery) => {
   return response.data;
 };
 
+export const getDeletedAssets = async () => {
+  const response = await axios.get('/asset/deleted-assets');
+  return response.data;
+};
+
 export const getAssetHistory = async (
   AssetHistoryQuery?: AssetHistoryQuery,
 ) => {

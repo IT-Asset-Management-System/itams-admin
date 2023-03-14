@@ -11,6 +11,7 @@ import {
   Profile,
   ChangePassword,
   AllAssets,
+  DeletedAssets,
   CreateAsset,
   DetailedAsset,
   CheckoutAsset,
@@ -82,6 +83,10 @@ function App() {
               <Route index element={<Dashboard />} />
               <Route path="hardware">
                 <Route index element={<AllAssets />} />
+                <Route
+                  path="deleted"
+                  element={<DeletedAssets />}
+                />
                 <Route
                   path="create"
                   element={<CreateAsset action={Actions.CREATE} />}

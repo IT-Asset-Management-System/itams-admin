@@ -138,6 +138,7 @@ export interface Asset {
   statusColor: string;
   username: string;
   check_type: CheckType;
+  deletedAt: string
 }
 
 export interface NewAsset {
