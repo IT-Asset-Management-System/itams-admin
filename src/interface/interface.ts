@@ -2,6 +2,7 @@ export interface AssetModel {
   id: number;
   name: string;
   image: string;
+  cpe: string;
   category: string;
   manufacturer: string;
   numOfAssets: number;
@@ -138,7 +139,7 @@ export interface Asset {
   statusColor: string;
   username: string;
   check_type: CheckType;
-  deletedAt: string
+  deletedAt: string;
 }
 
 export interface NewAsset {

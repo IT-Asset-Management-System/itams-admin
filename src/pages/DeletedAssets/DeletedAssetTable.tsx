@@ -510,66 +510,67 @@ export default function DeletedAssetTable(assetQuery: AssetQuery) {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.sort(getComparator(order, orderBy)).slice() */}
-              {!loading && stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {!loading &&
+                stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                          onClick={(event) => handleClick(event, row.id)}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        // onClick={(event) => handleClick(event, row.name)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
                       >
-                        {row.id}
-                      </TableCell>
-                      <TableCell align="left">
-                        <Link
-                          to={`/hardware/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#296282' }}
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                            onClick={(event) => handleClick(event, row.id)}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
                         >
-                          {row.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">
-                        <img
-                          src={row.image}
-                          style={{ maxHeight: '40px' }}
-                        ></img>
-                      </TableCell>
-                      <TableCell align="left">{row.assetModel}</TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">
-                        {formatDate(row.purchase_date)}
-                      </TableCell>
-                      <TableCell align="left">{row.purchase_cost}</TableCell>
-                      <TableCell align="left">{row.current_cost}</TableCell>
-                      <TableCell align="left">{row.supplier}</TableCell>
-                      <TableCell align="left">
-                      {formatDate(row.deletedAt)}
-                      </TableCell>
-                      {/* <TableCell align="left">
+                          {row.id}
+                        </TableCell>
+                        <TableCell align="left">
+                          <Link
+                            to={`/hardware/${row.id}`}
+                            style={{ textDecoration: 'none', color: '#296282' }}
+                          >
+                            {row.name}
+                          </Link>
+                        </TableCell>
+                        <TableCell align="left">
+                          <img
+                            src={row.image}
+                            style={{ maxHeight: '40px' }}
+                          ></img>
+                        </TableCell>
+                        <TableCell align="left">{row.assetModel}</TableCell>
+                        <TableCell align="left">{row.department}</TableCell>
+                        <TableCell align="left">
+                          {formatDate(row.purchase_date)}
+                        </TableCell>
+                        <TableCell align="left">{row.purchase_cost}</TableCell>
+                        <TableCell align="left">{row.current_cost}</TableCell>
+                        <TableCell align="left">{row.supplier}</TableCell>
+                        <TableCell align="left">
+                          {formatDate(row.deletedAt)}
+                        </TableCell>
+                        {/* <TableCell align="left">
                         <Actions
                           id={row.id}
                           path="hardware"
@@ -579,9 +580,9 @@ export default function DeletedAssetTable(assetQuery: AssetQuery) {
                           notClone
                         />
                       </TableCell> */}
-                    </TableRow>
-                  );
-                })}
+                      </TableRow>
+                    );
+                  })}
               {emptyRows > 0 && (
                 <TableRow
                   style={{
