@@ -456,68 +456,69 @@ export default function UserTable(userQuery: UserQuery) {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.sort(getComparator(order, orderBy)).slice() */}
-              {!loading && stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+              {!loading &&
+                stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow
-                      hover
-                      // onClick={(event) => handleClick(event, row.name)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                          onClick={(event) => handleClick(event, row.id)}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
+                    return (
+                      <TableRow
+                        hover
+                        // onClick={(event) => handleClick(event, row.name)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
                       >
-                        {row.id}
-                      </TableCell>
-                      <TableCell align="left">
-                        {' '}
-                        <Link
-                          to={`/users/${row.id}`}
-                          style={{ textDecoration: 'none', color: '#296282' }}
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                            onClick={(event) => handleClick(event, row.id)}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
                         >
-                          {row.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell align="left">{row.username}</TableCell>
-                      <TableCell align="left">{row.phone}</TableCell>
-                      <TableCell align="left">{row.email}</TableCell>
-                      <TableCell align="left">
-                        {formatDate(row.birthday)}
-                      </TableCell>
-                      <TableCell align="left">{row.department}</TableCell>
-                      <TableCell align="left">{row.assets}</TableCell>
-                      <TableCell align="left">
-                        <Actions
-                          id={row.id}
-                          path="users"
-                          data={row}
-                          onClickDelete={handleClickOpen}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                          {row.id}
+                        </TableCell>
+                        <TableCell align="left">
+                          {' '}
+                          <Link
+                            to={`/users/${row.id}`}
+                            style={{ textDecoration: 'none', color: '#296282' }}
+                          >
+                            {row.name}
+                          </Link>
+                        </TableCell>
+                        <TableCell align="left">{row.username}</TableCell>
+                        <TableCell align="left">{row.phone}</TableCell>
+                        <TableCell align="left">{row.email}</TableCell>
+                        <TableCell align="left">
+                          {formatDate(row.birthday)}
+                        </TableCell>
+                        <TableCell align="left">{row.department}</TableCell>
+                        <TableCell align="left">{row.assets}</TableCell>
+                        <TableCell align="left">
+                          <Actions
+                            id={row.id}
+                            path="users"
+                            data={row}
+                            onClickDelete={handleClickOpen}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               {emptyRows > 0 && (
                 <TableRow
                   style={{

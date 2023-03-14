@@ -100,6 +100,12 @@ const headCells: readonly HeadCell[] = [
     label: 'Image',
   },
   {
+    id: 'cpe',
+    numeric: false,
+    disablePadding: false,
+    label: 'CPE',
+  },
+  {
     id: 'numOfAssets',
     numeric: false,
     disablePadding: false,
@@ -426,6 +432,7 @@ export default function AssetModelTable(assetModelQuery: AssetModelQuery) {
                           style={{ maxHeight: '40px' }}
                         ></img>
                       </TableCell>
+                      <TableCell align="left">{row.cpe}</TableCell>
                       <TableCell align="left">{row.numOfAssets}</TableCell>
                       <TableCell align="left">{row.category}</TableCell>
                       <TableCell align="left">{row.manufacturer}</TableCell>

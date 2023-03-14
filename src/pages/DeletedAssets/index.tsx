@@ -5,7 +5,11 @@ import PageHeader from '../../components/PageHeader';
 function DeletedAssets() {
   return (
     <Box>
-      <PageHeader name="Deleted Assets" destination="/hardware/deleted" noButton />
+      <PageHeader
+        name="Deleted Assets"
+        destination="/hardware/deleted"
+        noButton
+      />
       <DeletedAssetTable />
     </Box>
   );
