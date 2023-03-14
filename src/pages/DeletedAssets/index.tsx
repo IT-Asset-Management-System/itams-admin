@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import DeletedAssetTable from './DeletedAssetTable';
 import PageHeader from '../../components/PageHeader';
 
-function AllAssets() {
+function DeletedAssets() {
   return (
     <Box>
       <PageHeader name="Deleted Assets" destination="/hardware/deleted" noButton />
@@ -11,4 +11,4 @@ function AllAssets() {
   );
 }
 
-export default AllAssets;
+export default DeletedAssets;
