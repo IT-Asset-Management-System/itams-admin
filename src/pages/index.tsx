@@ -5,6 +5,7 @@ export { default as NoPage } from './NoPage';
 export { default as Profile } from './Profile';
 export { default as ChangePassword } from './ChangePassword';
 export { default as AllAssets } from './AllAssets';
+export { default as DeletedAssets } from './DeletedAssets';
 export { default as DetailedAsset } from './DetailedAsset';
 export { default as CreateAsset } from './CreateAsset';
 export { default as CheckoutAsset } from './CheckoutAsset';
