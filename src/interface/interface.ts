@@ -442,7 +442,8 @@ export interface RequestAsset {
   id: number;
   name: string;
   username: string;
-  assetModel: string;
+  category: string;
+  categoryId: number;
   date: string;
   note: string;
   status: string;
