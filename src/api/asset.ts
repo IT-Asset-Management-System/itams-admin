@@ -94,9 +94,9 @@ export const rejectRequest = async (id: number | string) => {
   return response.data;
 };
 
-export const getAssetsByModel = async (assetModelId: number | string) => {
-  const response = await axios.get('/asset/asset-by-model', {
-    params: { assetModelId: assetModelId },
+export const getAssetsByCategory = async (categoryId: number | string) => {
+  const response = await axios.get('/asset/asset-by-category', {
+    params: { categoryId: categoryId },
   });
   return response.data;
 };

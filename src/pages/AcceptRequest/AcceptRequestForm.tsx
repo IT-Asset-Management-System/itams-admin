@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { AcceptRequest, Asset, AssetModel } from '../../interface/interface';
 import SelectField from '../../components/FormComponent/SelectField';
 import { useNavigate } from 'react-router-dom';
-import { getAssetsByModel, acceptRequest } from '../../api/asset';
+import { getAssetsByCategory, acceptRequest } from '../../api/asset';
 import { getAllAssetModels } from '../../api/assetModel';
 
 function AcceptRequestForm(props: any) {
@@ -21,12 +21,7 @@ function AcceptRequestForm(props: any) {
   useEffect(() => {
     const getData = async () => {
       try {
-        const assetModels: AssetModel[] = await getAllAssetModels();
-        const assetModelId =
-          assetModels.find((assetModel: AssetModel) => {
-            return assetModel.name === data?.assetModel;
-          })?.id ?? 0;
-        const assets: Asset[] = await getAssetsByModel(assetModelId);
+        const assets: Asset[] = await getAssetsByCategory(data?.categoryId);
         setAssets(assets);
       } catch (err) {
         console.log(err);
