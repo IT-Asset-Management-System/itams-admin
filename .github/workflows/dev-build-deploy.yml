@@ -18,6 +18,12 @@ jobs:
           node-version: "16"
       - name: Installing dependencies
         run: npm install
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo CI=false >> .env
+          echo REACT_APP_BASE_URL="https://itams-backend.up.railway.app" >> .env
+          cat .env
       - name: Building project
         run: npm run build
       - name: Configure AWS Credentials
