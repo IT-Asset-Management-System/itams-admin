@@ -7,7 +7,7 @@ on:
       - develop
 jobs:
   # To build the project
-  build-tambola:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checking out code
@@ -28,4 +28,4 @@ jobs:
           aws-region: us-west-1
 
       - name: Deploy to S3 bucket
-        run: aws s3 sync ./dist/ s3://dev-tambola --delete
+        run: aws s3 sync ./dist/ s3://itams --delete
